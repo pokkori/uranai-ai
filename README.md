@@ -26,7 +26,7 @@
 - **スタイル**: Tailwind CSS
 - **AI**: Anthropic Claude Haiku (claude-haiku-4-5-20251001)
 - **デプロイ**: Vercel
-- **決済**: Gumroad（予定）
+- **決済**: Stripe（サブスクリプション）
 - **アナリティクス**: Vercel Analytics
 
 ## ディレクトリ構成
@@ -37,12 +37,19 @@ uranai-ai/
 │   ├── page.tsx          # LP（ランディングページ）
 │   ├── layout.tsx        # レイアウト・メタデータ
 │   ├── uranai/
-│   │   └── page.tsx      # 鑑定画面（フォーム・結果表示）
+│   │   └── page.tsx      # 鑑定画面（フォーム・結果表示・Paywall）
+│   ├── success/
+│   │   └── page.tsx      # 決済完了ページ
 │   ├── blog/             # SEOブログ記事
 │   └── api/
-│       └── uranai/
-│           └── route.ts  # Claude API呼び出し・九星/干支計算・Cookie管理
-├── .env.local            # ANTHROPIC_API_KEY（Vercelに設定済み）
+│       ├── uranai/
+│       │   └── route.ts  # Claude API呼び出し・九星/干支計算・Cookie管理
+│       └── stripe/
+│           ├── checkout/
+│           │   └── route.ts  # Stripeセッション作成
+│           └── verify/
+│               └── route.ts  # 決済完了確認・Cookie付与
+├── .env.local            # 環境変数（Vercelに設定済み）
 └── package.json
 ```
 
@@ -63,6 +70,9 @@ uranai-ai/
 | 変数名 | 説明 |
 |--------|------|
 | `ANTHROPIC_API_KEY` | Anthropic APIキー |
+| `STRIPE_SECRET_KEY` | Stripe シークレットキー |
+| `STRIPE_PRICE_STD` | スタンダードプランの Price ID |
+| `STRIPE_PRICE_BIZ` | ビジネス（プレミアム）プランの Price ID |
 
 ## ローカル起動
 

@@ -10,6 +10,16 @@ const YEARS = Array.from({ length: 80 }, (_, i) => 2006 - i);
 const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
 const DAYS = Array.from({ length: 31 }, (_, i) => i + 1);
 
+async function startCheckout(plan: string) {
+  const res = await fetch("/api/stripe/checkout", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ plan }),
+  });
+  const { url } = await res.json();
+  if (url) window.location.href = url;
+}
+
 function PaywallModal({ onClose }: { onClose: () => void }) {
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 px-4">
@@ -18,14 +28,14 @@ function PaywallModal({ onClose }: { onClose: () => void }) {
         <h2 className="text-lg font-bold mb-2">無料鑑定を使い切りました</h2>
         <p className="text-purple-300 text-sm mb-6">引き続き鑑定を受けるには有料プランをご利用ください</p>
         <div className="space-y-3 mb-4">
-          <a href="https://gumroad.com/l/REPLACE_STD" target="_blank" rel="noopener noreferrer"
-            className="block bg-purple-500 hover:bg-purple-400 text-white font-bold py-3 rounded-xl transition-colors">
+          <button onClick={() => startCheckout("standard")}
+            className="block w-full bg-purple-500 hover:bg-purple-400 text-white font-bold py-3 rounded-xl transition-colors">
             スタンダード ¥980/月
-          </a>
-          <a href="https://gumroad.com/l/REPLACE_PRE" target="_blank" rel="noopener noreferrer"
-            className="block bg-white/10 hover:bg-white/20 text-white py-3 rounded-xl transition-colors text-sm">
+          </button>
+          <button onClick={() => startCheckout("business")}
+            className="block w-full bg-white/10 hover:bg-white/20 text-white py-3 rounded-xl transition-colors text-sm">
             プレミアム ¥2,980/月
-          </a>
+          </button>
         </div>
         <button onClick={onClose} className="text-xs text-purple-500 hover:text-purple-300">閉じる</button>
       </div>
@@ -187,10 +197,10 @@ export default function UranaiPage() {
                     className="text-xs bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition-colors">
                     Xでシェア
                   </a>
-                  <a href="https://gumroad.com/l/REPLACE_STD" target="_blank" rel="noopener noreferrer"
+                  <button onClick={() => startCheckout("standard")}
                     className="text-xs bg-purple-500 hover:bg-purple-400 px-4 py-2 rounded-lg transition-colors">
                     毎日鑑定する →
-                  </a>
+                  </button>
                 </div>
               </div>
             ) : (
