@@ -49,6 +49,7 @@ export async function POST(req: NextRequest) {
   if (!birthYear || !birthMonth || !birthDay) {
     return NextResponse.json({ error: "生年月日は必須です" }, { status: 400 });
   }
+  if (name && name.length > 50) return NextResponse.json({ error: "名前は50文字以内で入力してください" }, { status: 400 });
 
   const y = Number(birthYear);
   const m = Number(birthMonth);
@@ -98,7 +99,7 @@ export async function POST(req: NextRequest) {
     const text = message.content[0].type === "text" ? message.content[0].text : "";
     const newCount = cookieCount + 1;
     const res = NextResponse.json({ result: text, kyusei, eto, count: newCount });
-    res.cookies.set(COOKIE_KEY, String(newCount), { maxAge: 60 * 60 * 24 * 30, sameSite: "lax" });
+    res.cookies.set(COOKIE_KEY, String(newCount), { maxAge: 60 * 60 * 24 * 30, sameSite: "lax", httpOnly: true, secure: true });
     return res;
   } catch (err) {
     console.error(err);
