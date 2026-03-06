@@ -102,6 +102,7 @@ export default function LandingPage() {
           <div className="flex justify-center gap-6">
             <Link href="/blog/shichusuimei" className="hover:text-purple-300">四柱推命とは</Link>
             <Link href="/blog/kyusei-kigaku" className="hover:text-purple-300">九星気学とは</Link>
+            <Link href="/privacy" className="hover:text-purple-300">プライバシーポリシー</Link>
           </div>
         </div>
       </footer>
