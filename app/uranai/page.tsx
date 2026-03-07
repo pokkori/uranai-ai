@@ -96,6 +96,21 @@ export default function UranaiPage() {
   };
 
   const shareText = result ? `AIが私の運命を鑑定してくれました✨ #AI占い\nhttps://uranai-ai.vercel.app` : "";
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(result);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handlePrint = () => {
+    const html = `<html><head><title>AI占い鑑定結果</title><style>body{font-family:sans-serif;padding:32px;line-height:1.8;white-space:pre-wrap;}</style></head><body>${result.replace(/</g, "&lt;")}</body></html>`;
+    const blob = new Blob([html], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const w = window.open(url, "_blank");
+    w?.addEventListener("load", () => { w.print(); URL.revokeObjectURL(url); });
+  };
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-indigo-950 to-purple-950 text-white">
@@ -197,7 +212,17 @@ export default function UranaiPage() {
             ) : result ? (
               <div>
                 <pre className="text-sm text-purple-100 whitespace-pre-wrap font-sans leading-relaxed">{result}</pre>
-                <div className="mt-6 pt-4 border-t border-white/10 space-y-3">
+                <div className="mt-4 flex gap-2 justify-end">
+                  <button onClick={handleCopy}
+                    className="text-xs px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-purple-200 font-medium transition-colors">
+                    {copied ? "✓ コピー済み" : "コピー"}
+                  </button>
+                  <button onClick={handlePrint}
+                    className="text-xs px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-purple-200 font-medium transition-colors">
+                    印刷・PDF保存
+                  </button>
+                </div>
+                <div className="mt-4 pt-4 border-t border-white/10 space-y-3">
                   <button onClick={() => startCheckout("standard")}
                     className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white font-bold py-3 rounded-xl transition-opacity text-sm">
                     ✨ 毎日の運勢をチェックする（¥980/月）
