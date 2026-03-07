@@ -6,9 +6,27 @@ import "./globals.css";
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
+const SITE_URL = "https://uranai-ai-sigma.vercel.app";
+const TITLE = "AI占い｜九星気学×干支で本格鑑定・相性占いも｜無料3回";
+const DESC = "生年月日を入力するだけ。AIが九星気学×干支で今日の運勢・恋愛運・総合運命を鑑定。プレミアムでは相性占い（相性スコア＋恋愛・仕事分析）も。無料3回から。";
+
 export const metadata: Metadata = {
-  title: "AI占い｜九星気学・四柱推命であなたの運勢を鑑定",
-  description: "生年月日を入力するだけ。AIが九星気学と四柱推命をもとに、今日の運勢・恋愛運・総合運命を詳しく鑑定します。無料で3回試せます。",
+  title: TITLE,
+  description: DESC,
+  openGraph: {
+    title: TITLE,
+    description: DESC,
+    url: SITE_URL,
+    siteName: "AI占い",
+    locale: "ja_JP",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESC,
+  },
+  metadataBase: new URL(SITE_URL),
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
