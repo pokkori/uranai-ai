@@ -20,27 +20,56 @@ async function startCheckout(plan: string) {
   if (url) window.location.href = url;
 }
 
-function PaywallModal({ onClose }: { onClose: () => void }) {
+function BirthDatePicker({ year, month, day, onYearChange, onMonthChange, onDayChange }: {
+  year: string; month: string; day: string;
+  onYearChange: (v: string) => void;
+  onMonthChange: (v: string) => void;
+  onDayChange: (v: string) => void;
+}) {
+  return (
+    <div className="grid grid-cols-3 gap-2">
+      <select value={year} onChange={e => onYearChange(e.target.value)}
+        className="bg-white/10 border border-white/20 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-purple-400">
+        {YEARS.map(y => <option key={y} value={y}>{y}年</option>)}
+      </select>
+      <select value={month} onChange={e => onMonthChange(e.target.value)}
+        className="bg-white/10 border border-white/20 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-purple-400">
+        {MONTHS.map(m => <option key={m} value={m}>{m}月</option>)}
+      </select>
+      <select value={day} onChange={e => onDayChange(e.target.value)}
+        className="bg-white/10 border border-white/20 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-purple-400">
+        {DAYS.map(d => <option key={d} value={d}>{d}日</option>)}
+      </select>
+    </div>
+  );
+}
+
+function PaywallModal({ onClose, isCompatibility }: { onClose: () => void; isCompatibility?: boolean }) {
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 px-4">
       <div className="bg-indigo-950 border border-purple-500/50 rounded-2xl p-6 max-w-sm w-full text-white text-center">
-        <div className="text-4xl mb-3">🔮</div>
-        <h2 className="text-lg font-bold mb-2">無料鑑定を使い切りました</h2>
-        <p className="text-purple-300 text-sm mb-1">毎日の運勢チェックで人生の流れをつかむ</p>
+        <div className="text-4xl mb-3">{isCompatibility ? "💑" : "🔮"}</div>
+        <h2 className="text-lg font-bold mb-2">
+          {isCompatibility ? "相性占いはプレミアム限定" : "無料鑑定を使い切りました"}
+        </h2>
+        <p className="text-purple-300 text-sm mb-1">
+          {isCompatibility ? "ふたりの深い縁を九星気学×干支で鑑定" : "毎日の運勢チェックで人生の流れをつかむ"}
+        </p>
         <ul className="text-xs text-purple-400 text-left mb-5 space-y-1.5 mt-3">
           <li>✨ 毎日・毎月の運勢鑑定が無制限</li>
           <li>✨ 九星気学×干支の詳細分析</li>
+          <li>💑 相性占い（相性スコア＋恋愛・仕事・友人の多角分析）</li>
           <li>✨ 恋愛・仕事・金運を毎日チェック</li>
           <li>✨ ラッキー情報・行動指針を毎日更新</li>
         </ul>
         <div className="space-y-3 mb-4">
           <button onClick={() => startCheckout("standard")}
             className="block w-full bg-purple-500 hover:bg-purple-400 text-white font-bold py-3 rounded-xl transition-colors">
-            毎日鑑定プラン ¥980/月
+            毎日鑑定＋相性占いプラン ¥980/月
           </button>
           <button onClick={() => startCheckout("business")}
             className="block w-full bg-white/10 hover:bg-white/20 text-white py-3 rounded-xl transition-colors text-sm">
-            プレミアム ¥2,980/月（相性鑑定・詳細版）
+            プレミアム ¥2,980/月（詳細版・優先生成）
           </button>
         </div>
         <button onClick={onClose} className="text-xs text-purple-500 hover:text-purple-300">閉じる</button>
@@ -56,15 +85,29 @@ export default function UranaiPage() {
   const [birthDay, setBirthDay] = useState("1");
   const [gender, setGender] = useState("female");
   const [type, setType] = useState("today");
+
+  // 相性占い用
+  const [partnerName, setPartnerName] = useState("");
+  const [partnerBirthYear, setPartnerBirthYear] = useState("1990");
+  const [partnerBirthMonth, setPartnerBirthMonth] = useState("1");
+  const [partnerBirthDay, setPartnerBirthDay] = useState("1");
+  const [partnerGender, setPartnerGender] = useState("male");
+
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
   const [usageCount, setUsageCount] = useState(0);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [paywallIsCompatibility, setPaywallIsCompatibility] = useState(false);
   const [kyusei, setKyusei] = useState("");
   const [eto, setEto] = useState("");
+  const [partnerKyusei, setPartnerKyusei] = useState("");
+  const [partnerEto, setPartnerEto] = useState("");
+  const [copied, setCopied] = useState(false);
+  const [isPremium, setIsPremium] = useState(false);
 
   useEffect(() => {
     setUsageCount(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10));
+    fetch("/api/auth/status").then(r => r.json()).then(d => setIsPremium(d.isPremium)).catch(() => {});
   }, []);
 
   const remaining = Math.max(0, FREE_LIMIT - usageCount);
@@ -72,16 +115,36 @@ export default function UranaiPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isLimitReached) { setShowPaywall(true); return; }
+
+    if (type === "compatibility" && !isPremium) {
+      setPaywallIsCompatibility(true);
+      setShowPaywall(true);
+      return;
+    }
+
+    if (isLimitReached) {
+      setPaywallIsCompatibility(false);
+      setShowPaywall(true);
+      return;
+    }
+
     setLoading(true);
     setResult("");
     try {
       const res = await fetch("/api/uranai", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, birthYear, birthMonth, birthDay, gender, type }),
+        body: JSON.stringify({
+          name, birthYear, birthMonth, birthDay, gender, type,
+          partnerName, partnerBirthYear, partnerBirthMonth, partnerBirthDay, partnerGender,
+        }),
       });
-      if (res.status === 429) { setShowPaywall(true); setLoading(false); return; }
+      if (res.status === 429) {
+        setPaywallIsCompatibility(type === "compatibility");
+        setShowPaywall(true);
+        setLoading(false);
+        return;
+      }
       const data = await res.json();
       if (!res.ok) { setResult(data.error || "エラーが発生しました"); setLoading(false); return; }
       const newCount = data.count ?? usageCount + 1;
@@ -90,13 +153,12 @@ export default function UranaiPage() {
       setResult(data.result || "生成に失敗しました");
       setKyusei(data.kyusei || "");
       setEto(data.eto || "");
-      if (newCount >= FREE_LIMIT) setTimeout(() => setShowPaywall(true), 2000);
+      setPartnerKyusei(data.partnerKyusei || "");
+      setPartnerEto(data.partnerEto || "");
+      if (newCount >= FREE_LIMIT) setTimeout(() => { setPaywallIsCompatibility(false); setShowPaywall(true); }, 2000);
     } catch { setResult("通信エラーが発生しました。インターネット接続を確認してください。"); }
     finally { setLoading(false); }
   };
-
-  const shareText = result ? `AIが私の運命を鑑定してくれました✨ #AI占い\nhttps://uranai-ai.vercel.app` : "";
-  const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(result);
@@ -112,14 +174,16 @@ export default function UranaiPage() {
     w?.addEventListener("load", () => { w.print(); URL.revokeObjectURL(url); });
   };
 
+  const shareText = result ? `AIが私の運命を鑑定してくれました✨ #AI占い\nhttps://uranai-ai.vercel.app` : "";
+
   return (
     <main className="min-h-screen bg-gradient-to-b from-indigo-950 to-purple-950 text-white">
-      {showPaywall && <PaywallModal onClose={() => setShowPaywall(false)} />}
+      {showPaywall && <PaywallModal onClose={() => setShowPaywall(false)} isCompatibility={paywallIsCompatibility} />}
 
       <nav className="px-6 py-4 flex items-center justify-between max-w-4xl mx-auto">
         <Link href="/" className="font-bold">🔮 AI占い</Link>
-        <span className={`text-xs px-3 py-1 rounded-full ${isLimitReached ? "bg-red-900/50 text-red-300" : "bg-purple-900/50 text-purple-300"}`}>
-          {isLimitReached ? "無料枠終了" : `無料あと${remaining}回`}
+        <span className={`text-xs px-3 py-1 rounded-full ${isPremium ? "bg-purple-600/50 text-purple-200" : isLimitReached ? "bg-red-900/50 text-red-300" : "bg-purple-900/50 text-purple-300"}`}>
+          {isPremium ? "✓ プレミアム" : isLimitReached ? "無料枠終了" : `無料あと${remaining}回`}
         </span>
       </nav>
 
@@ -137,20 +201,8 @@ export default function UranaiPage() {
 
           <div>
             <label className="block text-sm text-purple-300 mb-1">生年月日</label>
-            <div className="grid grid-cols-3 gap-2">
-              <select value={birthYear} onChange={e => setBirthYear(e.target.value)}
-                className="bg-white/10 border border-white/20 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-purple-400">
-                {YEARS.map(y => <option key={y} value={y}>{y}年</option>)}
-              </select>
-              <select value={birthMonth} onChange={e => setBirthMonth(e.target.value)}
-                className="bg-white/10 border border-white/20 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-purple-400">
-                {MONTHS.map(m => <option key={m} value={m}>{m}月</option>)}
-              </select>
-              <select value={birthDay} onChange={e => setBirthDay(e.target.value)}
-                className="bg-white/10 border border-white/20 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-purple-400">
-                {DAYS.map(d => <option key={d} value={d}>{d}日</option>)}
-              </select>
-            </div>
+            <BirthDatePicker year={birthYear} month={birthMonth} day={birthDay}
+              onYearChange={setBirthYear} onMonthChange={setBirthMonth} onDayChange={setBirthDay} />
           </div>
 
           <div>
@@ -170,44 +222,85 @@ export default function UranaiPage() {
             <div className="space-y-2">
               {[
                 { value: "today", label: "🌟 今日の運勢", desc: "今日の全体運・行動指針" },
-                { value: "love", label: "💕 恋愛運・相性", desc: "恋愛の流れと出会いのヒント" },
+                { value: "love", label: "💕 恋愛運・相性傾向", desc: "恋愛の流れと出会いのヒント" },
                 { value: "destiny", label: "🔮 総合運命鑑定", desc: "人生のテーマと運命の流れ" },
+                { value: "compatibility", label: "💑 相性占い", desc: "プレミアム限定・ふたりの縁を鑑定", premium: true },
               ].map(t => (
                 <button key={t.value} type="button" onClick={() => setType(t.value)}
                   className={`w-full text-left px-4 py-3 rounded-lg border transition-colors ${type === t.value ? "bg-purple-500/30 border-purple-400" : "bg-white/5 border-white/10 hover:border-purple-500/50"}`}>
-                  <div className="text-sm font-medium">{t.label}</div>
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm font-medium">{t.label}</div>
+                    {t.premium && (
+                      <span className="text-xs bg-yellow-500/20 text-yellow-300 px-2 py-0.5 rounded-full border border-yellow-500/30">PRO</span>
+                    )}
+                  </div>
                   <div className="text-xs text-purple-400">{t.desc}</div>
                 </button>
               ))}
             </div>
           </div>
 
+          {/* 相性占いの場合：相手情報入力 */}
+          {type === "compatibility" && (
+            <div className="bg-white/5 border border-purple-500/30 rounded-xl p-4 space-y-4">
+              <p className="text-sm font-medium text-purple-300">💑 相手の情報</p>
+              <div>
+                <label className="block text-xs text-purple-400 mb-1">相手のお名前（任意）</label>
+                <input type="text" value={partnerName} onChange={e => setPartnerName(e.target.value)}
+                  placeholder="例: たくや"
+                  className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-purple-400 placeholder-white/30" />
+              </div>
+              <div>
+                <label className="block text-xs text-purple-400 mb-1">生年月日</label>
+                <BirthDatePicker year={partnerBirthYear} month={partnerBirthMonth} day={partnerBirthDay}
+                  onYearChange={setPartnerBirthYear} onMonthChange={setPartnerBirthMonth} onDayChange={setPartnerBirthDay} />
+              </div>
+              <div>
+                <label className="block text-xs text-purple-400 mb-1">性別</label>
+                <div className="flex gap-3">
+                  {[{ value: "female", label: "女性" }, { value: "male", label: "男性" }].map(g => (
+                    <button key={g.value} type="button" onClick={() => setPartnerGender(g.value)}
+                      className={`flex-1 py-2 rounded-lg border text-sm font-medium transition-colors ${partnerGender === g.value ? "bg-purple-500 border-purple-500 text-white" : "bg-white/5 border-white/20 text-purple-200 hover:border-purple-400"}`}>
+                      {g.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
           <button type="submit" disabled={loading}
-            className={`w-full font-bold py-4 rounded-xl transition-colors text-white ${isLimitReached ? "bg-orange-500 hover:bg-orange-400" : "bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 disabled:opacity-50"}`}>
-            {loading ? "鑑定中..." : isLimitReached ? "有料プランに申し込む" : "鑑定する ✨"}
+            className={`w-full font-bold py-4 rounded-xl transition-colors text-white ${(isLimitReached && type !== "compatibility") ? "bg-orange-500 hover:bg-orange-400" : "bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 disabled:opacity-50"}`}>
+            {loading ? "鑑定中..." :
+             type === "compatibility" && !isPremium ? "💑 相性を鑑定する（プレミアム）" :
+             isLimitReached ? "有料プランに申し込む" : "鑑定する ✨"}
           </button>
         </form>
 
         {/* 結果 */}
         <div className="flex flex-col">
-          {kyusei && (
-            <div className="flex gap-3 mb-4">
+          {(kyusei || partnerKyusei) && (
+            <div className="flex gap-3 mb-4 flex-wrap">
               <div className="bg-purple-900/50 border border-purple-500/30 rounded-lg px-4 py-2 text-center">
-                <div className="text-xs text-purple-400">九星</div>
-                <div className="font-bold text-purple-200">{kyusei}白星</div>
+                <div className="text-xs text-purple-400">{name || "あなた"}の九星</div>
+                <div className="font-bold text-purple-200">{kyusei}白星 / {eto}年</div>
               </div>
-              <div className="bg-purple-900/50 border border-purple-500/30 rounded-lg px-4 py-2 text-center">
-                <div className="text-xs text-purple-400">干支</div>
-                <div className="font-bold text-purple-200">{eto}年生</div>
-              </div>
+              {partnerKyusei && (
+                <div className="bg-pink-900/50 border border-pink-500/30 rounded-lg px-4 py-2 text-center">
+                  <div className="text-xs text-pink-400">{partnerName || "相手"}の九星</div>
+                  <div className="font-bold text-pink-200">{partnerKyusei}白星 / {partnerEto}年</div>
+                </div>
+              )}
             </div>
           )}
 
           <div className="flex-1 bg-white/5 border border-white/10 rounded-2xl p-5 min-h-[400px]">
             {loading ? (
               <div className="flex flex-col items-center justify-center h-full gap-4">
-                <div className="text-4xl animate-pulse">🔮</div>
-                <p className="text-purple-300 text-sm">AIが運命を読み解いています...</p>
+                <div className="text-4xl animate-pulse">{type === "compatibility" ? "💑" : "🔮"}</div>
+                <p className="text-purple-300 text-sm">
+                  {type === "compatibility" ? "ふたりの縁を読み解いています..." : "AIが運命を読み解いています..."}
+                </p>
               </div>
             ) : result ? (
               <div>
@@ -223,10 +316,12 @@ export default function UranaiPage() {
                   </button>
                 </div>
                 <div className="mt-4 pt-4 border-t border-white/10 space-y-3">
-                  <button onClick={() => startCheckout("standard")}
-                    className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white font-bold py-3 rounded-xl transition-opacity text-sm">
-                    ✨ 毎日の運勢をチェックする（¥980/月）
-                  </button>
+                  {!isPremium && (
+                    <button onClick={() => startCheckout("standard")}
+                      className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white font-bold py-3 rounded-xl transition-opacity text-sm">
+                      ✨ 毎日の運勢＋相性占いを使う（¥980/月）
+                    </button>
+                  )}
                   <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`}
                     target="_blank" rel="noopener noreferrer"
                     className="block text-center text-xs bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition-colors">
@@ -238,6 +333,12 @@ export default function UranaiPage() {
               <div className="flex flex-col items-center justify-center h-full text-purple-500 gap-3">
                 <div className="text-4xl">✨</div>
                 <p className="text-sm text-center">情報を入力して<br />「鑑定する」を押してください</p>
+                <div className="mt-2 text-xs text-purple-600 space-y-1 text-center">
+                  <p>🌟 今日の運勢 — 無料</p>
+                  <p>💕 恋愛運 — 無料</p>
+                  <p>🔮 総合運命鑑定 — 無料</p>
+                  <p>💑 相性占い — プレミアム限定</p>
+                </div>
               </div>
             )}
           </div>

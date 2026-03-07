@@ -17,7 +17,6 @@ function checkRateLimit(ip: string): boolean {
 
 // 九星気学：本命星の計算
 function calcKyusei(year: number, month: number, day: number): string {
-  // 立春（2月4日頃）前は前年として計算
   const adjustedYear = (month === 1 || (month === 2 && day < 4)) ? year - 1 : year;
   const sum = String(adjustedYear).split("").reduce((a, b) => a + parseInt(b), 0);
   const reduced = sum > 9 ? Math.floor(sum / 10) + (sum % 10) : sum;
@@ -46,21 +45,102 @@ export async function POST(req: NextRequest) {
   try { body = await req.json(); }
   catch { return NextResponse.json({ error: "リクエストの形式が正しくありません" }, { status: 400 }); }
 
-  const { name, birthYear, birthMonth, birthDay, gender, type } = body as Record<string, string>;
+  const { name, birthYear, birthMonth, birthDay, gender, type,
+          partnerName, partnerBirthYear, partnerBirthMonth, partnerBirthDay, partnerGender } = body as Record<string, string>;
+
   if (!birthYear || !birthMonth || !birthDay) {
     return NextResponse.json({ error: "生年月日は必須です" }, { status: 400 });
   }
   if (name && name.length > 50) return NextResponse.json({ error: "名前は50文字以内で入力してください" }, { status: 400 });
+
+  // 相性占いはプレミアムのみ
+  if (type === "compatibility" && !isPremium) {
+    return NextResponse.json({ error: "LIMIT_REACHED" }, { status: 429 });
+  }
 
   const y = Number(birthYear);
   const m = Number(birthMonth);
   const d = Number(birthDay);
   const kyusei = calcKyusei(y, m, d);
   const eto = calcEto(y, m, d);
-  const typeLabel = type === "today" ? "今日の運勢" : type === "love" ? "恋愛運・相性" : "総合運命鑑定";
 
   const today = new Date();
   const todayStr = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
+
+  let prompt = "";
+
+  if (type === "compatibility") {
+    if (!partnerBirthYear || !partnerBirthMonth || !partnerBirthDay) {
+      return NextResponse.json({ error: "相手の生年月日は必須です" }, { status: 400 });
+    }
+    const py = Number(partnerBirthYear);
+    const pm = Number(partnerBirthMonth);
+    const pd = Number(partnerBirthDay);
+    const partnerKyusei = calcKyusei(py, pm, pd);
+    const partnerEto = calcEto(py, pm, pd);
+
+    prompt = `あなたは30年のキャリアを持つ占術師です。九星気学・干支・数秘術を組み合わせた相性鑑定を行います。読んだ人が「ドキッとするほど当たっている」と感じる深い鑑定文を書いてください。
+
+【あなた】
+名前: ${name || "あなた"}
+生年月日: ${birthYear}年${birthMonth}月${birthDay}日（${eto}年・${kyusei}白星）
+性別: ${gender === "male" ? "男性" : "女性"}
+
+【相手】
+名前: ${partnerName || "相手"}
+生年月日: ${partnerBirthYear}年${partnerBirthMonth}月${partnerBirthDay}日（${partnerEto}年・${partnerKyusei}白星）
+性別: ${partnerGender === "male" ? "男性" : "女性"}
+
+本日: ${todayStr}
+
+---
+
+## 💑 ${name || "あなた"}と${partnerName || "相手"}の相性鑑定
+
+### 🌟 ふたりの総合相性スコア
+（100点満点でスコアを出し、一言で関係性を表現してください）
+**相性スコア: ○○点 「○○な関係」**
+
+### 🔮 九星気学×干支から見た相性の本質
+（${kyusei}白星×${eto}と${partnerKyusei}白星×${partnerEto}の組み合わせから、ふたりの根本的な相性を400文字で。「ふたりは〜」と語りかけるスタイルで。）
+
+### 💪 ふたりの強み・相乗効果
+（互いの長所が掛け合わさる部分を具体的に3点。この関係ならではの可能性。）
+
+### ⚠️ ふたりの注意点・乗り越えるべき壁
+（ぶつかりやすいパターンを正直に2点。解決策とセットで書く。）
+
+### 💕 恋愛・結婚における相性
+（恋愛・結婚パートナーとしての相性を300文字で。「お互いに○○すると関係が深まる」という具体的なアドバイス付き。）
+
+### 🤝 仕事・友人としての相性
+（仕事仲間や友人としての相性と、うまく付き合うコツを200文字で。）
+
+### 🌈 ふたりへのメッセージ
+（この組み合わせならではの可能性を最大化するための、温かいメッセージを100文字で。）
+
+---
+※ 占いは統計学的な傾向であり、参考としてご活用ください。`;
+
+    try {
+      const message = await client.messages.create({
+        model: "claude-haiku-4-5-20251001",
+        max_tokens: 2500,
+        messages: [{ role: "user", content: prompt }],
+      });
+      const text = message.content[0].type === "text" ? message.content[0].text : "";
+      const newCount = cookieCount + 1;
+      const res = NextResponse.json({ result: text, kyusei, eto, partnerKyusei, partnerEto, count: newCount });
+      res.cookies.set(COOKIE_KEY, String(newCount), { maxAge: 60 * 60 * 24 * 30, sameSite: "lax", httpOnly: true, secure: true });
+      return res;
+    } catch (err) {
+      console.error(err);
+      return NextResponse.json({ error: "AI生成中にエラーが発生しました。しばらく待ってから再試行してください。" }, { status: 500 });
+    }
+  }
+
+  // 通常鑑定
+  const typeLabel = type === "today" ? "今日の運勢" : type === "love" ? "恋愛運・相性" : "総合運命鑑定";
 
   const loveSection = type === "love" ? `
 ### 💑 恋愛・パートナーシップ詳細鑑定
@@ -69,7 +149,7 @@ export async function POST(req: NextRequest) {
 ### 🤝 相性の良い干支・九星
 （特に縁がある干支を3つ、その理由も簡潔に）` : "";
 
-  const prompt = `あなたは30年のキャリアを持つ占術師です。九星気学・干支・数秘術を組み合わせた独自鑑定で、読んだ人が「ドキッとするほど当たっている」と感じる、深く具体的な鑑定文を書いてください。
+  prompt = `あなたは30年のキャリアを持つ占術師です。九星気学・干支・数秘術を組み合わせた独自鑑定で、読んだ人が「ドキッとするほど当たっている」と感じる、深く具体的な鑑定文を書いてください。
 
 【鑑定対象者】
 名前: ${name || "あなた"}
@@ -109,7 +189,6 @@ ${loveSection}
 
 ---
 ※ 占いは統計学的な傾向であり、参考としてご活用ください。`;
-
 
   try {
     const message = await client.messages.create({
