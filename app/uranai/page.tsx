@@ -26,15 +26,21 @@ function PaywallModal({ onClose }: { onClose: () => void }) {
       <div className="bg-indigo-950 border border-purple-500/50 rounded-2xl p-6 max-w-sm w-full text-white text-center">
         <div className="text-4xl mb-3">🔮</div>
         <h2 className="text-lg font-bold mb-2">無料鑑定を使い切りました</h2>
-        <p className="text-purple-300 text-sm mb-6">引き続き鑑定を受けるには有料プランをご利用ください</p>
+        <p className="text-purple-300 text-sm mb-1">毎日の運勢チェックで人生の流れをつかむ</p>
+        <ul className="text-xs text-purple-400 text-left mb-5 space-y-1.5 mt-3">
+          <li>✨ 毎日・毎月の運勢鑑定が無制限</li>
+          <li>✨ 九星気学×干支の詳細分析</li>
+          <li>✨ 恋愛・仕事・金運を毎日チェック</li>
+          <li>✨ ラッキー情報・行動指針を毎日更新</li>
+        </ul>
         <div className="space-y-3 mb-4">
           <button onClick={() => startCheckout("standard")}
             className="block w-full bg-purple-500 hover:bg-purple-400 text-white font-bold py-3 rounded-xl transition-colors">
-            スタンダード ¥980/月
+            毎日鑑定プラン ¥980/月
           </button>
           <button onClick={() => startCheckout("business")}
             className="block w-full bg-white/10 hover:bg-white/20 text-white py-3 rounded-xl transition-colors text-sm">
-            プレミアム ¥2,980/月
+            プレミアム ¥2,980/月（相性鑑定・詳細版）
           </button>
         </div>
         <button onClick={onClose} className="text-xs text-purple-500 hover:text-purple-300">閉じる</button>
@@ -191,16 +197,16 @@ export default function UranaiPage() {
             ) : result ? (
               <div>
                 <pre className="text-sm text-purple-100 whitespace-pre-wrap font-sans leading-relaxed">{result}</pre>
-                <div className="mt-6 pt-4 border-t border-white/10 flex gap-3">
+                <div className="mt-6 pt-4 border-t border-white/10 space-y-3">
+                  <button onClick={() => startCheckout("standard")}
+                    className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white font-bold py-3 rounded-xl transition-opacity text-sm">
+                    ✨ 毎日の運勢をチェックする（¥980/月）
+                  </button>
                   <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`}
                     target="_blank" rel="noopener noreferrer"
-                    className="text-xs bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition-colors">
+                    className="block text-center text-xs bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition-colors">
                     Xでシェア
                   </a>
-                  <button onClick={() => startCheckout("standard")}
-                    className="text-xs bg-purple-500 hover:bg-purple-400 px-4 py-2 rounded-lg transition-colors">
-                    毎日鑑定する →
-                  </button>
                 </div>
               </div>
             ) : (
