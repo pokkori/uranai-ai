@@ -304,7 +304,19 @@ export default function UranaiPage() {
               </div>
             ) : result ? (
               <div>
-                <pre className="text-sm text-purple-100 whitespace-pre-wrap font-sans leading-relaxed">{result}</pre>
+                <div className="text-sm text-purple-100 leading-relaxed space-y-3">
+                  {result.split('\n').map((line, i) => {
+                    if (line.startsWith('### ')) return (
+                      <h3 key={i} className="text-base font-bold text-purple-200 pt-3 border-t border-white/10 first:border-0 first:pt-0">{line.replace('### ', '')}</h3>
+                    );
+                    if (line.startsWith('## ')) return (
+                      <h2 key={i} className="text-lg font-bold text-white pt-2">{line.replace('## ', '')}</h2>
+                    );
+                    if (line.trim() === '---' || line.trim() === '') return <div key={i} className="h-1" />;
+                    const html = line.replace(/\*\*(.+?)\*\*/g, '<strong class="text-white">$1</strong>');
+                    return <p key={i} dangerouslySetInnerHTML={{ __html: html }} />;
+                  })}
+                </div>
                 <div className="mt-4 flex gap-2 justify-end">
                   <button onClick={handleCopy}
                     className="text-xs px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-purple-200 font-medium transition-colors">
