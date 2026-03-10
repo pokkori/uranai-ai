@@ -49,6 +49,7 @@ export default function PrivacyPage() {
             <ul className="list-disc list-inside mt-2 space-y-1">
               <li>法令に基づく場合</li>
               <li>AI生成のためにAnthropicのAPIへ入力内容を送信する場合（Anthropicのプライバシーポリシーが適用されます）</li>
+              <li>決済処理のためPAY.JP（PAY.JP株式会社）に提供する場合（PAY.JPのプライバシーポリシーに従います）</li>
             </ul>
           </div>
 
@@ -74,7 +75,7 @@ export default function PrivacyPage() {
 
           <div>
             <h2 className="font-bold text-white mb-2">9. お問い合わせ</h2>
-            <p>本ポリシーに関するご質問は、サービス内のお問い合わせ方法からご連絡ください。</p>
+            <p>本ポリシーに関するご質問は levonadesign@gmail.com までご連絡ください。</p>
           </div>
         </section>
       </article>
