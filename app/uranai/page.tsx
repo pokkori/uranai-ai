@@ -2,23 +2,17 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import PayjpModal from "@/components/PayjpModal";
 
 const FREE_LIMIT = 3;
 const STORAGE_KEY = "uranai_count";
+const PAYJP_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYJP_PUBLIC_KEY ?? "";
 
 const YEARS = Array.from({ length: 80 }, (_, i) => 2006 - i);
 const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
 const DAYS = Array.from({ length: 31 }, (_, i) => i + 1);
 
-async function startCheckout(plan: string) {
-  const res = await fetch("/api/stripe/checkout", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ plan }),
-  });
-  const { url } = await res.json();
-  if (url) window.location.href = url;
-}
+// startCheckout は PayjpModal で処理するため削除済み
 
 function BirthDatePicker({ year, month, day, onYearChange, onMonthChange, onDayChange }: {
   year: string; month: string; day: string;
@@ -44,7 +38,7 @@ function BirthDatePicker({ year, month, day, onYearChange, onMonthChange, onDayC
   );
 }
 
-function PaywallModal({ onClose, isCompatibility }: { onClose: () => void; isCompatibility?: boolean }) {
+function PaywallModal({ onClose, isCompatibility, onStartPayjp }: { onClose: () => void; isCompatibility?: boolean; onStartPayjp: (plan: string) => void }) {
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 px-4">
       <div className="bg-indigo-950 border border-purple-500/50 rounded-2xl p-6 max-w-sm w-full text-white text-center">
@@ -63,11 +57,11 @@ function PaywallModal({ onClose, isCompatibility }: { onClose: () => void; isCom
           <li>✨ ラッキー情報・行動指針を毎日更新</li>
         </ul>
         <div className="space-y-3 mb-4">
-          <button onClick={() => startCheckout("standard")}
+          <button onClick={() => onStartPayjp("standard")}
             className="block w-full bg-purple-500 hover:bg-purple-400 text-white font-bold py-3 rounded-xl transition-colors">
             毎日鑑定＋相性占いプラン ¥980/月
           </button>
-          <button onClick={() => startCheckout("business")}
+          <button onClick={() => onStartPayjp("business")}
             className="block w-full bg-white/10 hover:bg-white/20 text-white py-3 rounded-xl transition-colors text-sm">
             プレミアム ¥2,980/月（詳細版・優先生成）
           </button>
@@ -104,6 +98,9 @@ export default function UranaiPage() {
   const [partnerEto, setPartnerEto] = useState("");
   const [copied, setCopied] = useState(false);
   const [isPremium, setIsPremium] = useState(false);
+  const [showPayjp, setShowPayjp] = useState(false);
+  const [payjpPlan, setPayjpPlan] = useState("standard");
+  const [compatibilityScore, setCompatibilityScore] = useState<number | null>(null);
 
   useEffect(() => {
     setUsageCount(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10));
@@ -150,12 +147,20 @@ export default function UranaiPage() {
       const newCount = data.count ?? usageCount + 1;
       localStorage.setItem(STORAGE_KEY, String(newCount));
       setUsageCount(newCount);
-      setResult(data.result || "生成に失敗しました");
+      const resultText = data.result || "生成に失敗しました";
+      setResult(resultText);
       setKyusei(data.kyusei || "");
       setEto(data.eto || "");
       setPartnerKyusei(data.partnerKyusei || "");
       setPartnerEto(data.partnerEto || "");
-      if (newCount >= FREE_LIMIT) setTimeout(() => { setPaywallIsCompatibility(false); setShowPaywall(true); }, 2000);
+      // 相性スコアを抽出 (例: "相性スコア: 78点" or "78点/100点")
+      if (type === "compatibility") {
+        const m = resultText.match(/(\d{1,3})\s*[点点]\s*(?:\/\s*100)?/) || resultText.match(/相性[スコア：:\s]+(\d{1,3})/);
+        setCompatibilityScore(m ? Math.min(100, parseInt(m[1], 10)) : null);
+      } else {
+        setCompatibilityScore(null);
+      }
+      if (newCount >= FREE_LIMIT) setTimeout(() => { setPaywallIsCompatibility(false); setShowPaywall(true); }, 12000);
     } catch { setResult("通信エラーが発生しました。インターネット接続を確認してください。"); }
     finally { setLoading(false); }
   };
@@ -174,11 +179,26 @@ export default function UranaiPage() {
     w?.addEventListener("load", () => { w.print(); URL.revokeObjectURL(url); });
   };
 
-  const shareText = result ? `AIが私の運命を鑑定してくれました✨ #AI占い\nhttps://uranai-ai.vercel.app` : "";
+  const shareText = result
+    ? type === "compatibility" && compatibilityScore !== null
+      ? `${name || "私"}と${partnerName || "相手"}の相性スコアは${compatibilityScore}点/100点！💑\n四柱推命×九星気学AIが鑑定してくれた✨\n#相性占い #AI占い #四柱推命\nhttps://uranai-ai.vercel.app`
+      : type === "compatibility"
+      ? `${name || "私"}と${partnerName || "相手"}の相性をAIが鑑定！💑\n四柱推命×九星気学で本当の相性が分かった✨\n#相性占い #AI占い\nhttps://uranai-ai.vercel.app`
+      : `AIが私の運命を鑑定してくれました✨ #AI占い\nhttps://uranai-ai.vercel.app`
+    : "";
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-indigo-950 to-purple-950 text-white">
-      {showPaywall && <PaywallModal onClose={() => setShowPaywall(false)} isCompatibility={paywallIsCompatibility} />}
+      {showPaywall && <PaywallModal onClose={() => setShowPaywall(false)} isCompatibility={paywallIsCompatibility} onStartPayjp={(plan) => { setPayjpPlan(plan); setShowPaywall(false); setShowPayjp(true); }} />}
+      {showPayjp && (
+        <PayjpModal
+          publicKey={PAYJP_PUBLIC_KEY}
+          planLabel={payjpPlan === "business" ? "プレミアムプラン ¥2,980/月" : "スタンダードプラン ¥980/月"}
+          plan={payjpPlan}
+          onSuccess={() => { setShowPayjp(false); setIsPremium(true); }}
+          onClose={() => setShowPayjp(false)}
+        />
+      )}
 
       <nav className="px-6 py-4 flex items-center justify-between max-w-4xl mx-auto">
         <Link href="/" className="font-bold">🔮 AI占い</Link>
@@ -329,16 +349,25 @@ export default function UranaiPage() {
                 </div>
                 <div className="mt-4 pt-4 border-t border-white/10 space-y-3">
                   {!isPremium && (
-                    <button onClick={() => startCheckout("standard")}
+                    <button onClick={() => { setPayjpPlan("standard"); setShowPayjp(true); }}
                       className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white font-bold py-3 rounded-xl transition-opacity text-sm">
                       ✨ 毎日の運勢＋相性占いを使う（¥980/月）
                     </button>
                   )}
-                  <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`}
-                    target="_blank" rel="noopener noreferrer"
-                    className="block text-center text-xs bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition-colors">
-                    Xでシェア
-                  </a>
+                  {/* 相性占い専用シェアボタン */}
+                  {type === "compatibility" ? (
+                    <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`}
+                      target="_blank" rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:opacity-90 text-white font-bold py-3 rounded-xl transition-opacity text-sm">
+                      💑 {compatibilityScore !== null ? `相性${compatibilityScore}点をXでシェア！` : "相性結果をXでシェア！"}
+                    </a>
+                  ) : (
+                    <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`}
+                      target="_blank" rel="noopener noreferrer"
+                      className="block text-center text-xs bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition-colors">
+                      Xでシェア
+                    </a>
+                  )}
                 </div>
               </div>
             ) : (

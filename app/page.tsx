@@ -69,8 +69,8 @@ export default function LandingPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
             { name: "お試し", price: "無料", limit: "3回まで", features: ["基本鑑定", "今日の運勢", "恋愛運"], url: "/uranai", highlight: false },
-            { name: "スタンダード", price: "¥980/月", limit: "毎日鑑定可能", features: ["全鑑定タイプ", "毎日の運勢", "相性診断"], url: "/api/stripe/checkout?plan=standard", highlight: true },
-            { name: "ビジネス", price: "¥2,980/月", limit: "無制限", features: ["スタンダードの全機能", "月運・年運鑑定", "優先サポート"], url: "/api/stripe/checkout?plan=business", highlight: false },
+            { name: "スタンダード", price: "¥980/月", limit: "毎日鑑定可能", features: ["全鑑定タイプ", "毎日の運勢", "相性診断"], url: "/uranai", highlight: true },
+            { name: "ビジネス", price: "¥2,980/月", limit: "無制限", features: ["スタンダードの全機能", "月運・年運鑑定", "優先サポート"], url: "/uranai", highlight: false },
           ].map((plan) => (
             <div key={plan.name} className={`rounded-2xl p-6 relative border ${plan.highlight ? "bg-purple-500/20 border-purple-400" : "bg-white/5 border-white/10"}`}>
               {plan.highlight && <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-purple-500 text-white text-xs px-3 py-0.5 rounded-full">人気No.1</div>}
