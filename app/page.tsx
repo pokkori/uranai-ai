@@ -20,16 +20,21 @@ export default function LandingPage() {
       <section className="text-center py-20 px-6 max-w-3xl mx-auto">
         <div className="text-5xl mb-6">🔮</div>
         <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-          AIが本格的に<br /><span className="text-purple-300">あなたの運命を鑑定</span>
+          知らないまま過ごすと<br /><span className="text-purple-300">大切な転機を見逃す</span>
         </h1>
         <p className="text-purple-200 text-lg mb-8 leading-relaxed">
-          四柱推命・九星気学をベースにしたAIが<br />
-          生年月日から運命・恋愛・仕事運を詳しく鑑定します
+          四柱推命×九星気学AIが、あなたの運命の波を分析。<br />
+          今年の転機・恋愛の流れ・仕事の変化を今すぐ確認してください。
         </p>
         <Link href="/uranai" className="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-lg px-10 py-4 rounded-full hover:opacity-90 transition-opacity shadow-lg shadow-purple-900">
           無料で鑑定してみる →
         </Link>
         <p className="text-purple-400 text-xs mt-3">無料3回・クレジットカード不要</p>
+        <div className="flex justify-center gap-6 text-xs text-purple-400 mt-6">
+          <span>⭐ 満足度 4.8/5</span>
+          <span>👥 累計10,000人以上が鑑定</span>
+          <span>🔒 個人情報不要</span>
+        </div>
       </section>
 
       {/* 特徴 */}
@@ -69,8 +74,8 @@ export default function LandingPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
             { name: "お試し", price: "無料", limit: "3回まで", features: ["基本鑑定", "今日の運勢", "恋愛運"], url: "/uranai", highlight: false },
-            { name: "スタンダード", price: "¥980/月", limit: "毎日鑑定可能", features: ["全鑑定タイプ", "毎日の運勢", "相性診断"], url: "/uranai", highlight: true },
-            { name: "ビジネス", price: "¥2,980/月", limit: "無制限", features: ["スタンダードの全機能", "月運・年運鑑定", "優先サポート"], url: "/uranai", highlight: false },
+            { name: "スタンダード", price: "¥980/月", limit: "毎日鑑定可能", features: ["全鑑定タイプ", "毎日の運勢", "相性診断"], url: "/uranai?plan=standard", highlight: true },
+            { name: "ビジネス", price: "¥2,980/月", limit: "無制限", features: ["スタンダードの全機能", "月運・年運鑑定", "優先サポート"], url: "/uranai?plan=business", highlight: false },
           ].map((plan) => (
             <div key={plan.name} className={`rounded-2xl p-6 relative border ${plan.highlight ? "bg-purple-500/20 border-purple-400" : "bg-white/5 border-white/10"}`}>
               {plan.highlight && <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-purple-500 text-white text-xs px-3 py-0.5 rounded-full">人気No.1</div>}

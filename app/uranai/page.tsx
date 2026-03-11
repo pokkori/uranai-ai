@@ -105,6 +105,12 @@ export default function UranaiPage() {
   useEffect(() => {
     setUsageCount(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10));
     fetch("/api/auth/status").then(r => r.json()).then(d => setIsPremium(d.isPremium)).catch(() => {});
+    // LPの「申し込む」から遷移した場合は決済モーダルを自動表示
+    const plan = new URLSearchParams(window.location.search).get("plan");
+    if (plan === "standard" || plan === "business") {
+      setPayjpPlan(plan);
+      setShowPayjp(true);
+    }
   }, []);
 
   const remaining = Math.max(0, FREE_LIMIT - usageCount);
