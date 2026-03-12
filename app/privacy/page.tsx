@@ -75,7 +75,7 @@ export default function PrivacyPage() {
 
           <div>
             <h2 className="font-bold text-white mb-2">9. お問い合わせ</h2>
-            <p>本ポリシーに関するご質問は levonadesign@gmail.com までご連絡ください。</p>
+            <p>本ポリシーに関するご質問は X(Twitter) @levona_design へのDM までご連絡ください。</p>
           </div>
         </section>
       </article>
