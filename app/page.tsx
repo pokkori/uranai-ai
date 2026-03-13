@@ -21,10 +21,10 @@ export default function LandingPage() {
       <section className="text-center py-20 px-6 max-w-3xl mx-auto">
         <div className="text-5xl mb-6">🔮</div>
         <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-          知らないまま過ごすと<br /><span className="text-purple-300">大切な転機を見逃す</span>
+          生年月日だけで、<br /><span className="text-purple-300">今月の転機・恋愛・仕事の流れがわかる</span>
         </h1>
         <p className="text-purple-200 text-lg mb-8 leading-relaxed">
-          四柱推命×九星気学AIが、あなたの運命の波を分析。<br />
+          九星気学×干支AIが、あなたの運命の波を分析。<br />
           今年の転機・恋愛の流れ・仕事の変化を今すぐ確認してください。
         </p>
         <Link href="/uranai" className="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-lg px-10 py-4 rounded-full hover:opacity-90 transition-opacity shadow-lg shadow-purple-900">
