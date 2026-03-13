@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import UranaiSampleSection from "@/components/UranaiSampleSection";
+import DailyFortuneSection from "@/components/DailyFortuneSection";
 
 export const metadata: Metadata = {
   title: "AI占い｜四柱推命・九星気学で本格鑑定",
@@ -37,6 +38,9 @@ export default function LandingPage() {
           <span>🔒 個人情報不要</span>
         </div>
       </section>
+
+      {/* 今日の日運 */}
+      <DailyFortuneSection />
 
       {/* 今月の転機ティーザー */}
       <section className="py-10 px-6 max-w-3xl mx-auto">
