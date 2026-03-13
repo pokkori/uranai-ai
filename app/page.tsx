@@ -37,6 +37,50 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* 今月の転機ティーザー */}
+      <section className="py-10 px-6 max-w-3xl mx-auto">
+        <div className="relative bg-gradient-to-br from-purple-900/80 to-pink-900/60 border border-purple-400/40 rounded-3xl p-7 overflow-hidden">
+          <div className="absolute top-0 right-0 w-40 h-40 bg-purple-500/10 rounded-full -translate-y-1/2 translate-x-1/2" />
+          <div className="relative">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse">🌙 3月の転機情報</span>
+              <span className="text-purple-300 text-xs">2026年最新</span>
+            </div>
+            <h2 className="text-xl font-bold text-white mb-3">
+              3月は「出会いと別れが交差する月」<br />
+              <span className="text-purple-300 text-lg font-normal">あなたに転機が訪れるのはいつ？</span>
+            </h2>
+            <p className="text-purple-200 text-sm leading-relaxed mb-6">
+              九星気学では2026年3月（三碧木星月）は<strong className="text-white">「新しい縁と決断の月」</strong>。
+              特に<span className="text-yellow-300 font-bold">3/20（春分）前後</span>は運命の歯車が大きく動く時期とされています。
+              あなたの生年月日から、転機が訪れる日を今すぐ確認してみてください。
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
+              {[
+                { period: "3/1〜5", type: "出会い運↑", color: "bg-pink-500/20 border-pink-400/40 text-pink-300" },
+                { period: "3/10〜15", type: "仕事運↑", color: "bg-blue-500/20 border-blue-400/40 text-blue-300" },
+                { period: "3/20前後", type: "転機の日◎", color: "bg-yellow-500/20 border-yellow-400/40 text-yellow-300" },
+                { period: "3/28〜31", type: "決断の時", color: "bg-purple-500/20 border-purple-400/40 text-purple-300" },
+              ].map((item) => (
+                <div key={item.period} className={`rounded-xl border p-3 text-center ${item.color}`}>
+                  <p className="text-xs font-bold mb-0.5">{item.period}</p>
+                  <p className="text-xs">{item.type}</p>
+                </div>
+              ))}
+            </div>
+            <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-5 text-xs text-purple-200 leading-relaxed">
+              ⚠️ <strong className="text-white">ただし、これは一般的な傾向です。</strong><br />
+              あなたの生年月日（四柱推命の命式）によって、転機が来る時期は人それぞれ異なります。
+              「今月の転機はいつ？」をAIが生年月日から個別に鑑定します。
+            </div>
+            <Link href="/uranai" className="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold px-7 py-3 rounded-full hover:opacity-90 transition-opacity shadow-lg text-sm">
+              🔮 今月の転機をAIに鑑定してもらう →
+            </Link>
+            <p className="text-purple-500 text-xs mt-2">無料3回・生年月日だけで診断</p>
+          </div>
+        </div>
+      </section>
+
       {/* 特徴 */}
       <section className="py-16 px-6 max-w-4xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
