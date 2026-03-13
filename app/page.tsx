@@ -113,7 +113,7 @@ export default function LandingPage() {
             { name: "ビジネス", price: "¥2,980/月", limit: "無制限", features: ["スタンダードの全機能", "月運・年運鑑定", "優先サポート"], url: "/uranai?plan=business", highlight: false },
           ].map((plan) => (
             <div key={plan.name} className={`rounded-2xl p-6 relative border ${plan.highlight ? "bg-purple-500/20 border-purple-400" : "bg-white/5 border-white/10"}`}>
-              {plan.highlight && <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-purple-500 text-white text-xs px-3 py-0.5 rounded-full">人気No.1</div>}
+              {plan.highlight && <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-purple-500 text-white text-xs px-3 py-0.5 rounded-full">おすすめ</div>}
               <div className="font-bold mb-1">{plan.name}</div>
               <div className="text-2xl font-bold text-purple-300 mb-1">{plan.price}</div>
               <div className="text-xs text-purple-400 mb-4">{plan.limit}</div>
