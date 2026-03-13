@@ -32,8 +32,8 @@ export default function LandingPage() {
         </Link>
         <p className="text-purple-400 text-xs mt-3">無料3回・クレジットカード不要</p>
         <div className="flex justify-center gap-6 text-xs text-purple-400 mt-6">
-          <span>⭐ 満足度 4.8/5</span>
-          <span>👥 累計10,000人以上が鑑定</span>
+          <span>⭐ 四柱推命×九星気学 AI</span>
+          <span>👥 毎日更新・リピーター多数</span>
           <span>🔒 個人情報不要</span>
         </div>
       </section>
