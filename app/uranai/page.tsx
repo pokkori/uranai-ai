@@ -383,8 +383,13 @@ export default function UranaiPage() {
                     ) : (
                       <div className="p-4 relative">
                         <div className="grid grid-cols-2 gap-3 text-xs blur-sm pointer-events-none select-none">
-                          {["⭐ 今日の総合運", "💕 恋愛運", "💼 仕事運", "🎨 ラッキーカラー"].map(item => (
-                            <div key={item} className="bg-white/5 rounded-lg p-2.5 h-12" />
+                          {[
+                            "⭐ 今日の総合運: 大吉・行動が吉",
+                            "💕 恋愛運: 告白は週末が◎",
+                            "💼 仕事運: 新しい縁が来る",
+                            "🎨 ラッキー: 紫・東の方角"
+                          ].map(item => (
+                            <div key={item} className="bg-white/5 rounded-lg p-2.5 text-xs text-purple-200">{item}</div>
                           ))}
                         </div>
                         <div className="absolute inset-0 flex flex-col items-center justify-center bg-indigo-950/60 rounded-b-xl p-3">
