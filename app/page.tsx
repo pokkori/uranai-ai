@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import UranaiSampleSection from "@/components/UranaiSampleSection";
 
 export const metadata: Metadata = {
   title: "AI占い｜四柱推命・九星気学で本格鑑定",
@@ -98,18 +99,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 鑑定サンプル */}
-      <section className="py-16 px-6 max-w-3xl mx-auto">
-        <h2 className="text-2xl font-bold text-center mb-8">鑑定サンプル</h2>
-        <div className="bg-white/5 border border-purple-500/30 rounded-2xl p-6 text-sm leading-relaxed text-purple-100">
-          <p className="font-bold text-purple-300 mb-3">✨ Aさん（1990年5月15日・女性）への鑑定結果</p>
-          <p className="mb-3">🌟 <strong>あなたの本質的な性格</strong><br />
-          あなたは直感力と行動力を兼ね備えた九紫火星の持ち主。華やかな存在感と鋭い感性で、周囲の人を惹きつける才能があります...</p>
-          <p className="mb-3">💫 <strong>今月の恋愛運</strong><br />
-          月の後半から出会い運が上昇。普段行かない場所への外出が吉。積極的な自己表現が新たな縁を引き寄せます...</p>
-          <p className="text-purple-400 text-xs mt-4">※ これはサンプルです。実際の鑑定はより詳細な内容になります</p>
-        </div>
-      </section>
+      {/* 鑑定サンプル — 本格版 */}
+      <UranaiSampleSection />
 
       {/* 料金 */}
       <section className="py-16 px-6 max-w-4xl mx-auto">
