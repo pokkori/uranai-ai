@@ -146,6 +146,17 @@ export default function LandingPage() {
             <Link href="/terms" className="hover:text-purple-300">利用規約</Link>
             <Link href="/privacy" className="hover:text-purple-300">プライバシーポリシー</Link>
           </div>
+          <div className="mt-4 pt-4 border-t border-white/10">
+            <p className="text-xs text-purple-600 mb-2">ポッコリラボの他のサービス</p>
+            <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-purple-600">
+              <a href="https://keiba-yoso-ai.vercel.app" className="hover:text-purple-300">競馬予想AI</a>
+              <a href="https://rougo-sim-ai.vercel.app" className="hover:text-purple-300">老後シミュレーターAI</a>
+              <a href="https://claim-ai-beryl.vercel.app" className="hover:text-purple-300">クレームAI</a>
+              <a href="https://hojyokin-ai-delta.vercel.app" className="hover:text-purple-300">補助金AI</a>
+              <a href="https://keiyakusho-ai.vercel.app" className="hover:text-purple-300">契約書AIレビュー</a>
+              <a href="https://hada-ai.vercel.app" className="hover:text-purple-300">AI美肌診断</a>
+            </div>
+          </div>
         </div>
       </footer>
     </main>
