@@ -30,9 +30,59 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "AI占い",
+      "url": SITE_URL,
+      "applicationCategory": "LifestyleApplication",
+      "operatingSystem": "Web",
+      "offers": { "@type": "Offer", "price": "980", "priceCurrency": "JPY", "description": "プレミアムプラン ¥980/月" },
+      "description": DESC,
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "どんな占いができますか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "九星気学×干支を組み合わせた本格AI鑑定が可能です。今日の運勢・恋愛運・仕事運・総合運命の分析に加え、プレミアムプランでは相性占い（相性スコア・恋愛相性・仕事相性の詳細分析）もご利用いただけます。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "相性占いはどのように使いますか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "プレミアムプランにアップグレード後、自分と相手の生年月日を入力するだけで、0〜100点の相性スコアと詳細な恋愛・仕事の相性分析レポートが表示されます。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "無料で使えますか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "登録不要で3回分の占いを無料でお試しいただけます。プレミアムプラン（¥980/月）で占い回数無制限・相性占い・詳細な運命分析が利用可能になります。"
+          }
+        },
+      ],
+    },
+  ],
+};
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ja">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
         <Analytics />
