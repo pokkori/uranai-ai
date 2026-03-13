@@ -353,6 +353,52 @@ export default function UranaiPage() {
                     印刷・PDF保存
                   </button>
                 </div>
+                {/* 今日の運勢サマリー（プレミアム限定） */}
+                {type !== "compatibility" && (
+                  <div className="mt-4 border border-purple-500/30 rounded-xl overflow-hidden">
+                    <div className="bg-purple-900/50 px-4 py-2 flex items-center gap-2">
+                      <span className="text-sm font-bold text-purple-200">🌟 今日の運勢チェック</span>
+                      {isPremium ? (
+                        <span className="text-xs bg-purple-600/60 text-purple-200 px-2 py-0.5 rounded-full">毎日更新</span>
+                      ) : (
+                        <span className="text-xs bg-yellow-500/20 text-yellow-300 px-2 py-0.5 rounded-full border border-yellow-500/30">PRO限定</span>
+                      )}
+                    </div>
+                    {isPremium ? (
+                      <div className="p-4 grid grid-cols-2 gap-3 text-xs">
+                        {[
+                          { label: "今日の総合運", icon: "⭐" },
+                          { label: "恋愛運", icon: "💕" },
+                          { label: "仕事運", icon: "💼" },
+                          { label: "ラッキーカラー", icon: "🎨" },
+                        ].map(item => (
+                          <div key={item.label} className="bg-white/5 rounded-lg p-2.5">
+                            <div className="text-purple-400 mb-1">{item.icon} {item.label}</div>
+                            <div className="text-purple-100 text-xs leading-relaxed">
+                              {result.match(new RegExp(`${item.label}[：:][^\n]*`))?.[0]?.replace(`${item.label}：`, "").replace(`${item.label}:`, "").trim().slice(0, 30) || "鑑定結果を参照"}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="p-4 relative">
+                        <div className="grid grid-cols-2 gap-3 text-xs blur-sm pointer-events-none select-none">
+                          {["⭐ 今日の総合運", "💕 恋愛運", "💼 仕事運", "🎨 ラッキーカラー"].map(item => (
+                            <div key={item} className="bg-white/5 rounded-lg p-2.5 h-12" />
+                          ))}
+                        </div>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center bg-indigo-950/60 rounded-b-xl p-3">
+                          <p className="text-xs text-purple-200 mb-2 text-center font-medium">毎日の運勢チェックで<br />人生の流れをつかむ</p>
+                          <button onClick={() => { setPayjpPlan("standard"); setShowPayjp(true); }}
+                            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white font-bold py-1.5 px-4 rounded-lg transition-opacity text-xs">
+                            プレミアムで毎日運勢チェック（¥980/月）
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 <div className="mt-4 pt-4 border-t border-white/10 space-y-3">
                   {!isPremium && (
                     <button onClick={() => { setPayjpPlan("standard"); setShowPayjp(true); }}
