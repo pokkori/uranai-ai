@@ -187,10 +187,10 @@ export default function UranaiPage() {
 
   const shareText = result
     ? type === "compatibility" && compatibilityScore !== null
-      ? `${name || "私"}と${partnerName || "相手"}の相性スコアは${compatibilityScore}点/100点！💑\n四柱推命×九星気学AIが鑑定してくれた✨\n#相性占い #AI占い #四柱推命\nhttps://uranai-ai.vercel.app`
+      ? `${name || "私"}と${partnerName || "相手"}の相性スコアは${compatibilityScore}点/100点！💑\n四柱推命×九星気学AIが鑑定してくれた✨\n#相性占い #AI占い #四柱推命\nhttps://uranai-ai-sigma.vercel.app`
       : type === "compatibility"
-      ? `${name || "私"}と${partnerName || "相手"}の相性をAIが鑑定！💑\n四柱推命×九星気学で本当の相性が分かった✨\n#相性占い #AI占い\nhttps://uranai-ai.vercel.app`
-      : `AIが私の運命を鑑定してくれました✨ #AI占い\nhttps://uranai-ai.vercel.app`
+      ? `${name || "私"}と${partnerName || "相手"}の相性をAIが鑑定！💑\n四柱推命×九星気学で本当の相性が分かった✨\n#相性占い #AI占い\nhttps://uranai-ai-sigma.vercel.app`
+      : `AIが私の運命を鑑定してくれました✨ #AI占い\nhttps://uranai-ai-sigma.vercel.app`
     : "";
 
   return (
