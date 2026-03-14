@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import UranaiSampleSection from "@/components/UranaiSampleSection";
 import DailyFortuneSection from "@/components/DailyFortuneSection";
+import TodayFortune from "@/components/TodayFortune";
 
 export const metadata: Metadata = {
   title: "AI占い｜四柱推命・九星気学で本格鑑定",
@@ -36,6 +37,9 @@ export default function LandingPage() {
           <span>⭐ 四柱推命×九星気学 AI</span>
           <span>👥 毎日更新・リピーター多数</span>
           <span>🔒 個人情報不要</span>
+        </div>
+        <div className="mt-8">
+          <TodayFortune />
         </div>
       </section>
 
