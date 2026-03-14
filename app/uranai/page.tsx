@@ -339,8 +339,17 @@ export default function UranaiPage() {
                       <h2 key={i} className="text-lg font-bold text-white pt-2">{line.replace('## ', '')}</h2>
                     );
                     if (line.trim() === '---' || line.trim() === '') return <div key={i} className="h-1" />;
-                    const html = line.replace(/\*\*(.+?)\*\*/g, '<strong class="text-white">$1</strong>');
-                    return <p key={i} dangerouslySetInnerHTML={{ __html: html }} />;
+                    // **太字** をReact要素に変換（dangerouslySetInnerHTML不使用・XSS対策）
+                    const parts = line.split(/\*\*(.+?)\*\*/g);
+                    return (
+                      <p key={i}>
+                        {parts.map((part, j) =>
+                          j % 2 === 1
+                            ? <strong key={j} className="text-white">{part}</strong>
+                            : part
+                        )}
+                      </p>
+                    );
                   })}
                 </div>
                 <div className="mt-4 flex gap-2 justify-end">
