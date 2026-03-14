@@ -426,6 +426,37 @@ export default function UranaiPage() {
                     </a>
                   )}
                 </div>
+
+                {/* シェアカード */}
+                <div className="mt-8 bg-gradient-to-br from-purple-600 to-pink-500 rounded-2xl p-6 text-white text-center">
+                  <p className="text-sm opacity-80 mb-2">今日の運勢をシェア</p>
+                  {type === "compatibility" && compatibilityScore !== null ? (
+                    <>
+                      <p className="text-2xl font-bold mb-1">相性スコア {compatibilityScore}点/100点</p>
+                      <p className="text-sm opacity-90 mb-4">
+                        {name || "私"}と{partnerName || "相手"}の相性をAIが鑑定しました💑
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-2xl font-bold mb-1">
+                        {type === "today" ? "今日の運勢を鑑定しました" : type === "love" ? "恋愛運を鑑定しました" : "総合運命を鑑定しました"}
+                      </p>
+                      <p className="text-sm opacity-90 mb-4">四柱推命×九星気学AIがあなたの運命を読み解きました✨</p>
+                    </>
+                  )}
+                  <button
+                    onClick={() => {
+                      window.open(
+                        `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent("https://uranai-ai-sigma.vercel.app")}`,
+                        "_blank"
+                      );
+                    }}
+                    className="bg-white text-purple-700 font-bold px-6 py-2 rounded-full hover:bg-purple-50 transition-colors"
+                  >
+                    Xでシェアする
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center h-full text-purple-500 gap-3">

@@ -23,7 +23,7 @@ export default function LandingPage() {
       <section className="text-center py-20 px-6 max-w-3xl mx-auto">
         <div className="text-5xl mb-6">🔮</div>
         <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-          生年月日だけで、<br /><span className="text-purple-300">今月の転機・恋愛・仕事の流れがわかる</span>
+          星が、あなたの今日の答えを持っている。
         </h1>
         <p className="text-purple-200 text-lg mb-8 leading-relaxed">
           九星気学×干支AIが、あなたの運命の波を分析。<br />
@@ -133,6 +133,18 @@ export default function LandingPage() {
               </Link>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* 相性占い予告 */}
+      <section className="max-w-2xl mx-auto px-6 py-8 text-center">
+        <div className="bg-purple-900/40 border border-purple-700 rounded-2xl p-6">
+          <p className="text-purple-300 text-sm font-semibold mb-2">✨ 近日公開</p>
+          <h3 className="text-xl font-bold text-white mb-2">相性占い機能</h3>
+          <p className="text-purple-200 text-sm">
+            2人の星座を入力するだけ。AIが相性スコアと相性のポイントを診断。<br/>
+            「私たち○○点でした」をXでシェアして友達と比べよう。
+          </p>
         </div>
       </section>
 
