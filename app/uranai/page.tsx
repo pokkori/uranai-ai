@@ -148,21 +148,43 @@ export default function UranaiPage() {
         setLoading(false);
         return;
       }
-      const data = await res.json();
-      if (!res.ok) { setResult(data.error || "エラーが発生しました"); setLoading(false); return; }
-      const newCount = data.count ?? usageCount + 1;
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({ error: "エラーが発生しました" }));
+        setResult(data.error || "エラーが発生しました");
+        setLoading(false);
+        return;
+      }
+
+      // レスポンスヘッダーからメタ情報を取得
+      const resKyusei = res.headers.get("X-Uranai-Kyusei") || "";
+      const resEto = res.headers.get("X-Uranai-Eto") || "";
+      const resPartnerKyusei = res.headers.get("X-Uranai-Partner-Kyusei") || "";
+      const resPartnerEto = res.headers.get("X-Uranai-Partner-Eto") || "";
+      const resCount = res.headers.get("X-Uranai-Count");
+      const newCount = resCount ? parseInt(resCount, 10) : usageCount + 1;
+
+      setKyusei(resKyusei);
+      setEto(resEto);
+      setPartnerKyusei(resPartnerKyusei);
+      setPartnerEto(resPartnerEto);
       localStorage.setItem(STORAGE_KEY, String(newCount));
       setUsageCount(newCount);
-      const resultText = data.result || "生成に失敗しました";
-      setResult(resultText);
-      setKyusei(data.kyusei || "");
-      setEto(data.eto || "");
-      setPartnerKyusei(data.partnerKyusei || "");
-      setPartnerEto(data.partnerEto || "");
+
+      // Streaming読み取り
+      const reader = res.body!.getReader();
+      const decoder = new TextDecoder();
+      let resultText = "";
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        resultText += decoder.decode(value, { stream: true });
+        setResult(resultText);
+      }
+
       // 相性スコアを抽出 (例: "相性スコア: 78点" or "78点/100点")
       if (type === "compatibility") {
-        const m = resultText.match(/(\d{1,3})\s*[点点]\s*(?:\/\s*100)?/) || resultText.match(/相性[スコア：:\s]+(\d{1,3})/);
-        setCompatibilityScore(m ? Math.min(100, parseInt(m[1], 10)) : null);
+        const scoreMatch = resultText.match(/(\d{1,3})\s*[点点]\s*(?:\/\s*100)?/) || resultText.match(/相性[スコア：:\s]+(\d{1,3})/);
+        setCompatibilityScore(scoreMatch ? Math.min(100, parseInt(scoreMatch[1], 10)) : null);
       } else {
         setCompatibilityScore(null);
       }

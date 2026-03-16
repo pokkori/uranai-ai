@@ -77,6 +77,10 @@ export async function POST(req: NextRequest) {
   const today = new Date();
   const todayStr = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
 
+  const newCount = cookieCount + 1;
+  // Cookie は Set-Cookie ヘッダーで渡す
+  const cookieHeader = `${COOKIE_KEY}=${newCount}; Max-Age=${60 * 60 * 24 * 30}; Path=/; SameSite=Lax; HttpOnly; Secure`;
+
   let prompt = "";
 
   if (type === "compatibility") {
@@ -133,16 +137,40 @@ export async function POST(req: NextRequest) {
 ※ 占いは統計学的な傾向であり、参考としてご活用ください。`;
 
     try {
-      const message = await client.messages.create({
+      const stream = client.messages.stream({
         model: "claude-haiku-4-5-20251001",
         max_tokens: 2500,
         messages: [{ role: "user", content: prompt }],
       });
-      const text = message.content[0].type === "text" ? message.content[0].text : "";
-      const newCount = cookieCount + 1;
-      const res = NextResponse.json({ result: text, kyusei, eto, partnerKyusei, partnerEto, count: newCount });
-      res.cookies.set(COOKIE_KEY, String(newCount), { maxAge: 60 * 60 * 24 * 30, sameSite: "lax", httpOnly: true, secure: true });
-      return res;
+
+      const readableStream = new ReadableStream({
+        async start(controller) {
+          try {
+            for await (const chunk of stream) {
+              if (chunk.type === "content_block_delta" && chunk.delta.type === "text_delta") {
+                controller.enqueue(new TextEncoder().encode(chunk.delta.text));
+              }
+            }
+          } catch (err) {
+            console.error(err);
+          } finally {
+            controller.close();
+          }
+        },
+      });
+
+      return new Response(readableStream, {
+        headers: {
+          "Content-Type": "text/plain; charset=utf-8",
+          "Transfer-Encoding": "chunked",
+          "Set-Cookie": cookieHeader,
+          "X-Uranai-Kyusei": kyusei,
+          "X-Uranai-Eto": eto,
+          "X-Uranai-Partner-Kyusei": partnerKyusei,
+          "X-Uranai-Partner-Eto": partnerEto,
+          "X-Uranai-Count": String(newCount),
+        },
+      });
     } catch (err) {
       console.error(err);
       return NextResponse.json({ error: "AI生成中にエラーが発生しました。しばらく待ってから再試行してください。" }, { status: 500 });
@@ -204,16 +232,38 @@ ${loveSection}
 ※ 占いは統計学的な傾向であり、参考としてご活用ください。`;
 
   try {
-    const message = await client.messages.create({
+    const stream = client.messages.stream({
       model: "claude-haiku-4-5-20251001",
       max_tokens: 2500,
       messages: [{ role: "user", content: prompt }],
     });
-    const text = message.content[0].type === "text" ? message.content[0].text : "";
-    const newCount = cookieCount + 1;
-    const res = NextResponse.json({ result: text, kyusei, eto, count: newCount });
-    res.cookies.set(COOKIE_KEY, String(newCount), { maxAge: 60 * 60 * 24 * 30, sameSite: "lax", httpOnly: true, secure: true });
-    return res;
+
+    const readableStream = new ReadableStream({
+      async start(controller) {
+        try {
+          for await (const chunk of stream) {
+            if (chunk.type === "content_block_delta" && chunk.delta.type === "text_delta") {
+              controller.enqueue(new TextEncoder().encode(chunk.delta.text));
+            }
+          }
+        } catch (err) {
+          console.error(err);
+        } finally {
+          controller.close();
+        }
+      },
+    });
+
+    return new Response(readableStream, {
+      headers: {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Transfer-Encoding": "chunked",
+        "Set-Cookie": cookieHeader,
+        "X-Uranai-Kyusei": kyusei,
+        "X-Uranai-Eto": eto,
+        "X-Uranai-Count": String(newCount),
+      },
+    });
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: "AI生成中にエラーが発生しました。しばらく待ってから再試行してください。" }, { status: 500 });
