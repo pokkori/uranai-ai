@@ -7,8 +7,8 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 const SITE_URL = "https://uranai-ai-sigma.vercel.app";
-const TITLE = "AI占い｜九星気学×干支で本格鑑定・相性占いも｜無料3回";
-const DESC = "生年月日を入力するだけ。AIが九星気学×干支で今日の運勢・恋愛運・総合運命を鑑定。プレミアムでは相性占い（相性スコア＋恋愛・仕事分析）も。無料3回から。";
+const TITLE = "AI占い｜無料・九星気学×干支で本格鑑定・今日の運勢・恋愛運・相性占い｜登録不要";
+const DESC = "AI占いが無料3回から。生年月日を入力するだけで九星気学×干支による今日の運勢・恋愛運・仕事運・総合運命をAIが本格鑑定。相性占い（相性スコア＋恋愛・仕事相性分析）もプレミアムで利用可能。タロット占い・数秘術より精度が高いと好評。登録不要・今すぐ無料占い。";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -39,7 +39,8 @@ const jsonLd = {
       "url": SITE_URL,
       "applicationCategory": "LifestyleApplication",
       "operatingSystem": "Web",
-      "offers": { "@type": "Offer", "price": "980", "priceCurrency": "JPY", "description": "プレミアムプラン ¥980/月" },
+      "keywords": "AI占い,無料占い,九星気学,干支,運勢,恋愛運,相性占い,今日の運勢,本格鑑定",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "JPY", "description": "無料3回・プレミアムプラン ¥980/月" },
       "description": DESC,
     },
     {
