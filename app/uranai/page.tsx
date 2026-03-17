@@ -101,6 +101,7 @@ export default function UranaiPage() {
   const [showPayjp, setShowPayjp] = useState(false);
   const [payjpPlan, setPayjpPlan] = useState("standard");
   const [compatibilityScore, setCompatibilityScore] = useState<number | null>(null);
+  const [starfall, setStarfall] = useState(false);
 
   useEffect(() => {
     setUsageCount(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10));
@@ -180,6 +181,8 @@ export default function UranaiPage() {
         resultText += decoder.decode(value, { stream: true });
         setResult(resultText);
       }
+      setStarfall(true);
+      setTimeout(() => setStarfall(false), 3000);
 
       // 相性スコアを抽出 (例: "相性スコア: 78点" or "78点/100点")
       if (type === "compatibility") {
@@ -218,11 +221,42 @@ export default function UranaiPage() {
       ? `${name || "私"}と${partnerName || "相手"}の相性スコアは${compatibilityScore}点/100点！💑\n四柱推命×九星気学AIが鑑定してくれた✨\n#相性占い #AI占い #四柱推命\nhttps://uranai-ai-sigma.vercel.app`
       : type === "compatibility"
       ? `${name || "私"}と${partnerName || "相手"}の相性をAIが鑑定！💑\n四柱推命×九星気学で本当の相性が分かった✨\n#相性占い #AI占い\nhttps://uranai-ai-sigma.vercel.app`
-      : `AIが私の運命を鑑定してくれました✨ #AI占い\nhttps://uranai-ai-sigma.vercel.app`
+      : (() => {
+          const plain = result.replace(/^#+\s*/gm, "").replace(/\*\*/g, "").replace(/\n+/g, " ").trim();
+          const snippet = plain.slice(0, 100);
+          const typeLabel = type === "today" ? "今日の運勢" : type === "love" ? "恋愛運" : "総合運命";
+          return `【AI占い】${typeLabel}を鑑定してもらいました✨\n「${snippet}...」\n#AI占い #${typeLabel} #四柱推命\nhttps://uranai-ai-sigma.vercel.app`;
+        })()
     : "";
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-indigo-950 to-purple-950 text-white">
+    <main className="min-h-screen bg-gradient-to-b from-indigo-950 to-purple-950 text-white relative overflow-hidden">
+      <style>{`
+        @keyframes starfall {
+          0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+          100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        .star-particle {
+          position: fixed;
+          pointer-events: none;
+          z-index: 9999;
+          animation: starfall linear forwards;
+        }
+      `}</style>
+      {starfall && Array.from({ length: 20 }).map((_, i) => (
+        <span
+          key={i}
+          className="star-particle text-xl"
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `-20px`,
+            animationDuration: `${1.5 + Math.random() * 2}s`,
+            animationDelay: `${Math.random() * 1}s`,
+          }}
+        >
+          {["✨", "⭐", "🌟", "💫"][Math.floor(Math.random() * 4)]}
+        </span>
+      ))}
       {showPaywall && <PaywallModal onClose={() => setShowPaywall(false)} isCompatibility={paywallIsCompatibility} onStartPayjp={(plan) => { setPayjpPlan(plan); setShowPaywall(false); setShowPayjp(true); }} />}
       {showPayjp && (
         <PayjpModal

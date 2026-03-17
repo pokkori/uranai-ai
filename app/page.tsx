@@ -58,25 +58,47 @@ export default function LandingPage() {
         <div className="relative bg-gradient-to-br from-purple-900/80 to-pink-900/60 border border-purple-400/40 rounded-3xl p-7 overflow-hidden">
           <div className="absolute top-0 right-0 w-40 h-40 bg-purple-500/10 rounded-full -translate-y-1/2 translate-x-1/2" />
           <div className="relative">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse">🌙 3月の転機情報</span>
+            {(() => {
+              const m = today.getMonth() + 1;
+              const monthThemes: Record<number, { theme: string; kyusei: string; keyword: string; kidate: string }> = {
+                1: { theme: "新たな出発と決意の月", kyusei: "一白水星月", keyword: "「始まりと覚悟の月」", kidate: "1/20（大寒）前後" },
+                2: { theme: "内省と準備の月", kyusei: "二黒土星月", keyword: "「土台固めの月」", kidate: "2/4（立春）前後" },
+                3: { theme: "出会いと別れが交差する月", kyusei: "三碧木星月", keyword: "「新しい縁と決断の月」", kidate: "3/20（春分）前後" },
+                4: { theme: "行動と変化の月", kyusei: "四緑木星月", keyword: "「動き出しの月」", kidate: "4/5（清明）前後" },
+                5: { theme: "繁栄と発展の月", kyusei: "五黄土星月", keyword: "「中心とパワーの月」", kidate: "5/5（立夏）前後" },
+                6: { theme: "調和と人間関係の月", kyusei: "六白金星月", keyword: "「縁と絆の月」", kidate: "6/21（夏至）前後" },
+                7: { theme: "情熱と直感の月", kyusei: "七赤金星月", keyword: "「喜びと収穫の月」", kidate: "7/7（七夕）前後" },
+                8: { theme: "積み重ねと継続の月", kyusei: "八白土星月", keyword: "「堅実と変革の月」", kidate: "8/8（立秋）前後" },
+                9: { theme: "完成と感謝の月", kyusei: "九紫火星月", keyword: "「輝きと別れの月」", kidate: "9/8（白露）前後" },
+                10: { theme: "収穫と転換の月", kyusei: "一白水星月", keyword: "「実りと再生の月」", kidate: "10/8（寒露）前後" },
+                11: { theme: "静寂と内観の月", kyusei: "二黒土星月", keyword: "「整理と蓄積の月」", kidate: "11/7（立冬）前後" },
+                12: { theme: "締めくくりと感謝の月", kyusei: "三碧木星月", keyword: "「完結と希望の月」", kidate: "12/22（冬至）前後" },
+              };
+              const mt = monthThemes[m] ?? monthThemes[3];
+              return (
+                <>
+          <div className="flex items-center gap-2 mb-4">
+              <span className="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse">🌙 {m}月の転機情報</span>
               <span className="text-purple-300 text-xs">2026年最新</span>
             </div>
             <h2 className="text-xl font-bold text-white mb-3">
-              3月は「出会いと別れが交差する月」<br />
+              {m}月は「{mt.theme}」<br />
               <span className="text-purple-300 text-lg font-normal">あなたに転機が訪れるのはいつ？</span>
             </h2>
             <p className="text-purple-200 text-sm leading-relaxed mb-6">
-              九星気学では2026年3月（三碧木星月）は<strong className="text-white">「新しい縁と決断の月」</strong>。
-              特に<span className="text-yellow-300 font-bold">3/20（春分）前後</span>は運命の歯車が大きく動く時期とされています。
+              九星気学では2026年{m}月（{mt.kyusei}）は<strong className="text-white">{mt.keyword}</strong>。
+              特に<span className="text-yellow-300 font-bold">{mt.kidate}</span>は運命の歯車が大きく動く時期とされています。
               あなたの生年月日から、転機が訪れる日を今すぐ確認してみてください。
             </p>
+                </>
+              );
+            })()}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
               {[
-                { period: "3/1〜5", type: "出会い運↑", color: "bg-pink-500/20 border-pink-400/40 text-pink-300" },
-                { period: "3/10〜15", type: "仕事運↑", color: "bg-blue-500/20 border-blue-400/40 text-blue-300" },
-                { period: "3/20前後", type: "転機の日◎", color: "bg-yellow-500/20 border-yellow-400/40 text-yellow-300" },
-                { period: "3/28〜31", type: "決断の時", color: "bg-purple-500/20 border-purple-400/40 text-purple-300" },
+                { period: `${today.getMonth()+1}/1〜5`, type: "出会い運↑", color: "bg-pink-500/20 border-pink-400/40 text-pink-300" },
+                { period: `${today.getMonth()+1}/10〜15`, type: "仕事運↑", color: "bg-blue-500/20 border-blue-400/40 text-blue-300" },
+                { period: `${today.getMonth()+1}/20前後`, type: "転機の日◎", color: "bg-yellow-500/20 border-yellow-400/40 text-yellow-300" },
+                { period: `${today.getMonth()+1}/末`, type: "決断の時", color: "bg-purple-500/20 border-purple-400/40 text-purple-300" },
               ].map((item) => (
                 <div key={item.period} className={`rounded-xl border p-3 text-center ${item.color}`}>
                   <p className="text-xs font-bold mb-0.5">{item.period}</p>
