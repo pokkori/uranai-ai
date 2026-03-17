@@ -102,6 +102,21 @@ export default function UranaiPage() {
   const [payjpPlan, setPayjpPlan] = useState("standard");
   const [compatibilityScore, setCompatibilityScore] = useState<number | null>(null);
   const [starfall, setStarfall] = useState(false);
+  const [uranaiScores, setUranaiScores] = useState<{total:number;love:number;work:number;money:number;health:number} | null>(null);
+
+  function parseUranaiScores(text: string) {
+    const get = (key: string) => {
+      const m = text.match(new RegExp(`===SCORE_${key}===(\\d+)`));
+      return m ? Math.min(10, Math.max(1, parseInt(m[1], 10))) : null;
+    };
+    const total = get("TOTAL"); const love = get("LOVE"); const work = get("WORK");
+    const money = get("MONEY"); const health = get("HEALTH");
+    if (total && love && work && money && health) return { total, love, work, money, health };
+    return null;
+  }
+  function cleanUranaiResult(text: string) {
+    return text.replace(/===SCORE_\w+===\d+\n?/g, "");
+  }
 
   useEffect(() => {
     setUsageCount(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10));
@@ -134,6 +149,7 @@ export default function UranaiPage() {
 
     setLoading(true);
     setResult("");
+    setUranaiScores(null);
     try {
       const res = await fetch("/api/uranai", {
         method: "POST",
@@ -179,7 +195,9 @@ export default function UranaiPage() {
         const { done, value } = await reader.read();
         if (done) break;
         resultText += decoder.decode(value, { stream: true });
-        setResult(resultText);
+        const scores = parseUranaiScores(resultText);
+        if (scores) setUranaiScores(scores);
+        setResult(cleanUranaiResult(resultText));
       }
       setStarfall(true);
       setTimeout(() => setStarfall(false), 3000);
@@ -392,6 +410,34 @@ export default function UranaiPage() {
               </div>
             ) : result ? (
               <div>
+                {/* 5軸運気スコア */}
+                {uranaiScores && type !== "compatibility" && (
+                  <div className="mb-5 bg-gradient-to-br from-purple-900/60 to-indigo-900/60 border border-purple-500/40 rounded-2xl p-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-lg">⭐</span>
+                      <h3 className="text-sm font-bold text-purple-200">今日の運気スコア</h3>
+                      <span className="ml-auto text-2xl font-black text-yellow-300">{uranaiScores.total}<span className="text-sm font-normal text-yellow-400">/10</span></span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {[
+                        { label: "恋愛運", val: uranaiScores.love, icon: "💕", color: "from-pink-500 to-rose-500" },
+                        { label: "仕事運", val: uranaiScores.work, icon: "💼", color: "from-blue-500 to-cyan-500" },
+                        { label: "金運", val: uranaiScores.money, icon: "💰", color: "from-yellow-500 to-amber-500" },
+                        { label: "健康運", val: uranaiScores.health, icon: "🌿", color: "from-green-500 to-emerald-500" },
+                      ].map(({ label, val, icon, color }) => (
+                        <div key={label} className="bg-white/5 rounded-xl p-2.5">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-xs text-purple-300">{icon} {label}</span>
+                            <span className="text-xs font-bold text-white">{val}/10</span>
+                          </div>
+                          <div className="w-full bg-white/10 rounded-full h-1.5">
+                            <div className={`h-1.5 rounded-full bg-gradient-to-r ${color} transition-all duration-700`} style={{ width: `${val * 10}%` }} />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 <div className="text-sm text-purple-100 leading-relaxed space-y-3">
                   {result.split('\n').map((line, i) => {
                     if (line.startsWith('### ')) return (
