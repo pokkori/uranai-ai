@@ -213,15 +213,18 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 相性占い予告 */}
+      {/* 相性占い */}
       <section className="max-w-2xl mx-auto px-6 py-8 text-center">
         <div className="bg-purple-900/40 border border-purple-700 rounded-2xl p-6">
-          <p className="text-purple-300 text-sm font-semibold mb-2">✨ 近日公開</p>
+          <p className="text-pink-300 text-sm font-semibold mb-2">💫 新機能 公開中</p>
           <h3 className="text-xl font-bold text-white mb-2">相性占い機能</h3>
-          <p className="text-purple-200 text-sm">
+          <p className="text-purple-200 text-sm mb-4">
             2人の星座を入力するだけ。AIが相性スコアと相性のポイントを診断。<br/>
             「私たち○○点でした」をXでシェアして友達と比べよう。
           </p>
+          <Link href="/uranai" className="inline-block bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold px-6 py-3 rounded-full hover:opacity-90 transition-opacity text-sm">
+            相性占いを試す →
+          </Link>
         </div>
       </section>
 
