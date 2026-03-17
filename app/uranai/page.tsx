@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import PayjpModal from "@/components/PayjpModal";
+import { track } from '@vercel/analytics';
 
 const FREE_LIMIT = 3;
 const STORAGE_KEY = "uranai_count";
@@ -57,11 +58,11 @@ function PaywallModal({ onClose, isCompatibility, onStartPayjp }: { onClose: () 
           <li>✨ ラッキー情報・行動指針を毎日更新</li>
         </ul>
         <div className="space-y-3 mb-4">
-          <button onClick={() => onStartPayjp("standard")}
+          <button onClick={() => { track('upgrade_click', { service: '占いAI', plan: 'standard' }); onStartPayjp("standard"); }}
             className="block w-full bg-purple-500 hover:bg-purple-400 text-white font-bold py-3 rounded-xl transition-colors">
             毎日鑑定＋相性占いプラン ¥980/月
           </button>
-          <button onClick={() => onStartPayjp("business")}
+          <button onClick={() => { track('upgrade_click', { service: '占いAI', plan: 'business' }); onStartPayjp("business"); }}
             className="block w-full bg-white/10 hover:bg-white/20 text-white py-3 rounded-xl transition-colors text-sm">
             プレミアム ¥2,980/月（詳細版・優先生成）
           </button>
@@ -151,17 +152,20 @@ export default function UranaiPage() {
     e.preventDefault();
 
     if (type === "compatibility" && !isPremium) {
+      track('paywall_shown', { service: '占いAI' });
       setPaywallIsCompatibility(true);
       setShowPaywall(true);
       return;
     }
 
     if (isLimitReached) {
+      track('paywall_shown', { service: '占いAI' });
       setPaywallIsCompatibility(false);
       setShowPaywall(true);
       return;
     }
 
+    track('ai_generated', { service: '占いAI' });
     setLoading(true);
     setResult("");
     setUranaiScores(null);
@@ -550,7 +554,7 @@ export default function UranaiPage() {
                         </div>
                         <div className="absolute inset-0 flex flex-col items-center justify-center bg-indigo-950/60 rounded-b-xl p-3">
                           <p className="text-xs text-purple-200 mb-2 text-center font-medium">毎日の運勢チェックで<br />人生の流れをつかむ</p>
-                          <button onClick={() => { setPayjpPlan("standard"); setShowPayjp(true); }}
+                          <button onClick={() => { track('upgrade_click', { service: '占いAI', plan: 'standard' }); setPayjpPlan("standard"); setShowPayjp(true); }}
                             className="bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white font-bold py-1.5 px-4 rounded-lg transition-opacity text-xs">
                             プレミアムで毎日運勢チェック（¥980/月）
                           </button>
@@ -563,7 +567,7 @@ export default function UranaiPage() {
                 <div className="mt-4 pt-4 border-t border-white/10 space-y-3">
                   {!isPremium && (
                     <>
-                      <button onClick={() => { setPayjpPlan("standard"); setShowPayjp(true); }}
+                      <button onClick={() => { track('upgrade_click', { service: '占いAI', plan: 'standard' }); setPayjpPlan("standard"); setShowPayjp(true); }}
                         className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white font-bold py-3 rounded-xl transition-opacity text-sm">
                         ✨ 毎日の運勢＋相性占いを使う（¥980/月）
                       </button>
