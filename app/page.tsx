@@ -10,8 +10,15 @@ export const metadata: Metadata = {
 };
 
 export default function LandingPage() {
+  const today = new Date();
   return (
     <main className="min-h-screen bg-gradient-to-b from-indigo-950 to-purple-950 text-white">
+      {/* 毎月1〜7日の間だけ表示される「今月の新しい診断」バナー */}
+      {today.getDate() <= 7 && (
+        <div className="bg-gradient-to-r from-purple-700 to-indigo-600 text-white text-center py-3 px-4 text-sm font-bold">
+          ✨ {today.getMonth() + 1}月の新しい運勢診断が解放されました！今すぐ診断する
+        </div>
+      )}
       <nav className="px-6 py-4 flex items-center justify-between max-w-5xl mx-auto">
         <span className="font-bold text-lg">🔮 AI占い</span>
         <Link href="/uranai" className="bg-purple-500 hover:bg-purple-400 text-white text-sm font-medium px-4 py-2 rounded-full transition-colors">
