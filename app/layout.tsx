@@ -21,11 +21,13 @@ export const metadata: Metadata = {
     siteName: "AI占い",
     locale: "ja_JP",
     type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "AI占い" }],
   },
   twitter: {
     card: "summary_large_image",
     title: TITLE,
     description: DESC,
+    images: ["/og.png"],
   },
   metadataBase: new URL(SITE_URL),
 };
