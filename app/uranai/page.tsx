@@ -207,6 +207,12 @@ export default function UranaiPage() {
     w?.addEventListener("load", () => { w.print(); URL.revokeObjectURL(url); });
   };
 
+  const ogpUrl = type === "compatibility" && compatibilityScore !== null
+    ? `https://uranai-ai-sigma.vercel.app/api/og?type=compatibility&score=${compatibilityScore}${name ? `&typeA=${encodeURIComponent(name)}` : ""}${partnerName ? `&typeB=${encodeURIComponent(partnerName)}` : ""}`
+    : type === "compatibility"
+    ? `https://uranai-ai-sigma.vercel.app/api/og?type=compatibility`
+    : `https://uranai-ai-sigma.vercel.app/api/og?type=${type}`;
+
   const shareText = result
     ? type === "compatibility" && compatibilityScore !== null
       ? `${name || "私"}と${partnerName || "相手"}の相性スコアは${compatibilityScore}点/100点！💑\n四柱推命×九星気学AIが鑑定してくれた✨\n#相性占い #AI占い #四柱推命\nhttps://uranai-ai-sigma.vercel.app`
@@ -379,12 +385,15 @@ export default function UranaiPage() {
                   const plainText = result.replace(/^#+\s*/gm, "").replace(/\*\*/g, "").replace(/\n+/g, " ").trim();
                   const snippet = plainText.slice(0, 100);
                   const shareMsg = type === "compatibility" && compatibilityScore !== null
-                    ? `【占いAI】${name || "私"}と${partnerName || "相手"}の相性スコアは${compatibilityScore}点！💑 四柱推命×九星気学AIが鑑定 #占いAI #AI占い #相性占い https://uranai-ai-sigma.vercel.app`
-                    : `【占いAI】${snippet}... #占いAI #AI占い #今日の運勢 https://uranai-ai-sigma.vercel.app`;
+                    ? `【占いAI】${name || "私"}と${partnerName || "相手"}の相性スコアは${compatibilityScore}点！💑 四柱推命×九星気学AIが鑑定 #占いAI #AI占い #相性占い`
+                    : `【占いAI】${snippet}... #占いAI #AI占い #今日の運勢`;
+                  const tweetUrl = type === "compatibility" && compatibilityScore !== null
+                    ? `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareMsg)}&url=${encodeURIComponent(ogpUrl)}`
+                    : `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareMsg)}&url=${encodeURIComponent("https://uranai-ai-sigma.vercel.app")}`;
                   return (
                     <div className="mt-4">
                       <a
-                        href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareMsg)}`}
+                        href={tweetUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 bg-sky-500 hover:bg-sky-400 text-white font-bold px-6 py-3 rounded-2xl transition-colors"
@@ -465,7 +474,7 @@ export default function UranaiPage() {
                   )}
                   {/* 相性占い専用シェアボタン */}
                   {type === "compatibility" ? (
-                    <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`}
+                    <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(ogpUrl)}`}
                       target="_blank" rel="noopener noreferrer"
                       className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:opacity-90 text-white font-bold py-3 rounded-xl transition-opacity text-sm">
                       💑 {compatibilityScore !== null ? `相性${compatibilityScore}点をXでシェア！` : "相性結果をXでシェア！"}
@@ -499,10 +508,10 @@ export default function UranaiPage() {
                   )}
                   <button
                     onClick={() => {
-                      window.open(
-                        `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent("https://uranai-ai-sigma.vercel.app")}`,
-                        "_blank"
-                      );
+                      const shareCardUrl = type === "compatibility" && compatibilityScore !== null
+                        ? `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(ogpUrl)}`
+                        : `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent("https://uranai-ai-sigma.vercel.app")}`;
+                      window.open(shareCardUrl, "_blank");
                     }}
                     className="bg-white text-purple-700 font-bold px-6 py-2 rounded-full hover:bg-purple-50 transition-colors"
                   >
