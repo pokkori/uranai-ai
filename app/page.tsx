@@ -119,6 +119,47 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* 感情フック：ストーリー型 */}
+      <section className="py-14 px-6 max-w-2xl mx-auto">
+        <div className="inline-block bg-purple-500/20 text-purple-300 text-xs font-bold px-3 py-1 rounded-full mb-6 border border-purple-500/30">
+          こんな経験、ありませんか？
+        </div>
+        <div className="space-y-4">
+          {[
+            {
+              emoji: "😞",
+              scene: "なんとなく今日、うまくいかない気がする",
+              body: "原因はわからないのに、なんとなく不安。そういう日は「星の流れ」が影響していることがあります。今日が吉日か凶日か、知っているだけで気持ちが変わります。",
+            },
+            {
+              emoji: "💔",
+              scene: "あの人の気持ちが読めなくて眠れない",
+              body: "LINEの返信が遅い。この関係はどこへ向かうのか。生年月日の相性から、2人の縁の深さをAIが分析します。",
+            },
+            {
+              emoji: "🌀",
+              scene: "転職・引越し——この決断、今が正しいタイミング？",
+              body: "大事な決断ほど、「今動くべきか」を知りたくなる。九星気学では、人には「動く年」と「待つ年」があります。あなたは今、どちらですか？",
+            },
+          ].map((item) => (
+            <div key={item.scene} className="flex gap-4 bg-white/5 rounded-2xl p-5 border border-white/10">
+              <span className="text-3xl shrink-0">{item.emoji}</span>
+              <div>
+                <p className="font-bold text-white text-sm mb-1">{item.scene}</p>
+                <p className="text-sm text-purple-300 leading-relaxed">{item.body}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="mt-8 bg-gradient-to-r from-purple-900/80 to-pink-900/60 border border-purple-400/40 rounded-2xl p-5 text-center">
+          <p className="text-white font-bold mb-1">星があなたに今、何を伝えているか——</p>
+          <p className="text-purple-300 text-sm mb-4">生年月日を入れるだけで、AIが四柱推命×九星気学で本格鑑定します。</p>
+          <Link href="/uranai" className="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white font-black px-6 py-3 rounded-full text-sm hover:opacity-90 transition-opacity">
+            今すぐ無料で占う →
+          </Link>
+        </div>
+      </section>
+
       {/* 特徴 */}
       <section className="py-16 px-6 max-w-4xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -258,7 +299,14 @@ export default function LandingPage() {
         </Link>
       </section>
 
-      <footer className="border-t border-white/10 py-8 text-center text-xs text-purple-500 px-6">
+      {/* スティッキーモバイルCTA */}
+      <div className="fixed bottom-0 left-0 right-0 bg-indigo-950 border-t border-purple-700/50 px-4 py-3 z-40 sm:hidden shadow-lg">
+        <Link href="/uranai" className="block w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-black text-center py-3.5 rounded-full text-sm">
+          今すぐ無料で占う →
+        </Link>
+      </div>
+
+      <footer className="border-t border-white/10 py-8 pb-24 sm:pb-8 text-center text-xs text-purple-500 px-6">
         <div className="max-w-5xl mx-auto space-y-2">
           <p>AI占い © 2026</p>
           <div className="flex justify-center gap-6">
