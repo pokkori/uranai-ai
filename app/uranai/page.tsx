@@ -66,6 +66,21 @@ function PaywallModal({ onClose, isCompatibility, onStartPayjp }: { onClose: () 
             プレミアム ¥2,980/月（詳細版・優先生成）
           </button>
         </div>
+        {/* 安心保証バッジ */}
+        <div className="flex items-center justify-center gap-3 mb-3">
+          <div className="flex items-center gap-1 text-xs text-purple-400">
+            <span>🔒</span>
+            <span>SSL暗号化決済</span>
+          </div>
+          <div className="flex items-center gap-1 text-xs text-purple-400">
+            <span>✅</span>
+            <span>いつでもキャンセル可能</span>
+          </div>
+          <div className="flex items-center gap-1 text-xs text-purple-400">
+            <span>💳</span>
+            <span>PAY.JP安全決済</span>
+          </div>
+        </div>
         <button onClick={onClose} className="text-xs text-purple-500 hover:text-purple-300">閉じる</button>
       </div>
     </div>
@@ -409,7 +424,7 @@ export default function UranaiPage() {
                 </p>
               </div>
             ) : result ? (
-              <div>
+              <div className="animate-fade-in-up">
                 {/* 5軸運気スコア */}
                 {uranaiScores && type !== "compatibility" && (
                   <div className="mb-5 bg-gradient-to-br from-purple-900/60 to-indigo-900/60 border border-purple-500/40 rounded-2xl p-4">
@@ -547,10 +562,27 @@ export default function UranaiPage() {
 
                 <div className="mt-4 pt-4 border-t border-white/10 space-y-3">
                   {!isPremium && (
-                    <button onClick={() => { setPayjpPlan("standard"); setShowPayjp(true); }}
-                      className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white font-bold py-3 rounded-xl transition-opacity text-sm">
-                      ✨ 毎日の運勢＋相性占いを使う（¥980/月）
-                    </button>
+                    <>
+                      <button onClick={() => { setPayjpPlan("standard"); setShowPayjp(true); }}
+                        className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white font-bold py-3 rounded-xl transition-opacity text-sm">
+                        ✨ 毎日の運勢＋相性占いを使う（¥980/月）
+                      </button>
+                      {/* 安心保証バッジ */}
+                      <div className="flex items-center justify-center gap-3 mt-2">
+                        <div className="flex items-center gap-1 text-xs text-purple-500">
+                          <span>🔒</span>
+                          <span>SSL暗号化決済</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-xs text-purple-500">
+                          <span>✅</span>
+                          <span>いつでもキャンセル可能</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-xs text-purple-500">
+                          <span>💳</span>
+                          <span>PAY.JP安全決済</span>
+                        </div>
+                      </div>
+                    </>
                   )}
                   {/* 相性占い専用シェアボタン */}
                   {type === "compatibility" ? (
