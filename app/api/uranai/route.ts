@@ -139,7 +139,7 @@ export async function POST(req: NextRequest) {
     try {
       const stream = client.messages.stream({
         model: "claude-sonnet-4-6",
-        max_tokens: 2500,
+        max_tokens: 4000,
         messages: [{ role: "user", content: prompt }],
       });
 
@@ -236,13 +236,18 @@ ${loveSection}
 ### 💌 最後に${name || "あなた"}へ
 （70〜100文字の温かいメッセージ。その人の干支・九星の特質に触れ、今の時期を乗り越えるための勇気づけの言葉で締める。）
 
+### 📱 シェア用おみくじ結果
+以下の形式で必ず出力してください（SNS投稿用）：
+【今日の運勢】大吉・中吉・小吉・末吉・吉・凶のいずれか + 一言（15文字以内）
+【シェアするとしたら】「${eto}年生まれ・${kyusei}白星の私の今日の運勢は○○でした！${todayStr}の占いが当たりすぎて驚いた… #占いAI #九星気学 #${eto}年生まれ」
+
 ---
 ※ 占いは統計学的な傾向であり、参考としてご活用ください。`;
 
   try {
     const stream = client.messages.stream({
       model: "claude-sonnet-4-6",
-      max_tokens: 2500,
+      max_tokens: 4000,
       messages: [{ role: "user", content: prompt }],
     });
 
