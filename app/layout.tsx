@@ -21,7 +21,6 @@ export const metadata: Metadata = {
     siteName: "AI占い",
     locale: "ja_JP",
     type: "website",
-    images: ["/og.png"],
   },
   twitter: {
     card: "summary_large_image",

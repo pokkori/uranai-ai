@@ -114,6 +114,76 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* 占い結果例カード */}
+      <section className="py-16 px-6 max-w-4xl mx-auto">
+        <div className="text-center mb-10">
+          <div className="inline-block bg-purple-500/20 text-purple-300 text-xs font-bold px-3 py-1 rounded-full mb-3 border border-purple-500/30">✨ 実際の占い結果例</div>
+          <h2 className="text-2xl font-bold text-white">AIはこんな結果を教えてくれます</h2>
+          <p className="text-purple-300 text-sm mt-2">生年月日を入れるだけで、あなただけの鑑定が届きます</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {/* カード1: 今日の恋愛運 */}
+          <div className="relative bg-gradient-to-br from-pink-900/60 to-purple-900/60 border border-pink-500/30 rounded-2xl p-6 overflow-hidden">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-pink-500/10 rounded-full -translate-y-1/2 translate-x-1/2" />
+            <div className="relative">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-2xl">💕</span>
+                <span className="text-xs text-pink-300 font-bold bg-pink-500/20 px-2 py-0.5 rounded-full border border-pink-500/30">今日の恋愛運</span>
+              </div>
+              <div className="flex items-center gap-1 mb-3">
+                <span className="text-yellow-400 text-lg">★★★★</span><span className="text-gray-500 text-lg">☆</span>
+              </div>
+              <p className="text-white text-sm font-bold mb-2">出会いの予感が高まる一日</p>
+              <p className="text-pink-200 text-xs leading-relaxed">
+                三碧木星の影響で言葉に力が宿る日。気になる相手には積極的に声をかけて。夕方以降の縁が特に吉。
+              </p>
+              <p className="text-pink-400 text-xs mt-3">🍀 ラッキーカラー: ローズピンク</p>
+            </div>
+          </div>
+          {/* カード2: 仕事運 */}
+          <div className="relative bg-gradient-to-br from-blue-900/60 to-indigo-900/60 border border-blue-500/30 rounded-2xl p-6 overflow-hidden">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/10 rounded-full -translate-y-1/2 translate-x-1/2" />
+            <div className="relative">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-2xl">💼</span>
+                <span className="text-xs text-blue-300 font-bold bg-blue-500/20 px-2 py-0.5 rounded-full border border-blue-500/30">仕事運</span>
+              </div>
+              <div className="flex items-center gap-1 mb-3">
+                <span className="text-yellow-400 text-lg">★★★</span><span className="text-gray-500 text-lg">☆☆</span>
+              </div>
+              <p className="text-white text-sm font-bold mb-2">実力を認められる転換期</p>
+              <p className="text-blue-200 text-xs leading-relaxed">
+                六白金星の月回りが強まり、これまでの努力が評価される時期。提案や報告は午前中が吉。焦らず着実に。
+              </p>
+              <p className="text-blue-400 text-xs mt-3">⚡ キーワード: 「実績を声に出す」</p>
+            </div>
+          </div>
+          {/* カード3: 総合運 */}
+          <div className="relative bg-gradient-to-br from-purple-900/60 to-violet-900/60 border border-purple-500/30 rounded-2xl p-6 overflow-hidden">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/10 rounded-full -translate-y-1/2 translate-x-1/2" />
+            <div className="relative">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-2xl">🔮</span>
+                <span className="text-xs text-purple-300 font-bold bg-purple-500/20 px-2 py-0.5 rounded-full border border-purple-500/30">総合運</span>
+              </div>
+              <div className="flex items-center gap-1 mb-3">
+                <span className="text-yellow-400 text-lg">★★★★★</span>
+              </div>
+              <p className="text-white text-sm font-bold mb-2">大吉 — 動けば必ず道が開く</p>
+              <p className="text-purple-200 text-xs leading-relaxed">
+                九紫火星の波動が頂点に達する特別な日。直感を信じて行動するだけで、思いがけない幸運を引き寄せられる。
+              </p>
+              <p className="text-purple-400 text-xs mt-3">🌙 ラッキー方位: 南・南東</p>
+            </div>
+          </div>
+        </div>
+        <div className="text-center mt-8">
+          <Link href="/uranai" className="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold px-8 py-4 rounded-full hover:opacity-90 transition-opacity shadow-lg text-sm">
+            🔮 自分の運勢を今すぐ占う（無料3回）→
+          </Link>
+        </div>
+      </section>
+
       {/* 鑑定サンプル — 本格版 */}
       <UranaiSampleSection />
 

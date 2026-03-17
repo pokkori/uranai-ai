@@ -374,11 +374,13 @@ export default function UranaiPage() {
                     );
                   })}
                 </div>
-                {/* 結果直下のXシェアボタン（今月の運勢用） */}
-                {type !== "compatibility" && (() => {
-                  const firstLine = result.replace(/^#+\s*/gm, "").replace(/\*\*/g, "").split('\n').find(l => l.trim().length > 0) || "";
-                  const snippet = firstLine.slice(0, 50);
-                  const shareMsg = `【AI占い】今月の運勢を診断してもらったら...「${snippet}」占いAIで無料診断 → https://uranai-ai-sigma.vercel.app #占いAI #今月の運勢 #AI占い`;
+                {/* 結果直下のXシェアボタン */}
+                {(() => {
+                  const plainText = result.replace(/^#+\s*/gm, "").replace(/\*\*/g, "").replace(/\n+/g, " ").trim();
+                  const snippet = plainText.slice(0, 100);
+                  const shareMsg = type === "compatibility" && compatibilityScore !== null
+                    ? `【占いAI】${name || "私"}と${partnerName || "相手"}の相性スコアは${compatibilityScore}点！💑 四柱推命×九星気学AIが鑑定 #占いAI #AI占い #相性占い https://uranai-ai-sigma.vercel.app`
+                    : `【占いAI】${snippet}... #占いAI #AI占い #今日の運勢 https://uranai-ai-sigma.vercel.app`;
                   return (
                     <div className="mt-4">
                       <a
@@ -388,7 +390,7 @@ export default function UranaiPage() {
                         className="inline-flex items-center gap-2 bg-sky-500 hover:bg-sky-400 text-white font-bold px-6 py-3 rounded-2xl transition-colors"
                       >
                         <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.892-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                        今月の運勢をシェア
+                        𝕏 結果をシェアする
                       </a>
                     </div>
                   );
