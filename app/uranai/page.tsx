@@ -7,13 +7,9 @@ import { track } from '@vercel/analytics';
 
 const FREE_LIMIT = 3;
 const STORAGE_KEY = "uranai_count";
-const PAYJP_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYJP_PUBLIC_KEY ?? "";
-
 const YEARS = Array.from({ length: 80 }, (_, i) => 2006 - i);
 const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
 const DAYS = Array.from({ length: 31 }, (_, i) => i + 1);
-
-// startCheckout は PayjpModal で処理するため削除済み
 
 function BirthDatePicker({ year, month, day, onYearChange, onMonthChange, onDayChange }: {
   year: string; month: string; day: string;
@@ -35,55 +31,6 @@ function BirthDatePicker({ year, month, day, onYearChange, onMonthChange, onDayC
         className="bg-white/10 border border-white/20 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-purple-400">
         {DAYS.map(d => <option key={d} value={d}>{d}日</option>)}
       </select>
-    </div>
-  );
-}
-
-function PaywallModal({ onClose, isCompatibility, onStartPayjp }: { onClose: () => void; isCompatibility?: boolean; onStartPayjp: (plan: string) => void }) {
-  return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 px-4">
-      <div className="bg-indigo-950 border border-purple-500/50 rounded-2xl p-6 max-w-sm w-full text-white text-center">
-        <div className="text-4xl mb-3">{isCompatibility ? "💑" : "🔮"}</div>
-        <h2 className="text-lg font-bold mb-2">
-          {isCompatibility ? "相性占いはプレミアム限定" : "無料鑑定を使い切りました"}
-        </h2>
-        <p className="text-purple-300 text-sm mb-1">
-          {isCompatibility ? "ふたりの深い縁を九星気学×干支で鑑定" : "毎日の運勢チェックで人生の流れをつかむ"}
-        </p>
-        <ul className="text-xs text-purple-400 text-left mb-5 space-y-1.5 mt-3">
-          <li>✨ 毎日・毎月の運勢鑑定が無制限</li>
-          <li>✨ 九星気学×干支の詳細分析</li>
-          <li>💑 相性占い（相性スコア＋恋愛・仕事・友人の多角分析）</li>
-          <li>✨ 恋愛・仕事・金運を毎日チェック</li>
-          <li>✨ ラッキー情報・行動指針を毎日更新</li>
-        </ul>
-        <div className="space-y-3 mb-4">
-          <button onClick={() => { track('upgrade_click', { service: '占いAI', plan: 'standard' }); onStartPayjp("standard"); }}
-            className="block w-full bg-purple-500 hover:bg-purple-400 text-white font-bold py-3 rounded-xl transition-colors">
-            毎日鑑定＋相性占いプラン ¥980/月
-          </button>
-          <button onClick={() => { track('upgrade_click', { service: '占いAI', plan: 'business' }); onStartPayjp("business"); }}
-            className="block w-full bg-white/10 hover:bg-white/20 text-white py-3 rounded-xl transition-colors text-sm">
-            プレミアム ¥2,980/月（詳細版・優先生成）
-          </button>
-        </div>
-        {/* 安心保証バッジ */}
-        <div className="flex items-center justify-center gap-3 mb-3">
-          <div className="flex items-center gap-1 text-xs text-purple-400">
-            <span>🔒</span>
-            <span>SSL暗号化決済</span>
-          </div>
-          <div className="flex items-center gap-1 text-xs text-purple-400">
-            <span>✅</span>
-            <span>いつでもキャンセル可能</span>
-          </div>
-          <div className="flex items-center gap-1 text-xs text-purple-400">
-            <span>💳</span>
-            <span>PAY.JP安全決済</span>
-          </div>
-        </div>
-        <button onClick={onClose} className="text-xs text-purple-500 hover:text-purple-300">閉じる</button>
-      </div>
     </div>
   );
 }
@@ -114,8 +61,6 @@ export default function UranaiPage() {
   const [partnerEto, setPartnerEto] = useState("");
   const [copied, setCopied] = useState(false);
   const [isPremium, setIsPremium] = useState(false);
-  const [showPayjp, setShowPayjp] = useState(false);
-  const [payjpPlan, setPayjpPlan] = useState("standard");
   const [compatibilityScore, setCompatibilityScore] = useState<number | null>(null);
   const [starfall, setStarfall] = useState(false);
   const [uranaiScores, setUranaiScores] = useState<{total:number;love:number;work:number;money:number;health:number} | null>(null);
@@ -315,18 +260,6 @@ export default function UranaiPage() {
           </div>
         </div>
       )}
-      {showPayjp && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
-          <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl relative">
-            <button onClick={() => setShowPayjp(false)} className="absolute top-3 right-3 text-gray-400 text-xl">✕</button>
-            <div className="text-3xl mb-3 text-center">🔮</div>
-            <h2 className="text-lg font-bold mb-2 text-center">プレミアムプラン</h2>
-            <p className="text-sm text-gray-500 mb-4 text-center">{payjpPlan === "business" ? "プレミアム — 占い無制限+深層鑑定" : "スタンダード — 占い無制限"}</p>
-            <KomojuButton planId="standard" planLabel={payjpPlan === "business" ? "プレミアムプラン ¥2,980/月" : "スタンダードプラン ¥980/月"} className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 disabled:opacity-50" />
-          </div>
-        </div>
-      )}
-
       <nav className="px-6 py-4 flex items-center justify-between max-w-4xl mx-auto">
         <Link href="/" className="font-bold">🔮 AI占い</Link>
         <span className={`text-xs px-3 py-1 rounded-full ${isPremium ? "bg-purple-600/50 text-purple-200" : isLimitReached ? "bg-red-900/50 text-red-300" : "bg-purple-900/50 text-purple-300"}`}>
