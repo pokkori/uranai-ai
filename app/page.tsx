@@ -306,6 +306,20 @@ export default function LandingPage() {
         </Link>
       </div>
 
+      {/* X Share */}
+      <section className="py-6 px-6 text-center">
+        <a
+          href={"https://twitter.com/intent/tweet?text=" + encodeURIComponent("AI占い — 生年月日を入力するだけで四柱推命・九星気学・西洋占星術をAIが本格鑑定✨ 無料で試してみて → https://uranai-ai-sigma.vercel.app #AI占い #四柱推命 #九星気学")}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 bg-black hover:bg-gray-800 text-white font-bold py-3 px-6 rounded-xl text-sm transition-colors"
+        >
+          <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+          Xでシェアする
+        </a>
+      </section>
       <footer className="border-t border-white/10 py-8 pb-24 sm:pb-8 text-center text-xs text-purple-500 px-6">
         <div className="max-w-5xl mx-auto space-y-2">
           <p>AI占い © 2026</p>
