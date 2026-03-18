@@ -429,6 +429,7 @@ export default function UranaiPage() {
                 <p className="text-xs text-gray-400">🔮 生年月日分析 → ⭐ 運勢算出 → 📋 鑑定文生成</p>
               </div>
             ) : result ? (
+              <>
               <div className="animate-fade-in-up">
                 {/* 5軸運気スコア */}
                 {uranaiScores && type !== "compatibility" && (
@@ -640,6 +641,23 @@ export default function UranaiPage() {
                   </button>
                 </div>
               </div>
+              {/* 次のアクション3選 */}
+              <div className="mt-4 bg-purple-900/30 border border-purple-500/30 rounded-xl p-4">
+                <p className="text-sm font-bold text-purple-300 mb-3">🔮 今日やるべきこと3選</p>
+                <ol className="space-y-2">
+                  {[
+                    { icon: "💜", text: "今日の行動テーマを手帳やメモに書き留めておく" },
+                    { icon: "🌟", text: "今日の幸運アイテムを身につけてからスタートする" },
+                    { icon: "✨", text: "週間・月間運勢でさらに詳しい流れを確認する" },
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3 text-sm text-purple-100">
+                      <span className="text-base leading-none">{item.icon}</span>
+                      <span>{i + 1}. {item.text}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+              </>
             ) : (
               <div className="flex flex-col items-center justify-center h-full text-purple-500 gap-3">
                 <div className="text-4xl">✨</div>
