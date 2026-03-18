@@ -306,6 +306,27 @@ export default function LandingPage() {
         </Link>
       </div>
 
+      {/* もっと活用する3選 */}
+      <section className="py-8 px-4 max-w-lg mx-auto">
+        <h2 className="text-center text-base font-bold text-purple-300 mb-4">🔮 AI占いをもっと活用する3選</h2>
+        <ol className="space-y-3">
+          {[
+            { icon: "📅", title: "毎月の運勢を確認する習慣に", desc: "月初めに鑑定することで今月の運気の流れを把握。仕事・恋愛・健康を先回りして対策しよう。" },
+            { icon: "💕", title: "気になる相手との相性を占う", desc: "相手の生年月日を入力して相性スコアを確認。恋愛・仕事のパートナー選びに活用できます。" },
+            { icon: "🌟", title: "大事な決断前のお守りに", desc: "転職・引越し・告白など人生の節目にAI鑑定を参考に。今日やるべきこと3選を実行しよう。" },
+          ].map((item, i) => (
+            <li key={i} className="flex items-start gap-3 rounded-xl p-3"
+              style={{ background: "rgba(168,85,247,0.08)", border: "1px solid rgba(168,85,247,0.2)" }}>
+              <span style={{ fontSize: "22px", lineHeight: "1" }}>{item.icon}</span>
+              <div>
+                <div className="text-purple-300 font-bold text-sm">{i + 1}. {item.title}</div>
+                <div className="text-purple-400 text-xs mt-0.5 opacity-80">{item.desc}</div>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
       {/* X Share */}
       <section className="py-6 px-6 text-center">
         <a
