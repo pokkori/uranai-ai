@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import PayjpModal from "@/components/PayjpModal";
+import KomojuButton from "@/components/KomojuButton";
 import { track } from '@vercel/analytics';
 
 const FREE_LIMIT = 3;
@@ -294,15 +294,37 @@ export default function UranaiPage() {
           {["✨", "⭐", "🌟", "💫"][Math.floor(Math.random() * 4)]}
         </span>
       ))}
-      {showPaywall && <PaywallModal onClose={() => setShowPaywall(false)} isCompatibility={paywallIsCompatibility} onStartPayjp={(plan) => { setPayjpPlan(plan); setShowPaywall(false); setShowPayjp(true); }} />}
+      {showPaywall && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
+          <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl text-center relative">
+            <button onClick={() => setShowPaywall(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl font-bold">×</button>
+            <div className="text-3xl mb-3">🔮</div>
+            <h2 className="text-lg font-bold mb-2">無料枠を使い切りました</h2>
+            <p className="text-sm text-gray-500 mb-4">プレミアムプランで全機能を使えます</p>
+            <KomojuButton
+              planId="standard"
+              planLabel="スタンダード ¥980/月を始める"
+              className="w-full bg-purple-600 text-white font-bold py-3 rounded-xl hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors mb-2"
+            />
+            <KomojuButton
+              planId="business"
+              planLabel="プレミアム ¥2,980/月を始める"
+              className="w-full bg-gray-700 text-white font-bold py-3 rounded-xl hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            />
+            <button onClick={() => setShowPaywall(false)} className="text-xs text-gray-400 hover:text-gray-600 mt-3 block w-full">閉じる</button>
+          </div>
+        </div>
+      )}
       {showPayjp && (
-        <PayjpModal
-          publicKey={PAYJP_PUBLIC_KEY}
-          planLabel={payjpPlan === "business" ? "プレミアムプラン ¥2,980/月" : "スタンダードプラン ¥980/月"}
-          plan={payjpPlan}
-          onSuccess={() => { setShowPayjp(false); setIsPremium(true); }}
-          onClose={() => setShowPayjp(false)}
-        />
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
+          <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl relative">
+            <button onClick={() => setShowPayjp(false)} className="absolute top-3 right-3 text-gray-400 text-xl">✕</button>
+            <div className="text-3xl mb-3 text-center">🔮</div>
+            <h2 className="text-lg font-bold mb-2 text-center">プレミアムプラン</h2>
+            <p className="text-sm text-gray-500 mb-4 text-center">{payjpPlan === "business" ? "プレミアム — 占い無制限+深層鑑定" : "スタンダード — 占い無制限"}</p>
+            <KomojuButton planId="standard" planLabel={payjpPlan === "business" ? "プレミアムプラン ¥2,980/月" : "スタンダードプラン ¥980/月"} className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 disabled:opacity-50" />
+          </div>
+        </div>
       )}
 
       <nav className="px-6 py-4 flex items-center justify-between max-w-4xl mx-auto">
@@ -556,10 +578,11 @@ export default function UranaiPage() {
                         </div>
                         <div className="absolute inset-0 flex flex-col items-center justify-center bg-indigo-950/60 rounded-b-xl p-3">
                           <p className="text-xs text-purple-200 mb-2 text-center font-medium">毎日の運勢チェックで<br />人生の流れをつかむ</p>
-                          <button onClick={() => { track('upgrade_click', { service: '占いAI', plan: 'standard' }); setPayjpPlan("standard"); setShowPayjp(true); }}
-                            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white font-bold py-1.5 px-4 rounded-lg transition-opacity text-xs">
-                            プレミアムで毎日運勢チェック（¥980/月）
-                          </button>
+                          <KomojuButton
+                            planId="standard"
+                            planLabel="プレミアムで毎日運勢チェック（¥980/月）"
+                            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white font-bold py-1.5 px-4 rounded-lg transition-opacity text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+                          />
                         </div>
                       </div>
                     )}
@@ -569,10 +592,11 @@ export default function UranaiPage() {
                 <div className="mt-4 pt-4 border-t border-white/10 space-y-3">
                   {!isPremium && (
                     <>
-                      <button onClick={() => { track('upgrade_click', { service: '占いAI', plan: 'standard' }); setPayjpPlan("standard"); setShowPayjp(true); }}
-                        className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white font-bold py-3 rounded-xl transition-opacity text-sm">
-                        ✨ 毎日の運勢＋相性占いを使う（¥980/月）
-                      </button>
+                      <KomojuButton
+                        planId="standard"
+                        planLabel="✨ 毎日の運勢＋相性占いを使う（¥980/月）"
+                        className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white font-bold py-3 rounded-xl transition-opacity text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                      />
                       {/* 安心保証バッジ */}
                       <div className="flex items-center justify-center gap-3 mt-2">
                         <div className="flex items-center gap-1 text-xs text-purple-500">
