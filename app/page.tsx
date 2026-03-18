@@ -327,6 +327,24 @@ export default function LandingPage() {
         </ol>
       </section>
 
+      {/* FAQ */}
+      <section className="py-16 px-6 max-w-3xl mx-auto">
+        <h2 className="text-2xl font-bold text-center text-white mb-10">よくある質問</h2>
+        <div className="space-y-4">
+          {[
+            { q: "本当に当たりますか？", a: "AIが星座・四柱推命・タロットの要素を組み合わせて独自分析。エンターテインメント目的でご利用ください。" },
+            { q: "何回まで無料ですか？", a: "毎日3回まで無料で鑑定できます。" },
+            { q: "データは保存されますか？", a: "入力データは鑑定後に自動削除されます。個人情報の保存はしていません。" },
+            { q: "スマホから使えますか？", a: "はい、スマートフォン・タブレットに完全対応しています。" },
+          ].map((faq) => (
+            <div key={faq.q} className="border border-purple-700/40 rounded-xl p-5 bg-white/5">
+              <h3 className="font-bold text-white mb-2 text-sm">Q. {faq.q}</h3>
+              <p className="text-purple-300 text-sm leading-relaxed">A. {faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* X Share */}
       <section className="py-6 px-6 text-center">
         <a
