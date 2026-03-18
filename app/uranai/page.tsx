@@ -426,6 +426,7 @@ export default function UranaiPage() {
                 <p className="text-purple-300 text-sm">
                   {type === "compatibility" ? "ふたりの縁を読み解いています..." : "AIが運命を読み解いています..."}
                 </p>
+                <p className="text-xs text-gray-400">🔮 生年月日分析 → ⭐ 運勢算出 → 📋 鑑定文生成</p>
               </div>
             ) : result ? (
               <div className="animate-fade-in-up">
