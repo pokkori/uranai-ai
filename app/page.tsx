@@ -276,6 +276,36 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* 今日のタロット1枚引き — デイリーコンテンツ訴求 */}
+      <section className="max-w-2xl mx-auto px-6 py-8">
+        <div className="bg-gradient-to-br from-indigo-900/80 to-purple-900/60 border border-indigo-400/40 rounded-3xl p-7 text-center">
+          <div className="flex justify-center gap-3 mb-4">
+            {["🃏", "🌙", "⭐"].map((e, i) => (
+              <div key={i} className="w-14 h-20 bg-gradient-to-br from-indigo-700 to-purple-800 border-2 border-indigo-400/60 rounded-xl flex items-center justify-center text-2xl shadow-lg">
+                {e}
+              </div>
+            ))}
+          </div>
+          <div className="inline-block bg-indigo-500/20 text-indigo-300 text-xs font-bold px-3 py-1 rounded-full mb-3 border border-indigo-500/30">
+            毎日23時リセット・無料
+          </div>
+          <h3 className="text-xl font-bold text-white mb-2">今日のタロット1枚引き</h3>
+          <p className="text-purple-200 text-sm mb-4 leading-relaxed">
+            大アルカナ22枚から<strong className="text-white">今日のあなたへのメッセージ</strong>が届きます。<br />
+            毎日1枚引いて、朝のルーティンにしよう。
+          </p>
+          <div className="bg-white/5 border border-white/10 rounded-xl p-3 mb-4 text-xs text-purple-300 text-left space-y-1">
+            <p>🃏 大アルカナ22枚（愚者〜世界）を毎日ローテーション</p>
+            <p>🎯 カードの意味 + <strong className="text-white">今日のアクション</strong>付き</p>
+            <p>📱 引いた結果をXでシェアできる（拡散しやすい！）</p>
+          </div>
+          <Link href="/uranai?tab=tarot" className="inline-block bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold px-7 py-3 rounded-full hover:opacity-90 transition-opacity shadow-lg text-sm">
+            🃏 今日のタロットを引く（無料）→
+          </Link>
+          <p className="text-indigo-500 text-xs mt-2">生年月日不要・1タップで結果が出る</p>
+        </div>
+      </section>
+
       {/* 相性占い */}
       <section className="max-w-2xl mx-auto px-6 py-8 text-center">
         <div className="bg-purple-900/40 border border-purple-700 rounded-2xl p-6">

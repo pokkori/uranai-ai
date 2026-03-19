@@ -5,6 +5,49 @@ import Link from "next/link";
 import KomojuButton from "@/components/KomojuButton";
 import { track } from '@vercel/analytics';
 
+// ==============================
+// タロットカードデータ（大アルカナ22枚）
+// ==============================
+const TAROT_CARDS = [
+  { id: 0, name: "愚者", emoji: "🃏", upright: "新しい始まり・自由・冒険", meaning: "恐れを手放し、新しい一歩を踏み出す日。直感に従って動くことで、思いがけない縁や機会が開きます。完璧を求めず、まず動いてみて。", action: "今日、ずっと迷っていたことを一歩だけ前に進める" },
+  { id: 1, name: "魔術師", emoji: "🔮", upright: "意志・スキル・実現力", meaning: "あなたには今、必要な力がすべて揃っています。知識・情熱・行動力——これらを今日一日で組み合わせることで、願いを現実に変えられます。", action: "今日、持っているスキルを一つ誰かのために活かす" },
+  { id: 2, name: "女教皇", emoji: "🌙", upright: "直感・内なる知恵・静観", meaning: "答えはすでにあなたの中にあります。騒がしい情報から離れ、静かな時間を取ることで、本当の気持ちが浮かび上がってきます。", action: "今日5分、スマホを置いて静かに自分の気持ちと向き合う" },
+  { id: 3, name: "女帝", emoji: "🌸", upright: "豊かさ・創造・母性", meaning: "あなたの周りに豊かさの種が芽吹いています。今日は与えることで循環が生まれる日。自分を大切にすることが、周りへの愛にもなります。", action: "今日、自分を喜ばせることを一つする（好きな食事・好きな音楽）" },
+  { id: 4, name: "皇帝", emoji: "👑", upright: "権威・構造・安定", meaning: "今日は計画と構造を大切にする日。感情より論理を優先し、長期的な視点で判断することで、確実な基盤を築けます。", action: "今日、先延ばしにしていたタスクを一つ完了させる" },
+  { id: 5, name: "教皇", emoji: "⛪", upright: "伝統・指導・信念", meaning: "信頼できる人の助言を求めることで、道が開ける日。自分一人で抱え込まず、経験者の知恵を借りることが今日のテーマです。", action: "今日、尊敬する人に一つ質問・相談してみる" },
+  { id: 6, name: "恋人", emoji: "💑", upright: "選択・愛・調和", meaning: "大切な選択が訪れる日。心と頭、両方で考えることが重要です。今日の選択は、あなたが何を一番大切にしているかを映し出します。", action: "今日、大切な人に素直な気持ちを一言伝える" },
+  { id: 7, name: "戦車", emoji: "⚡", upright: "意志・勝利・前進", meaning: "強い意志と行動力が幸運を引き寄せる日。障害があっても、正面突破することで道が開けます。今日は諦めずに進み続けて。", action: "今日、困難に感じていることに真正面から向き合う" },
+  { id: 8, name: "力", emoji: "🦁", upright: "内なる力・勇気・忍耐", meaning: "今日求められるのは、力強さより「やわらかな強さ」です。怒りや恐れを優しさで包み込むことで、想像以上の影響力を持てます。", action: "今日、感情的になりそうな場面で一呼吸置いてから応答する" },
+  { id: 9, name: "隠者", emoji: "🕯️", upright: "内省・探求・孤独", meaning: "今日は少し距離を置いて、自分を見つめ直す日。人混みや情報から離れ、内なる声に耳を傾けることで、次の方向性が見えてきます。", action: "今日、一人の時間を30分作って、日記や思考の整理をする" },
+  { id: 10, name: "運命の輪", emoji: "🎡", upright: "変化・チャンス・サイクル", meaning: "運命の歯車が動き始めています。今日起こる小さな出会いや偶然を見逃さないで。それがターニングポイントになる可能性があります。", action: "今日、いつもと違うルートや方法を試してみる" },
+  { id: 11, name: "正義", emoji: "⚖️", upright: "公正・真実・責任", meaning: "誠実さが幸運を呼ぶ日。ごまかしや先延ばしをやめ、正直に向き合うことで、信頼と結果が同時についてきます。", action: "今日、避けていた正直な会話や決断を一つする" },
+  { id: 12, name: "吊られた男", emoji: "🌿", upright: "待機・見方を変える・手放す", meaning: "今日は「待つ」ことが最大の行動です。焦らず、違う角度から状況を眺めることで、今まで見えなかった解決策が現れます。", action: "今日、問題を「なぜ起きたか」ではなく「何を教えてくれているか」で考える" },
+  { id: 13, name: "死神", emoji: "🌑", upright: "終焉・変容・再生", meaning: "何かが終わることは、新しいものが始まるサインです。今日、手放すべきものを手放すことで、スペースが生まれ、新しい流れが入ってきます。", action: "今日、もう必要ないもの（物・習慣・関係）を一つ手放す" },
+  { id: 14, name: "節制", emoji: "🌊", upright: "バランス・調和・忍耐", meaning: "急がず、焦らず、少しずつ進む日。極端な行動より、バランスを保ちながらコツコツ積み重ねることが、最終的な成果につながります。", action: "今日、過剰になっていること（食事・スマホ・仕事）を少し控える" },
+  { id: 15, name: "悪魔", emoji: "🔗", upright: "束縛からの自由・欲望・物質", meaning: "あなたを縛っているのは、実は自分自身の思い込みかもしれません。今日は「〜しなければならない」という制約を一度外して考えてみて。", action: "今日、「どうせ自分には無理」という思い込みを一つ書き出して否定する" },
+  { id: 16, name: "塔", emoji: "⚡", upright: "突然の変化・解放・啓示", meaning: "揺さぶりがあるとしたら、それは古い構造を壊して新しくするため。今日起こる予期せぬ変化を恐れず、むしろチャンスとして受け取って。", action: "今日、突然のトラブルを「そこに何のヒントがあるか」と考えてみる" },
+  { id: 17, name: "星", emoji: "⭐", upright: "希望・インスピレーション・癒し", meaning: "今日は特別な日です。夢や理想を口に出す、書き出すことで、宇宙があなたの願いを聞いてくれます。ポジティブな言葉が現実を引き寄せます。", action: "今日、自分の夢や願いを3つ声に出して言う" },
+  { id: 18, name: "月", emoji: "🌕", upright: "幻想・不安・潜在意識", meaning: "見えないものへの不安が高まりやすい日。でもその不安の多くは現実ではなく想像です。今日は事実だけを見て、感情に振り回されないようにして。", action: "今日、不安に感じていることを書き出し、「これは事実か？」と確認する" },
+  { id: 19, name: "太陽", emoji: "☀️", upright: "喜び・成功・輝き", meaning: "今日はラッキーデー！自信を持って行動することで、周りの人もあなたのエネルギーに引き寄せられます。笑顔と明るさが、最大の武器です。", action: "今日、会う人全員に笑顔で挨拶する" },
+  { id: 20, name: "審判", emoji: "🎺", upright: "覚醒・再生・呼びかけ", meaning: "何かが「目覚めろ」と呼びかけている日。長い間眠っていた才能や夢が、今日の出来事によって再び動き出すかもしれません。", action: "今日、昔やっていて今は忘れていた好きなことを一つ思い出す" },
+  { id: 21, name: "世界", emoji: "🌍", upright: "完成・達成・統合", meaning: "一つのサイクルが完成に近づいています。今日は感謝と振り返りの日。これまでの努力を認め、次のステージへの準備を始めましょう。", action: "今日、最近達成したことを3つ書き出して自分を褒める" },
+];
+
+function getDailyTarotCard(): typeof TAROT_CARDS[0] {
+  const today = new Date();
+  const dateStr = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
+  // 日付ベースで決定論的にカードを選択（ユーザーごとに変わらないシード）
+  let hash = 0;
+  for (let i = 0; i < dateStr.length; i++) {
+    hash = ((hash << 5) - hash) + dateStr.charCodeAt(i);
+    hash |= 0;
+  }
+  const index = Math.abs(hash) % TAROT_CARDS.length;
+  return TAROT_CARDS[index];
+}
+
+const TAROT_STORAGE_KEY = "tarot_drawn_date";
+
 const FREE_LIMIT = 3;
 const STORAGE_KEY = "uranai_count";
 const YEARS = Array.from({ length: 80 }, (_, i) => 2006 - i);
@@ -66,6 +109,13 @@ export default function UranaiPage() {
   const [starfall, setStarfall] = useState(false);
   const [uranaiScores, setUranaiScores] = useState<{total:number;love:number;work:number;money:number;health:number} | null>(null);
 
+  // タロット1枚引き
+  const [activeTab, setActiveTab] = useState<"uranai" | "tarot">("uranai");
+  const [tarotCard, setTarotCard] = useState<typeof TAROT_CARDS[0] | null>(null);
+  const [tarotDrawn, setTarotDrawn] = useState(false);
+  const [tarotFlipped, setTarotFlipped] = useState(false);
+  const [tarotShared, setTarotShared] = useState(false);
+
   // 鑑定履歴
   const HISTORY_KEY = "uranai_history";
   type HistoryItem = { date: string; type: string; summary: string; score: number };
@@ -99,6 +149,17 @@ export default function UranaiPage() {
       setPayjpPlan(plan);
       setShowPayjp(true);
     }
+    // タロット：本日引き済みチェック
+    const today = new Date().toDateString();
+    const drawnDate = localStorage.getItem(TAROT_STORAGE_KEY);
+    if (drawnDate === today) {
+      setTarotDrawn(true);
+      setTarotFlipped(true);
+      setTarotCard(getDailyTarotCard());
+    }
+    // URLパラメータでタロットタブを直接開く
+    const tab = new URLSearchParams(window.location.search).get("tab");
+    if (tab === "tarot") setActiveTab("tarot");
   }, []);
 
   const remaining = Math.max(0, FREE_LIMIT - usageCount);
@@ -301,6 +362,134 @@ export default function UranaiPage() {
         </span>
       </nav>
 
+      {/* タブナビゲーション */}
+      <div className="max-w-4xl mx-auto px-6 pb-2">
+        <div className="flex gap-2">
+          <button
+            onClick={() => setActiveTab("uranai")}
+            className={`flex items-center gap-1.5 px-5 py-2.5 rounded-full text-sm font-bold transition-all ${activeTab === "uranai" ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-900/40" : "bg-white/10 text-purple-300 hover:bg-white/20"}`}
+          >
+            🔮 AI鑑定
+          </button>
+          <button
+            onClick={() => setActiveTab("tarot")}
+            className={`flex items-center gap-1.5 px-5 py-2.5 rounded-full text-sm font-bold transition-all ${activeTab === "tarot" ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg shadow-indigo-900/40" : "bg-white/10 text-purple-300 hover:bg-white/20"}`}
+          >
+            🃏 今日のタロット
+            {!tarotDrawn && <span className="bg-pink-500 text-white text-xs px-1.5 py-0.5 rounded-full animate-pulse">NEW</span>}
+          </button>
+        </div>
+      </div>
+
+      {/* タロット1枚引きセクション */}
+      {activeTab === "tarot" && (
+        <div className="max-w-2xl mx-auto px-6 py-8">
+          <div className="text-center mb-6">
+            <div className="inline-block bg-indigo-500/20 text-indigo-300 text-xs font-bold px-3 py-1 rounded-full mb-3 border border-indigo-500/30">
+              毎日23時リセット・無料
+            </div>
+            <h2 className="text-2xl font-bold text-white mb-2">今日のタロット1枚引き</h2>
+            <p className="text-purple-300 text-sm">今日のあなたへのメッセージをタロットが伝えます。<br />毎日1枚、無料で引けます。</p>
+          </div>
+
+          {!tarotFlipped ? (
+            <div className="flex flex-col items-center gap-6">
+              {/* カード裏面 */}
+              <div
+                onClick={() => {
+                  const card = getDailyTarotCard();
+                  setTarotCard(card);
+                  setTarotFlipped(true);
+                  setTarotDrawn(true);
+                  localStorage.setItem(TAROT_STORAGE_KEY, new Date().toDateString());
+                  track('tarot_drawn', { service: '占いAI' });
+                }}
+                className="cursor-pointer group"
+                role="button"
+                aria-label="タロットカードを引く"
+              >
+                <div className="w-48 h-72 bg-gradient-to-br from-indigo-800 to-purple-900 border-4 border-indigo-400/60 rounded-2xl flex flex-col items-center justify-center shadow-2xl shadow-indigo-900/60 group-hover:scale-105 transition-transform duration-300 group-hover:shadow-indigo-500/40">
+                  <div className="text-6xl mb-3 opacity-60">✨</div>
+                  <div className="grid grid-cols-3 gap-1 mb-3 opacity-30">
+                    {Array.from({length: 9}).map((_, i) => <div key={i} className="w-2 h-2 bg-indigo-300 rounded-full" />)}
+                  </div>
+                  <p className="text-indigo-300 text-xs font-bold tracking-wider">タップして引く</p>
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  const card = getDailyTarotCard();
+                  setTarotCard(card);
+                  setTarotFlipped(true);
+                  setTarotDrawn(true);
+                  localStorage.setItem(TAROT_STORAGE_KEY, new Date().toDateString());
+                  track('tarot_drawn', { service: '占いAI' });
+                }}
+                className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold px-8 py-4 rounded-full hover:opacity-90 transition-opacity shadow-lg text-sm"
+              >
+                🃏 今日のカードを引く（無料）
+              </button>
+              <p className="text-purple-500 text-xs text-center">毎日23時にリセット • 1日1回無料</p>
+            </div>
+          ) : tarotCard ? (
+            <div className="flex flex-col items-center gap-5">
+              {/* カード表面 */}
+              <div className="w-48 h-72 bg-gradient-to-br from-purple-700 to-indigo-800 border-4 border-purple-400/80 rounded-2xl flex flex-col items-center justify-center shadow-2xl shadow-purple-900/60 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-pink-500/10" />
+                <div className="relative text-center px-4">
+                  <div className="text-6xl mb-3">{tarotCard.emoji}</div>
+                  <div className="text-white font-black text-xl mb-1">{tarotCard.name}</div>
+                  <div className="text-purple-300 text-xs">{tarotCard.upright}</div>
+                </div>
+              </div>
+
+              {/* カードの意味 */}
+              <div className="w-full bg-white/5 border border-purple-500/30 rounded-2xl p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-2xl">{tarotCard.emoji}</span>
+                  <div>
+                    <h3 className="text-white font-black text-lg">{tarotCard.name}</h3>
+                    <p className="text-purple-400 text-xs">{tarotCard.upright}</p>
+                  </div>
+                  <span className="ml-auto text-xs bg-green-500/20 text-green-300 px-2 py-0.5 rounded-full border border-green-500/30 font-bold">正位置</span>
+                </div>
+                <p className="text-purple-100 text-sm leading-relaxed mb-4">{tarotCard.meaning}</p>
+                <div className="bg-indigo-900/50 border border-indigo-500/30 rounded-xl p-3">
+                  <p className="text-xs text-indigo-300 font-bold mb-1">🎯 今日のアクション</p>
+                  <p className="text-xs text-indigo-100">{tarotCard.action}</p>
+                </div>
+              </div>
+
+              {/* シェアボタン */}
+              <div className="w-full space-y-2">
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`【今日のタロット】${tarotCard.emoji}「${tarotCard.name}」が出ました！\n\n「${tarotCard.meaning.slice(0, 60)}...」\n\n今日のアクション：${tarotCard.action}\n\n#タロット占い #AI占い #今日の運勢 #${tarotCard.name}\nhttps://uranai-ai-sigma.vercel.app/uranai?tab=tarot`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setTarotShared(true)}
+                  className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90 text-white font-bold py-3 rounded-xl transition-opacity text-sm"
+                >
+                  <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.892-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                  {tarotCard.name}カードをXでシェア
+                </a>
+                {tarotShared && (
+                  <p className="text-center text-xs text-green-400">シェアありがとう！明日も引いてね ✨</p>
+                )}
+                <button
+                  onClick={() => setActiveTab("uranai")}
+                  className="w-full bg-white/10 hover:bg-white/20 text-purple-200 font-medium py-2.5 rounded-xl transition-colors text-sm"
+                >
+                  🔮 AI鑑定も試す →
+                </button>
+              </div>
+              <p className="text-purple-600 text-xs text-center">明日の23時に新しいカードが引けます</p>
+            </div>
+          ) : null}
+        </div>
+      )}
+
+      {/* AI鑑定セクション（タブ切り替え） */}
+      {activeTab === "uranai" && (
       <div className="max-w-4xl mx-auto px-6 py-8 grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* 入力フォーム */}
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -713,6 +902,7 @@ export default function UranaiPage() {
           </div>
         </div>
       </div>
+      )} {/* activeTab === "uranai" の終了 */}
       {/* 鑑定履歴アコーディオン */}
       {history.length > 0 && (
         <div className="max-w-4xl mx-auto px-6 pb-6">
