@@ -55,13 +55,14 @@ export async function POST(req: NextRequest) {
   try { body = await req.json(); }
   catch { return NextResponse.json({ error: "リクエストの形式が正しくありません" }, { status: 400 }); }
 
-  const { name, birthYear, birthMonth, birthDay, gender, type,
+  const { name, birthYear, birthMonth, birthDay, gender, type, question,
           partnerName, partnerBirthYear, partnerBirthMonth, partnerBirthDay, partnerGender } = body as Record<string, string>;
 
   if (!birthYear || !birthMonth || !birthDay) {
     return NextResponse.json({ error: "生年月日は必須です" }, { status: 400 });
   }
   if (name && name.length > 50) return NextResponse.json({ error: "名前は50文字以内で入力してください" }, { status: 400 });
+  if (question && question.length > 200) return NextResponse.json({ error: "相談内容は200文字以内で入力してください" }, { status: 400 });
 
   // 相性占いはプレミアムのみ
   if (type === "compatibility" && !isPremium) {
@@ -226,7 +227,7 @@ export async function POST(req: NextRequest) {
 本日: ${todayStr}
 
 【鑑定種別】${typeLabel}
-
+${question ? `\n【相談内容】${question}\n（上記の相談内容に特に焦点を当てて鑑定してください。）` : ""}
 【重要1】本日${todayStr}に特有の運勢を必ず反映させてください。鑑定文の最後に以下の形式で1段落追記すること:
 「本日（${today.getMonth() + 1}月${today.getDate()}日）の運勢として...」という書き出しで、今日という日付に基づいた特有のアドバイスや注意点・チャンスを100〜150文字で書いてください。毎日異なる内容になるよう、今日の日付エネルギーを読み解いた具体的な内容にしてください。
 

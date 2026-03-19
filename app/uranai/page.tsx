@@ -60,6 +60,7 @@ export default function UranaiPage() {
   const [partnerKyusei, setPartnerKyusei] = useState("");
   const [partnerEto, setPartnerEto] = useState("");
   const [copied, setCopied] = useState(false);
+  const [question, setQuestion] = useState("");
   const [isPremium, setIsPremium] = useState(false);
   const [compatibilityScore, setCompatibilityScore] = useState<number | null>(null);
   const [starfall, setStarfall] = useState(false);
@@ -119,7 +120,7 @@ export default function UranaiPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name, birthYear, birthMonth, birthDay, gender, type,
+          name, birthYear, birthMonth, birthDay, gender, type, question,
           partnerName, partnerBirthYear, partnerBirthMonth, partnerBirthDay, partnerGender,
         }),
       });
@@ -348,6 +349,38 @@ export default function UranaiPage() {
               </div>
             </div>
           )}
+
+          {/* 占い種類プリセットボタン */}
+          <div>
+            <label className="block text-sm text-purple-300 mb-2">相談内容（任意）— プリセットから選ぶか自由に入力</label>
+            <div className="flex flex-wrap gap-2 mb-3">
+              {[
+                { emoji: "💕", label: "恋愛", typeVal: "love", text: "彼との関係はこれからどうなりますか？今の気持ちを伝えるべきか迷っています" },
+                { emoji: "💼", label: "仕事", typeVal: "today", text: "転職を考えています。今の会社に残るべきか、新しい職場に挑戦すべきでしょうか" },
+                { emoji: "💰", label: "金運", typeVal: "today", text: "今年の金運はどうですか？投資や副業を始めるべきタイミングを教えてください" },
+                { emoji: "🌿", label: "健康", typeVal: "today", text: "最近体調が優れません。健康面で気をつけることを教えてください" },
+                { emoji: "✨", label: "総合", typeVal: "destiny", text: "今の私の運勢全般を見てください。特に気をつけることは何ですか？" },
+              ].map(preset => (
+                <button
+                  key={preset.label}
+                  type="button"
+                  onClick={() => { setType(preset.typeVal); setQuestion(preset.text); }}
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-full border text-xs font-medium transition-colors bg-white/5 border-white/20 text-purple-200 hover:bg-purple-500/30 hover:border-purple-400"
+                >
+                  {preset.emoji} {preset.label}
+                </button>
+              ))}
+            </div>
+            <textarea
+              value={question}
+              onChange={e => setQuestion(e.target.value)}
+              placeholder="例: 転職のタイミングを教えてください（任意）"
+              rows={3}
+              maxLength={200}
+              className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-purple-400 placeholder-white/30 resize-none"
+            />
+            {question && <p className="text-xs text-purple-500 mt-1 text-right">{question.length}/200文字</p>}
+          </div>
 
           <button type="submit" disabled={loading}
             className={`w-full font-bold py-4 rounded-xl transition-colors text-white ${(isLimitReached && type !== "compatibility") ? "bg-orange-500 hover:bg-orange-400" : "bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 disabled:opacity-50"}`}>
