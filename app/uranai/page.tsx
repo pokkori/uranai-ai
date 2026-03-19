@@ -66,6 +66,12 @@ export default function UranaiPage() {
   const [starfall, setStarfall] = useState(false);
   const [uranaiScores, setUranaiScores] = useState<{total:number;love:number;work:number;money:number;health:number} | null>(null);
 
+  // 鑑定履歴
+  const HISTORY_KEY = "uranai_history";
+  type HistoryItem = { date: string; type: string; summary: string; score: number };
+  const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [historyOpen, setHistoryOpen] = useState(false);
+
   function parseUranaiScores(text: string) {
     const get = (key: string) => {
       const m = text.match(new RegExp(`===SCORE_${key}===(\\d+)`));
@@ -82,6 +88,10 @@ export default function UranaiPage() {
 
   useEffect(() => {
     setUsageCount(parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10));
+    try {
+      const saved = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+      if (Array.isArray(saved)) setHistory(saved);
+    } catch {}
     fetch("/api/auth/status").then(r => r.json()).then(d => setIsPremium(d.isPremium)).catch(() => {});
     // LPの「申し込む」から遷移した場合は決済モーダルを自動表示
     const plan = new URLSearchParams(window.location.search).get("plan");
@@ -164,6 +174,29 @@ export default function UranaiPage() {
         if (scores) setUranaiScores(scores);
         setResult(cleanUranaiResult(resultText));
       }
+      // 鑑定履歴を保存
+      const typeLabels: Record<string, string> = {
+        today: "今日の運勢", love: "恋愛運", destiny: "総合運命", compatibility: "相性占い"
+      };
+      const cleanedForHistory = cleanUranaiResult(resultText);
+      const summarySrc = cleanedForHistory.replace(/^#+\s*/gm, "").replace(/\*\*/g, "").replace(/\n+/g, " ").trim();
+      const historyScore = (() => {
+        const scores = parseUranaiScores(resultText);
+        if (scores) return scores.total;
+        return Math.floor(Math.random() * 5) + 1;
+      })();
+      const newItem: { date: string; type: string; summary: string; score: number } = {
+        date: new Date().toLocaleString("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }),
+        type: typeLabels[type] || type,
+        summary: summarySrc.slice(0, 100),
+        score: historyScore,
+      };
+      setHistory(prev => {
+        const next = [newItem, ...prev].slice(0, 7);
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(next));
+        return next;
+      });
+
       setStarfall(true);
       setTimeout(() => setStarfall(false), 3000);
 
@@ -680,6 +713,37 @@ export default function UranaiPage() {
           </div>
         </div>
       </div>
+      {/* 鑑定履歴アコーディオン */}
+      {history.length > 0 && (
+        <div className="max-w-4xl mx-auto px-6 pb-6">
+          <button
+            onClick={() => setHistoryOpen(o => !o)}
+            className="w-full flex items-center justify-between bg-white/5 border border-white/10 rounded-xl px-5 py-3 hover:bg-white/10 transition-colors"
+          >
+            <span className="text-sm font-bold text-purple-200">📜 過去の鑑定履歴（直近{history.length}件）</span>
+            <span className="text-purple-400 text-xs">{historyOpen ? "▲ 閉じる" : "▼ 開く"}</span>
+          </button>
+          {historyOpen && (
+            <div className="mt-2 bg-white/5 border border-white/10 rounded-xl overflow-hidden divide-y divide-white/10">
+              {history.map((item, i) => (
+                <div key={i} className="px-5 py-3 flex items-start gap-3">
+                  <div className="shrink-0 text-center">
+                    <div className="text-lg font-black text-yellow-300">{item.score}<span className="text-xs font-normal text-yellow-500">/10</span></div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span className="text-xs font-bold text-purple-300">{item.type}</span>
+                      <span className="text-xs text-purple-600">{item.date}</span>
+                    </div>
+                    <p className="text-xs text-purple-200 leading-relaxed line-clamp-2">{item.summary}…</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       <footer className="text-center py-6 text-xs text-gray-400 border-t mt-8">
         <a href="/legal" className="hover:underline">特定商取引法に基づく表記</a>
         <span className="mx-2">|</span>
