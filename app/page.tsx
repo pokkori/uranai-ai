@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import UranaiSampleSection from "@/components/UranaiSampleSection";
 import DailyFortuneSection from "@/components/DailyFortuneSection";
 import TodayFortune from "@/components/TodayFortune";
+import ZodiacRankingSection from "@/components/ZodiacRankingSection";
 
 export const metadata: Metadata = {
   title: "AI占い｜四柱推命・九星気学で本格鑑定",
@@ -73,6 +74,9 @@ export default function LandingPage() {
 
       {/* 今日の日運 */}
       <DailyFortuneSection />
+
+      {/* 12星座 総合運ランキング */}
+      <ZodiacRankingSection />
 
       {/* 今月の転機ティーザー */}
       <section className="py-10 px-6 max-w-3xl mx-auto">
@@ -394,6 +398,57 @@ export default function LandingPage() {
           </p>
           <Link href="/uranai" className="inline-block bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold px-6 py-3 rounded-full hover:opacity-90 transition-opacity text-sm">
             相性占いを試す →
+          </Link>
+        </div>
+      </section>
+
+      {/* 今週の開運アクション */}
+      <section className="py-10 px-6 max-w-3xl mx-auto">
+        <div className="text-center mb-6">
+          <div className="inline-block bg-green-500/20 text-green-300 text-xs font-bold px-3 py-1 rounded-full mb-3 border border-green-500/30">
+            📅 毎週更新
+          </div>
+          <h2 className="text-xl font-bold text-white">今週の開運アクション3選</h2>
+          <p className="text-purple-300 text-sm mt-1">九星気学・干支の週運から導いた、今週やると運気が上がる行動</p>
+        </div>
+        {(() => {
+          const weekNum = Math.floor(Date.now() / (7 * 24 * 60 * 60 * 1000));
+          const actions = [
+            [
+              { icon: "🌸", title: "東の方角への外出", desc: "九星では東は「木のエネルギー」。新しい出会い・仕事のチャンスが東から来やすい週です。", tag: "対人運UP" },
+              { icon: "📝", title: "感謝の気持ちを文章に", desc: "水星の影響で言葉の力が高まる週。感謝を伝えることで、縁が深まり仕事運も上昇します。", tag: "縁強化" },
+              { icon: "💧", title: "水回りの掃除・整理", desc: "干支の気学では水回りを清潔に保つと金運が整うとされています。今週特に効果的な日です。", tag: "金運UP" },
+            ],
+            [
+              { icon: "🌿", title: "新しいことを1つ始める", desc: "今週は「始まりのエネルギー」が強い。小さなことでも新しい習慣を作ると、運気が大きく動きます。", tag: "総合運UP" },
+              { icon: "💌", title: "久しぶりの連絡を取る", desc: "縁の星が活発な週。しばらく連絡していなかった人に連絡すると、嬉しい展開が起きやすいです。", tag: "人間関係UP" },
+              { icon: "🧘", title: "朝5分の瞑想・深呼吸", desc: "今週は精神的な安定が運気上昇のカギ。朝のルーティンに静かな時間を加えると、直感力が高まります。", tag: "直感力UP" },
+            ],
+            [
+              { icon: "🎨", title: "好きな色を身につける", desc: "今週の開運カラーを意識して。九星では色には運気を呼ぶ力があるとされています。", tag: "運気UP" },
+              { icon: "🌙", title: "寝る前の1日振り返り", desc: "月の満ち欠けが感受性を高める週。就寝前に今日の出来事を3つ書き出すと、明日の運気が好転します。", tag: "運気整え" },
+              { icon: "🍀", title: "南西方向のお出かけ", desc: "今週は「土のエネルギー」が流れる方角。南西への外出が縁と金運を引き寄せます。", tag: "縁・金運UP" },
+            ],
+          ];
+          const weekActions = actions[weekNum % actions.length];
+          return (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {weekActions.map((action, i) => (
+                <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-5 hover:border-purple-400/40 transition-colors">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-2xl">{action.icon}</span>
+                    <span className="text-xs bg-green-500/20 text-green-300 px-2 py-0.5 rounded-full border border-green-500/30">{action.tag}</span>
+                  </div>
+                  <h3 className="text-white font-bold text-sm mb-2">{action.title}</h3>
+                  <p className="text-purple-300 text-xs leading-relaxed">{action.desc}</p>
+                </div>
+              ))}
+            </div>
+          );
+        })()}
+        <div className="text-center mt-6">
+          <Link href="/uranai" className="inline-block text-sm text-purple-400 hover:text-purple-200 transition-colors underline underline-offset-2">
+            🔮 生年月日であなただけの今週の開運アドバイスを見る →
           </Link>
         </div>
       </section>

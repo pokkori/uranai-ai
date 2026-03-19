@@ -110,11 +110,16 @@ export default function UranaiPage() {
   const [uranaiScores, setUranaiScores] = useState<{total:number;love:number;work:number;money:number;health:number} | null>(null);
 
   // タロット1枚引き
-  const [activeTab, setActiveTab] = useState<"uranai" | "tarot">("uranai");
+  const [activeTab, setActiveTab] = useState<"uranai" | "tarot" | "trend">("uranai");
   const [tarotCard, setTarotCard] = useState<typeof TAROT_CARDS[0] | null>(null);
   const [tarotDrawn, setTarotDrawn] = useState(false);
   const [tarotFlipped, setTarotFlipped] = useState(false);
   const [tarotShared, setTarotShared] = useState(false);
+
+  // 連続鑑定ストリーク
+  const STREAK_KEY = "uranai_streak";
+  const STREAK_DATE_KEY = "uranai_streak_date";
+  const [streak, setStreak] = useState(0);
 
   // 鑑定履歴
   const HISTORY_KEY = "uranai_history";
@@ -143,11 +148,23 @@ export default function UranaiPage() {
       if (Array.isArray(saved)) setHistory(saved);
     } catch {}
     fetch("/api/auth/status").then(r => r.json()).then(d => setIsPremium(d.isPremium)).catch(() => {});
-    // LPの「申し込む」から遷移した場合は決済モーダルを自動表示
+
+    // ストリーク計算
+    const todayDate = new Date().toDateString();
+    const lastDate = localStorage.getItem(STREAK_DATE_KEY);
+    const savedStreak = parseInt(localStorage.getItem(STREAK_KEY) || "0", 10);
+    if (lastDate === todayDate) {
+      setStreak(savedStreak);
+    } else {
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const newStreak = lastDate === yesterday.toDateString() ? savedStreak : 0;
+      setStreak(newStreak);
+    }
+    // LPの「申し込む」から遷移した場合はペイウォールを自動表示
     const plan = new URLSearchParams(window.location.search).get("plan");
     if (plan === "standard" || plan === "business") {
-      setPayjpPlan(plan);
-      setShowPayjp(true);
+      setShowPaywall(true);
     }
     // タロット：本日引き済みチェック
     const today = new Date().toDateString();
@@ -260,6 +277,19 @@ export default function UranaiPage() {
 
       setStarfall(true);
       setTimeout(() => setStarfall(false), 3000);
+
+      // ストリーク更新
+      const todayStr = new Date().toDateString();
+      const lastStreakDate = localStorage.getItem(STREAK_DATE_KEY);
+      if (lastStreakDate !== todayStr) {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const prevStreak = parseInt(localStorage.getItem(STREAK_KEY) || "0", 10);
+        const newStreak = lastStreakDate === yesterday.toDateString() ? prevStreak + 1 : 1;
+        localStorage.setItem(STREAK_KEY, String(newStreak));
+        localStorage.setItem(STREAK_DATE_KEY, todayStr);
+        setStreak(newStreak);
+      }
 
       // 相性スコアを抽出 (例: "相性スコア: 78点" or "78点/100点")
       if (type === "compatibility") {
@@ -392,9 +422,21 @@ export default function UranaiPage() {
         </span>
       </nav>
 
+      {/* ストリークバッジ */}
+      {streak >= 3 && (
+        <div className="max-w-4xl mx-auto px-6 pb-2">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500/20 to-yellow-500/20 border border-orange-400/40 rounded-full px-4 py-1.5 text-xs font-bold text-orange-300">
+            🔥 {streak}日連続鑑定中！
+            {streak >= 30 && <span className="bg-yellow-400 text-black text-xs px-2 py-0.5 rounded-full font-black">伝説の占い師</span>}
+            {streak >= 7 && streak < 30 && <span className="bg-orange-400 text-black text-xs px-2 py-0.5 rounded-full font-black">占い達人</span>}
+            {streak >= 3 && streak < 7 && <span className="bg-amber-400 text-black text-xs px-2 py-0.5 rounded-full font-black">占い修行中</span>}
+          </div>
+        </div>
+      )}
+
       {/* タブナビゲーション */}
       <div className="max-w-4xl mx-auto px-6 pb-2">
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <button
             onClick={() => setActiveTab("uranai")}
             className={`flex items-center gap-1.5 px-5 py-2.5 rounded-full text-sm font-bold transition-all ${activeTab === "uranai" ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-900/40" : "bg-white/10 text-purple-300 hover:bg-white/20"}`}
@@ -407,6 +449,13 @@ export default function UranaiPage() {
           >
             🃏 今日のタロット
             {!tarotDrawn && <span className="bg-pink-500 text-white text-xs px-1.5 py-0.5 rounded-full animate-pulse">NEW</span>}
+          </button>
+          <button
+            onClick={() => setActiveTab("trend")}
+            className={`flex items-center gap-1.5 px-5 py-2.5 rounded-full text-sm font-bold transition-all ${activeTab === "trend" ? "bg-gradient-to-r from-teal-500 to-cyan-500 text-white shadow-lg shadow-teal-900/40" : "bg-white/10 text-purple-300 hover:bg-white/20"}`}
+          >
+            📈 運気トレンド
+            {history.length > 0 && <span className="bg-teal-500 text-white text-xs px-1.5 py-0.5 rounded-full">{history.length}</span>}
           </button>
         </div>
       </div>
@@ -515,6 +564,132 @@ export default function UranaiPage() {
               <p className="text-purple-600 text-xs text-center">明日の23時に新しいカードが引けます</p>
             </div>
           ) : null}
+        </div>
+      )}
+
+      {/* 運気トレンドセクション */}
+      {activeTab === "trend" && (
+        <div className="max-w-2xl mx-auto px-6 py-8">
+          <div className="text-center mb-6">
+            <div className="inline-block bg-teal-500/20 text-teal-300 text-xs font-bold px-3 py-1 rounded-full mb-3 border border-teal-500/30">
+              鑑定するたびに自動記録
+            </div>
+            <h2 className="text-2xl font-bold text-white mb-2">あなたの運気トレンド</h2>
+            <p className="text-purple-300 text-sm">過去の鑑定スコアから運気の流れを可視化します。</p>
+          </div>
+
+          {history.length === 0 ? (
+            <div className="text-center py-12 text-purple-500">
+              <div className="text-4xl mb-3">📈</div>
+              <p className="text-sm mb-4">まだ鑑定履歴がありません。<br />AI鑑定を受けると運気トレンドが記録されます。</p>
+              <button
+                onClick={() => setActiveTab("uranai")}
+                className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold px-6 py-3 rounded-full text-sm hover:opacity-90 transition-opacity"
+              >
+                🔮 今すぐ鑑定する
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {/* ミニグラフ */}
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
+                <div className="flex items-end gap-2 h-24 mb-3">
+                  {history.slice().reverse().map((item, i) => {
+                    const heightPct = (item.score / 10) * 100;
+                    const isLatest = i === history.slice().reverse().length - 1;
+                    return (
+                      <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                        <div className="text-xs text-purple-400 font-bold">{item.score}</div>
+                        <div
+                          className={`w-full rounded-t-lg transition-all duration-700 ${isLatest ? "bg-gradient-to-t from-yellow-500 to-amber-400" : "bg-gradient-to-t from-purple-600 to-purple-400"}`}
+                          style={{ height: `${heightPct}%`, minHeight: "8px" }}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="flex items-center justify-between text-xs text-purple-500">
+                  <span>← 古い</span>
+                  <span className="text-yellow-400 font-bold">最新 →</span>
+                </div>
+                {/* 平均スコア */}
+                <div className="mt-3 pt-3 border-t border-white/10 flex items-center justify-between">
+                  <span className="text-xs text-purple-400">平均運気スコア</span>
+                  <span className="text-lg font-black text-yellow-300">
+                    {(history.reduce((a, b) => a + b.score, 0) / history.length).toFixed(1)}
+                    <span className="text-xs font-normal text-yellow-500">/10</span>
+                  </span>
+                </div>
+                {/* 最高スコア */}
+                <div className="flex items-center justify-between mt-1">
+                  <span className="text-xs text-purple-400">最高スコア</span>
+                  <span className="text-sm font-bold text-pink-300">
+                    {Math.max(...history.map(h => h.score))}/10
+                  </span>
+                </div>
+              </div>
+
+              {/* 詳細履歴 */}
+              <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
+                <div className="px-5 py-3 border-b border-white/10 flex items-center justify-between">
+                  <span className="text-sm font-bold text-purple-200">📜 鑑定履歴</span>
+                  <span className="text-xs text-purple-500">直近{history.length}件</span>
+                </div>
+                <div className="divide-y divide-white/10">
+                  {history.map((item, i) => (
+                    <div key={i} className="px-5 py-3 flex items-center gap-3">
+                      <div className="w-10 text-center shrink-0">
+                        <div className="text-lg font-black text-yellow-300">{item.score}</div>
+                        <div className="text-xs text-yellow-500">/10</div>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <span className="text-xs font-bold text-purple-300">{item.type}</span>
+                          <span className="text-xs text-purple-600">{item.date}</span>
+                        </div>
+                        <p className="text-xs text-purple-200 leading-relaxed line-clamp-2">{item.summary}…</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* ストリーク表示 */}
+              <div className="bg-gradient-to-r from-orange-900/30 to-yellow-900/20 border border-orange-400/30 rounded-2xl p-4 text-center">
+                <div className="text-3xl font-black text-orange-300 mb-1">
+                  🔥 {streak > 0 ? streak : 0}日
+                </div>
+                <p className="text-sm text-orange-200 font-bold mb-1">連続鑑定ストリーク</p>
+                <p className="text-xs text-orange-400">
+                  {streak >= 30 ? "🏆 伝説の占い師バッジ獲得！" :
+                   streak >= 7  ? "⚡ 占い達人バッジ獲得！次は30日連続を目指そう" :
+                   streak >= 3  ? "✨ 占い修行中バッジ獲得！次は7日連続を目指そう" :
+                   streak >= 1  ? `あと${3 - streak}日で「占い修行中」バッジ獲得！` :
+                   "毎日鑑定すると連続記録が積み上がります"}
+                </p>
+                <div className="mt-3 flex justify-center gap-4 text-xs">
+                  {[
+                    { days: 3, label: "修行中", icon: "✨" },
+                    { days: 7, label: "達人", icon: "⚡" },
+                    { days: 30, label: "伝説", icon: "🏆" },
+                  ].map(badge => (
+                    <div key={badge.days} className={`text-center px-3 py-2 rounded-xl border ${streak >= badge.days ? "border-orange-400/60 bg-orange-500/20 text-orange-200" : "border-white/10 bg-white/5 text-purple-600"}`}>
+                      <div className="text-lg mb-0.5">{badge.icon}</div>
+                      <div className="font-bold">{badge.days}日</div>
+                      <div>{badge.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                onClick={() => setActiveTab("uranai")}
+                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-3.5 rounded-xl hover:opacity-90 transition-opacity text-sm"
+              >
+                🔮 今日の鑑定を受けてストリークを伸ばす
+              </button>
+            </div>
+          )}
         </div>
       )}
 

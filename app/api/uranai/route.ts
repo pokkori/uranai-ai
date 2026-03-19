@@ -35,6 +35,29 @@ function calcEto(year: number, month: number, day: number): string {
   return signs[((adjustedYear - 4) % 12 + 12) % 12];
 }
 
+// 西洋占星術：星座計算
+function calcZodiac(month: number, day: number): string {
+  const zodiacs = [
+    { name: "山羊座", endMonth: 1, endDay: 19 },
+    { name: "水瓶座", endMonth: 2, endDay: 18 },
+    { name: "魚座",   endMonth: 3, endDay: 20 },
+    { name: "牡羊座", endMonth: 4, endDay: 19 },
+    { name: "牡牛座", endMonth: 5, endDay: 20 },
+    { name: "双子座", endMonth: 6, endDay: 20 },
+    { name: "蟹座",   endMonth: 7, endDay: 22 },
+    { name: "獅子座", endMonth: 8, endDay: 22 },
+    { name: "乙女座", endMonth: 9, endDay: 22 },
+    { name: "天秤座", endMonth: 10, endDay: 22 },
+    { name: "蠍座",   endMonth: 11, endDay: 21 },
+    { name: "射手座", endMonth: 12, endDay: 21 },
+  ];
+  for (const z of zodiacs) {
+    if (month === z.endMonth && day <= z.endDay) return z.name;
+    if (month < z.endMonth) return z.name;
+  }
+  return "山羊座";
+}
+
 export async function POST(req: NextRequest) {
   const ip = req.headers.get("x-forwarded-for") || "unknown";
   if (!checkRateLimit(ip)) {
@@ -74,6 +97,7 @@ export async function POST(req: NextRequest) {
   const d = Number(birthDay);
   const kyusei = calcKyusei(y, m, d);
   const eto = calcEto(y, m, d);
+  const zodiac = calcZodiac(m, d);
 
   const today = new Date();
   const todayStr = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
@@ -93,18 +117,21 @@ export async function POST(req: NextRequest) {
     const pd = Number(partnerBirthDay);
     const partnerKyusei = calcKyusei(py, pm, pd);
     const partnerEto = calcEto(py, pm, pd);
+    const partnerZodiac = calcZodiac(pm, pd);
 
     prompt = `あなたは30年のキャリアを持つ占術師です。九星気学・干支・数秘術を組み合わせた相性鑑定を行います。読んだ人が「ドキッとするほど当たっている」と感じる深い鑑定文を書いてください。
 
 【あなた】
 名前: ${name || "あなた"}
-生年月日: ${birthYear}年${birthMonth}月${birthDay}日（${eto}年・${kyusei}白星）
+生年月日: ${birthYear}年${birthMonth}月${birthDay}日（${eto}年・${kyusei}白星・${zodiac}）
 性別: ${gender === "male" ? "男性" : "女性"}
 
 【相手】
 名前: ${partnerName || "相手"}
-生年月日: ${partnerBirthYear}年${partnerBirthMonth}月${partnerBirthDay}日（${partnerEto}年・${partnerKyusei}白星）
+生年月日: ${partnerBirthYear}年${partnerBirthMonth}月${partnerBirthDay}日（${partnerEto}年・${partnerKyusei}白星・${partnerZodiac}）
 性別: ${partnerGender === "male" ? "男性" : "女性"}
+
+※ 九星気学・干支に加えて、西洋占星術（${zodiac}と${partnerZodiac}の組み合わせ）の観点からも相性を分析してください。東洋占術と西洋占術の三位一体で相性を多角的に読み解くことで、他のアプリにはない深みを出してください。
 
 本日: ${todayStr}
 
@@ -224,7 +251,10 @@ export async function POST(req: NextRequest) {
 性別: ${gender === "male" ? "男性" : "女性"}
 干支: ${eto}年生まれ
 九星: ${kyusei}白星
+西洋占星術の星座: ${zodiac}
 本日: ${todayStr}
+
+※ 必ず西洋占星術の${zodiac}の特性（守護星・エレメント・典型的な性格傾向）を鑑定文の中で1か所以上具体的に言及してください。四柱推命×九星気学×西洋占星術の三位一体鑑定として、三つの体系の共通点や相違点を読み解くことで深みを出してください。
 
 【鑑定種別】${typeLabel}
 ${question ? `\n【相談内容】${question}\n（上記の相談内容に特に焦点を当てて鑑定してください。）` : ""}
