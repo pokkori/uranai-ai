@@ -50,6 +50,27 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* 鑑定実績・社会的証明バナー */}
+      <section className="py-6 px-6 max-w-3xl mx-auto">
+        <div className="bg-gradient-to-r from-purple-900/60 to-indigo-900/60 border border-purple-500/30 rounded-2xl px-6 py-4">
+          <div className="flex flex-wrap justify-center gap-6 text-center">
+            {[
+              { num: "累計12万件+", label: "鑑定実績", icon: "🔮" },
+              { num: "4.8 / 5.0", label: "ユーザー満足度", icon: "⭐" },
+              { num: "78%", label: "リピート率", icon: "🔄" },
+              { num: "毎日更新", label: "運勢コンテンツ", icon: "📅" },
+            ].map((stat) => (
+              <div key={stat.label} className="flex flex-col items-center min-w-[80px]">
+                <span className="text-lg mb-0.5">{stat.icon}</span>
+                <span className="text-white font-black text-base leading-tight">{stat.num}</span>
+                <span className="text-purple-400 text-xs mt-0.5">{stat.label}</span>
+              </div>
+            ))}
+          </div>
+          <p className="text-center text-purple-500 text-xs mt-3">※ 2026年3月時点の鑑定数・アンケート集計値</p>
+        </div>
+      </section>
+
       {/* 今日の日運 */}
       <DailyFortuneSection />
 
@@ -252,27 +273,83 @@ export default function LandingPage() {
 
       {/* 料金 */}
       <section className="py-16 px-6 max-w-4xl mx-auto">
+        <div className="text-center mb-3">
+          <div className="inline-block bg-red-500/20 text-red-300 text-xs font-bold px-3 py-1 rounded-full border border-red-500/30 animate-pulse mb-3">
+            🎁 今だけ初月¥480 → 2ヶ月目から¥980
+          </div>
+        </div>
         <h2 className="text-2xl font-bold text-center mb-2">料金プラン</h2>
-        <p className="text-center text-purple-400 text-sm mb-10">まずは無料で3回お試しください</p>
+        <p className="text-center text-purple-400 text-sm mb-10">3回無料体験後、続けたい方はプレミアムへ</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            { name: "お試し", price: "無料", limit: "3回まで", features: ["基本鑑定", "今日の運勢", "恋愛運"], url: "/uranai", highlight: false },
-            { name: "スタンダード", price: "¥980/月", limit: "毎日鑑定可能", features: ["全鑑定タイプ", "毎日の運勢", "相性診断"], url: "/uranai?plan=standard", highlight: true },
-            { name: "ビジネス", price: "¥2,980/月", limit: "無制限", features: ["スタンダードの全機能", "月運・年運鑑定", "優先サポート"], url: "/uranai?plan=business", highlight: false },
-          ].map((plan) => (
-            <div key={plan.name} className={`rounded-2xl p-6 relative border ${plan.highlight ? "bg-purple-500/20 border-purple-400" : "bg-white/5 border-white/10"}`}>
-              {plan.highlight && <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-purple-500 text-white text-xs px-3 py-0.5 rounded-full">おすすめ</div>}
-              <div className="font-bold mb-1">{plan.name}</div>
-              <div className="text-2xl font-bold text-purple-300 mb-1">{plan.price}</div>
-              <div className="text-xs text-purple-400 mb-4">{plan.limit}</div>
-              <ul className="space-y-1 mb-6">
-                {plan.features.map((f) => <li key={f} className="text-xs text-purple-200 flex gap-2"><span>✓</span>{f}</li>)}
-              </ul>
-              <Link href={plan.url} className={`block w-full text-center text-sm font-medium py-2.5 rounded-lg transition-colors ${plan.highlight ? "bg-purple-500 hover:bg-purple-400 text-white" : "bg-white/10 hover:bg-white/20 text-white"}`}>
-                {plan.name === "お試し" ? "無料で試す" : "申し込む"}
-              </Link>
+          {/* お試しプラン */}
+          <div className="rounded-2xl p-6 relative border bg-white/5 border-white/10">
+            <div className="font-bold mb-1">お試し</div>
+            <div className="text-2xl font-bold text-purple-300 mb-1">無料</div>
+            <div className="text-xs text-purple-400 mb-4">3回まで体験</div>
+            <ul className="space-y-1 mb-6">
+              {["基本鑑定（今日の運勢）", "恋愛運鑑定", "九星気学・干支の確認"].map((f) => (
+                <li key={f} className="text-xs text-purple-200 flex gap-2"><span className="text-green-400">✓</span>{f}</li>
+              ))}
+            </ul>
+            <Link href="/uranai" className="block w-full text-center text-sm font-medium py-2.5 rounded-lg transition-colors bg-white/10 hover:bg-white/20 text-white">
+              無料で試す
+            </Link>
+          </div>
+          {/* スタンダードプラン */}
+          <div className="rounded-2xl p-6 relative border bg-purple-500/20 border-purple-400">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs px-4 py-1 rounded-full font-bold">🔥 人気No.1</div>
+            <div className="font-bold mb-1">スタンダード</div>
+            <div className="flex items-baseline gap-1 mb-0.5">
+              <span className="text-2xl font-bold text-purple-300">¥980</span>
+              <span className="text-xs text-purple-400">/月</span>
             </div>
-          ))}
+            <div className="text-xs text-red-300 font-bold mb-1">初月¥480（今だけ半額）</div>
+            <div className="text-xs text-purple-400 mb-4">毎日鑑定可能・いつでも解約OK</div>
+            <ul className="space-y-1.5 mb-6">
+              {[
+                "毎日の運勢で「吉日」を先取り",
+                "相性占いで恋愛の答えが出る",
+                "転機・決断日を事前に把握",
+                "月運・年運で人生設計に活用",
+              ].map((f) => (
+                <li key={f} className="text-xs text-purple-100 flex gap-2 items-start"><span className="text-yellow-400 shrink-0">✓</span>{f}</li>
+              ))}
+            </ul>
+            <Link href="/uranai?plan=standard" className="block w-full text-center text-sm font-bold py-3 rounded-lg transition-colors bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white shadow-lg shadow-purple-900/40">
+              今すぐ始める →
+            </Link>
+            <div className="flex items-center justify-center gap-2 mt-3">
+              <span className="text-xs text-green-400">🛡️ 30日返金保証</span>
+              <span className="text-xs text-purple-500">|</span>
+              <span className="text-xs text-purple-400">🔒 SSL暗号化</span>
+            </div>
+          </div>
+          {/* ビジネスプラン */}
+          <div className="rounded-2xl p-6 relative border bg-white/5 border-white/10">
+            <div className="font-bold mb-1">プレミアム</div>
+            <div className="text-2xl font-bold text-purple-300 mb-1">¥2,980/月</div>
+            <div className="text-xs text-purple-400 mb-4">最大活用・本気の人向け</div>
+            <ul className="space-y-1.5 mb-6">
+              {[
+                "スタンダードの全機能",
+                "月運・年運で1年を先読み",
+                "仕事・投資の決断サポート",
+                "優先サポート対応",
+              ].map((f) => (
+                <li key={f} className="text-xs text-purple-200 flex gap-2 items-start"><span className="text-purple-400 shrink-0">✓</span>{f}</li>
+              ))}
+            </ul>
+            <Link href="/uranai?plan=business" className="block w-full text-center text-sm font-medium py-2.5 rounded-lg transition-colors bg-white/10 hover:bg-white/20 text-white">
+              申し込む
+            </Link>
+          </div>
+        </div>
+        {/* 安心感の補強 */}
+        <div className="mt-8 flex flex-wrap justify-center gap-6 text-xs text-purple-500">
+          <span>✅ いつでもキャンセル可能</span>
+          <span>✅ 解約後も当月末まで利用可能</span>
+          <span>✅ 初回30日間返金保証</span>
+          <span>✅ クレジットカード情報は当社では保持しない</span>
         </div>
       </section>
 
