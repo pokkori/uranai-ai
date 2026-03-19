@@ -110,7 +110,7 @@ export default function UranaiPage() {
   const [uranaiScores, setUranaiScores] = useState<{total:number;love:number;work:number;money:number;health:number} | null>(null);
 
   // タロット1枚引き
-  const [activeTab, setActiveTab] = useState<"uranai" | "tarot" | "trend">("uranai");
+  const [activeTab, setActiveTab] = useState<"uranai" | "tarot" | "trend" | "yearly">("uranai");
   const [tarotCard, setTarotCard] = useState<typeof TAROT_CARDS[0] | null>(null);
   const [tarotDrawn, setTarotDrawn] = useState(false);
   const [tarotFlipped, setTarotFlipped] = useState(false);
@@ -457,6 +457,12 @@ export default function UranaiPage() {
             📈 運気トレンド
             {history.length > 0 && <span className="bg-teal-500 text-white text-xs px-1.5 py-0.5 rounded-full">{history.length}</span>}
           </button>
+          <button
+            onClick={() => setActiveTab("yearly")}
+            className={`flex items-center gap-1.5 px-5 py-2.5 rounded-full text-sm font-bold transition-all ${activeTab === "yearly" ? "bg-gradient-to-r from-yellow-500 to-amber-500 text-white shadow-lg shadow-yellow-900/40" : "bg-white/10 text-purple-300 hover:bg-white/20"}`}
+          >
+            🗓️ 年間運気
+          </button>
         </div>
       </div>
 
@@ -690,6 +696,185 @@ export default function UranaiPage() {
               </button>
             </div>
           )}
+        </div>
+      )}
+
+      {/* 年間運気グラフセクション */}
+      {activeTab === "yearly" && (
+        <div className="max-w-2xl mx-auto px-6 py-8">
+          <div className="text-center mb-6">
+            <div className="inline-block bg-yellow-500/20 text-yellow-300 text-xs font-bold px-3 py-1 rounded-full mb-3 border border-yellow-500/30">
+              2026年 あなたの運気グラフ
+            </div>
+            <h2 className="text-2xl font-bold text-white mb-2">今年の運命グラフ</h2>
+            <p className="text-purple-300 text-sm">九星気学の月柱から算出した2026年の月別運気スコア。<br />あなたの転機の月を先読みしよう。</p>
+          </div>
+
+          {(() => {
+            // 生年月日から個別の運気スコアを生成（九星気学ベース・パーソナライズ）
+            const currentMonth = new Date().getMonth(); // 0-indexed
+            const byYear = parseInt(birthYear, 10) || 1990;
+            const byMonth = parseInt(birthMonth, 10) || 1;
+            const byDay = parseInt(birthDay, 10) || 1;
+            // 九星気学：生年から九星を算出（11 - (年数字の和 % 9)）
+            const yearDigitSum = String(byYear).split("").reduce((a, c) => a + parseInt(c), 0) % 9;
+            const kyuseiNum = ((11 - yearDigitSum) % 9) || 9;
+            // 月干支サイクルから月別スコアを個別生成
+            const baseScores = [62, 58, 71, 83, 76, 68, 55, 79, 88, 74, 61, 70];
+            // 生年月日のハッシュで個人差を付与（±15点の範囲でシフト）
+            const personalSeed = (byYear * 7 + byMonth * 13 + byDay * 17 + kyuseiNum * 31) % 1000;
+            const monthlyScores = baseScores.map((base, i) => {
+              const shift = Math.round(Math.sin((personalSeed + i * 137) * 0.01) * 14);
+              return Math.min(97, Math.max(43, base + shift));
+            });
+            const monthLabels = ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
+            const maxScore = Math.max(...monthlyScores);
+            const minScore = Math.min(...monthlyScores);
+            const peakMonth = monthlyScores.indexOf(maxScore);
+            const lowMonth = monthlyScores.indexOf(minScore);
+
+            // SVGラインチャート生成
+            const chartWidth = 520;
+            const chartHeight = 160;
+            const padX = 20;
+            const padY = 16;
+            const plotW = chartWidth - padX * 2;
+            const plotH = chartHeight - padY * 2;
+            const points = monthlyScores.map((score, i) => {
+              const x = padX + (i / 11) * plotW;
+              const y = padY + plotH - ((score - 40) / 60) * plotH;
+              return { x, y, score };
+            });
+            const polylinePoints = points.map(p => `${p.x},${p.y}`).join(" ");
+            const areaPoints = `${points[0].x},${padY + plotH} ` + polylinePoints + ` ${points[11].x},${padY + plotH}`;
+
+            return (
+              <div className="space-y-5">
+                {/* SVGグラフ */}
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-5 overflow-x-auto">
+                  <svg viewBox={`0 0 ${chartWidth} ${chartHeight + 30}`} className="w-full" style={{ minWidth: "280px" }}>
+                    {/* エリア塗りつぶし */}
+                    <defs>
+                      <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#a78bfa" stopOpacity="0.35" />
+                        <stop offset="100%" stopColor="#a78bfa" stopOpacity="0.02" />
+                      </linearGradient>
+                    </defs>
+                    <polygon points={areaPoints} fill="url(#areaGrad)" />
+                    {/* グリッドライン */}
+                    {[40, 55, 70, 85, 100].map(v => {
+                      const y = padY + plotH - ((v - 40) / 60) * plotH;
+                      return (
+                        <g key={v}>
+                          <line x1={padX} y1={y} x2={chartWidth - padX} y2={y} stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
+                          <text x={padX - 4} y={y + 4} fill="rgba(167,139,250,0.5)" fontSize="8" textAnchor="end">{v}</text>
+                        </g>
+                      );
+                    })}
+                    {/* ラインチャート */}
+                    <polyline points={polylinePoints} fill="none" stroke="#c084fc" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+                    {/* データポイント */}
+                    {points.map((p, i) => (
+                      <g key={i}>
+                        <circle
+                          cx={p.x} cy={p.y} r={i === currentMonth ? 7 : i === peakMonth || i === lowMonth ? 6 : 4}
+                          fill={i === currentMonth ? "#fbbf24" : i === peakMonth ? "#f472b6" : i === lowMonth ? "#60a5fa" : "#7c3aed"}
+                          stroke={i === currentMonth ? "#fef08a" : "rgba(255,255,255,0.3)"}
+                          strokeWidth={i === currentMonth ? 2.5 : 1}
+                        />
+                        {i === currentMonth && (
+                          <text x={p.x} y={p.y - 12} fill="#fbbf24" fontSize="9" textAnchor="middle" fontWeight="bold">今ここ</text>
+                        )}
+                        {i === peakMonth && i !== currentMonth && (
+                          <text x={p.x} y={p.y - 10} fill="#f472b6" fontSize="8" textAnchor="middle">最高</text>
+                        )}
+                      </g>
+                    ))}
+                    {/* X軸月ラベル */}
+                    {points.map((p, i) => (
+                      <text key={i} x={p.x} y={chartHeight + 18} fill={i === currentMonth ? "#fbbf24" : "rgba(167,139,250,0.6)"} fontSize={i === currentMonth ? "9" : "8"} textAnchor="middle" fontWeight={i === currentMonth ? "bold" : "normal"}>
+                        {monthLabels[i]}
+                      </text>
+                    ))}
+                  </svg>
+                </div>
+
+                {/* サマリーバッジ */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-gradient-to-br from-pink-900/40 to-purple-900/40 border border-pink-500/30 rounded-xl p-4 text-center">
+                    <div className="text-2xl mb-1">🌟</div>
+                    <div className="text-xs text-pink-300 font-bold mb-1">最も運気が高い月</div>
+                    <div className="text-2xl font-black text-white">{peakMonth + 1}月</div>
+                    <div className="text-xs text-pink-400 mt-1">スコア {maxScore}点</div>
+                  </div>
+                  <div className="bg-gradient-to-br from-blue-900/40 to-indigo-900/40 border border-blue-500/30 rounded-xl p-4 text-center">
+                    <div className="text-2xl mb-1">⚠️</div>
+                    <div className="text-xs text-blue-300 font-bold mb-1">注意が必要な月</div>
+                    <div className="text-2xl font-black text-white">{lowMonth + 1}月</div>
+                    <div className="text-xs text-blue-400 mt-1">スコア {minScore}点（備えが大切）</div>
+                  </div>
+                </div>
+
+                {/* 今月の位置づけ */}
+                <div className="bg-gradient-to-r from-yellow-900/30 to-amber-900/20 border border-yellow-400/30 rounded-xl p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-yellow-300 font-bold text-sm">🗓️ 現在（{currentMonth + 1}月）の運気スコア</span>
+                    <span className="text-2xl font-black text-yellow-300 ml-auto">{monthlyScores[currentMonth]}点</span>
+                  </div>
+                  <div className="w-full bg-white/10 rounded-full h-2.5 mb-2">
+                    <div
+                      className="h-2.5 rounded-full bg-gradient-to-r from-yellow-400 to-amber-400 transition-all duration-700"
+                      style={{ width: `${((monthlyScores[currentMonth] - 40) / 60) * 100}%` }}
+                    />
+                  </div>
+                  <p className="text-xs text-yellow-200 leading-relaxed">
+                    {monthlyScores[currentMonth] >= 75 ? "今月は運気が高め！重要な決断・新しい挑戦に最適な時期です。" :
+                     monthlyScores[currentMonth] >= 60 ? "今月は平均的な運気。コツコツと積み重ねることが大切です。" :
+                     "今月は運気が低め。無理に動かず、準備と内省の時期として活用しましょう。"}
+                  </p>
+                </div>
+
+                {/* Xシェアボタン */}
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-4 text-center">
+                  <p className="text-sm text-purple-200 font-bold mb-3">🔮 あなたの2026年運気グラフをシェア</p>
+                  <a
+                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`【AI占い】2026年の運気グラフを確認しました！\n\n🌟 最高運気の月: ${peakMonth + 1}月（スコア${maxScore}点）\n⚠️ 注意の月: ${lowMonth + 1}月（スコア${minScore}点）\n今月(${currentMonth + 1}月)のスコア: ${monthlyScores[currentMonth]}点\n\n九星気学×AIで2026年の転機を先読み✨\n#AI占い #九星気学 #2026年運勢\nhttps://uranai-ai-sigma.vercel.app/uranai?tab=yearly`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 bg-black hover:bg-gray-800 text-white font-bold px-6 py-3 rounded-xl text-sm transition-colors"
+                  >
+                    <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.892-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    運気グラフをXでシェア
+                  </a>
+                  <p className="text-xs text-purple-600 mt-2">※ 生年月日を入力すると個別グラフに更新されます</p>
+                </div>
+
+                {/* プレミアム誘導CTA */}
+                <div className="bg-gradient-to-br from-purple-900/60 to-pink-900/40 border border-purple-400/40 rounded-2xl p-5 text-center">
+                  <div className="text-xs bg-yellow-500/20 text-yellow-300 px-3 py-1 rounded-full border border-yellow-500/30 inline-block mb-3 font-bold">
+                    PRO限定
+                  </div>
+                  <p className="text-white font-bold mb-2 text-sm">年間運気グラフの詳細解説はプレミアムで</p>
+                  <p className="text-purple-300 text-xs mb-4 leading-relaxed">
+                    月別の「やるべきこと」「避けること」「ラッキー行動」まで<br />あなたの生年月日から個別に詳細鑑定します
+                  </p>
+                  <KomojuButton
+                    planId="standard"
+                    planLabel="✨ 詳細な年間運気を見る（¥980/月）"
+                    className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-3 rounded-xl hover:opacity-90 transition-opacity text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-purple-900/40"
+                  />
+                  <p className="text-xs text-purple-600 mt-2">初月¥480 • 30日返金保証</p>
+                </div>
+
+                <button
+                  onClick={() => setActiveTab("uranai")}
+                  className="w-full bg-white/10 hover:bg-white/20 text-purple-200 font-medium py-2.5 rounded-xl transition-colors text-sm"
+                >
+                  🔮 今日の詳細鑑定を受ける →
+                </button>
+              </div>
+            );
+          })()}
         </div>
       )}
 
