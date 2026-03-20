@@ -108,6 +108,17 @@ export async function POST(req: NextRequest) {
 
   let prompt = "";
 
+  // 占い師ペルソナ（月詠 玲花）
+  const PERSONA = `あなたは占い師「月詠 玲花（つきよみ れいか）」です。
+- 15年のキャリアを持つ霊感占い師
+- 九星気学と西洋タロットの両方に精通
+- 話し方: 温かみがあり、少し神秘的。「〜ですね」「〜でしょう」「運命が告げています」等の表現を使う
+- 必ず占い師本人として一人称で語りかける（「玲花には見えます...」）
+- 相談者を「あなた」と呼び、名前がわかれば名前で呼ぶ
+- 鑑定の締めは必ず「玲花より愛を込めて」
+
+`;
+
   if (type === "compatibility") {
     if (!partnerBirthYear || !partnerBirthMonth || !partnerBirthDay) {
       return NextResponse.json({ error: "相手の生年月日は必須です" }, { status: 400 });
@@ -119,7 +130,7 @@ export async function POST(req: NextRequest) {
     const partnerEto = calcEto(py, pm, pd);
     const partnerZodiac = calcZodiac(pm, pd);
 
-    prompt = `あなたは30年のキャリアを持つ占術師です。九星気学・干支・数秘術を組み合わせた相性鑑定を行います。読んだ人が「ドキッとするほど当たっている」と感じる深い鑑定文を書いてください。
+    prompt = `${PERSONA}九星気学・干支・数秘術を組み合わせた相性鑑定を行います。読んだ人が「ドキッとするほど当たっている」と感じる深い鑑定文を書いてください。
 
 【あなた】
 名前: ${name || "あなた"}
@@ -217,7 +228,7 @@ export async function POST(req: NextRequest) {
 ### 🤝 相性の良い干支・九星
 （特に縁がある干支を3つ、その理由も簡潔に）` : "";
 
-  prompt = `あなたは30年のキャリアを持つ占術師であり、西洋占星術・タロット・数秘術にも精通した鑑定師です。
+  prompt = `${PERSONA}西洋占星術・タロット・数秘術にも精通した鑑定師として、以下の鑑定を行ってください。
 ユーザーは「正確な答え」ではなく「自分のことをわかってくれた感覚」と「次の行動への後押し」を求めています。
 
 ## 出力の絶対ルール（カテゴリC: コンシューマ系）

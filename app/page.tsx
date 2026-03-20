@@ -51,6 +51,26 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* 占い師プロフィールカード */}
+      <section className="py-4 px-6 max-w-3xl mx-auto">
+        <div className="bg-purple-950/50 border border-purple-500/30 rounded-2xl p-6 flex items-center gap-6">
+          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-400 to-pink-300 flex items-center justify-center text-4xl shrink-0">
+            🌙
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-purple-300 text-xs mb-0.5">担当占い師</p>
+            <h3 className="text-white text-xl font-bold leading-tight">月詠 玲花</h3>
+            <p className="text-purple-200 text-xs mt-1">九星気学×タロット歴15年 / 累計鑑定数12,847件</p>
+            <div className="flex flex-wrap gap-1.5 mt-2">
+              <span className="bg-purple-800/70 text-purple-200 text-xs px-2 py-0.5 rounded border border-purple-600/40">九星気学</span>
+              <span className="bg-purple-800/70 text-purple-200 text-xs px-2 py-0.5 rounded border border-purple-600/40">タロット</span>
+              <span className="bg-purple-800/70 text-purple-200 text-xs px-2 py-0.5 rounded border border-purple-600/40">相性占い</span>
+              <span className="bg-purple-800/70 text-purple-200 text-xs px-2 py-0.5 rounded border border-purple-600/40">霊感鑑定</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* 鑑定実績・社会的証明バナー */}
       <section className="py-6 px-6 max-w-3xl mx-auto">
         <div className="bg-gradient-to-r from-purple-900/60 to-indigo-900/60 border border-purple-500/30 rounded-2xl px-6 py-4">
@@ -450,6 +470,66 @@ export default function LandingPage() {
           <Link href="/uranai" className="inline-block text-sm text-purple-400 hover:text-purple-200 transition-colors underline underline-offset-2">
             🔮 生年月日であなただけの今週の開運アドバイスを見る →
           </Link>
+        </div>
+      </section>
+
+      {/* LINE通知導線セクション */}
+      <section className="py-10 px-6 max-w-2xl mx-auto">
+        <div className="bg-gradient-to-br from-green-900/40 to-teal-900/30 border border-green-500/40 rounded-3xl p-7 text-center relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/10 rounded-full -translate-y-1/2 translate-x-1/2" />
+          <div className="relative">
+            <div className="inline-block bg-green-500/20 text-green-300 text-xs font-bold px-3 py-1 rounded-full mb-4 border border-green-500/30">
+              📩 毎朝8時にお届け
+            </div>
+            <div className="text-5xl mb-4">
+              <svg viewBox="0 0 24 24" className="w-14 h-14 mx-auto fill-current text-green-400">
+                <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold text-white mb-2">毎日の鑑定をLINEで受け取る</h3>
+            <p className="text-green-200 text-sm mb-5 leading-relaxed">
+              毎朝8時に「今日の運勢」が届きます。<br />
+              開運アクション・ラッキーカラー・吉方位をLINEで確認。<br />
+              <span className="text-yellow-300 font-bold">朝のルーティンに運勢チェックを追加しよう。</span>
+            </p>
+            {/* 特典リスト */}
+            <div className="bg-white/5 border border-green-500/20 rounded-xl p-4 mb-5 text-left space-y-2">
+              {[
+                "毎朝8時に今日の運勢をお届け",
+                "吉日・注意日を事前にお知らせ",
+                "今週の開運アクション3選",
+                "月替わりの特別鑑定コンテンツ",
+              ].map((item) => (
+                <div key={item} className="flex items-center gap-2 text-xs text-green-100">
+                  <span className="text-green-400 shrink-0">✓</span>
+                  {item}
+                </div>
+              ))}
+            </div>
+            {/* 登録者数カウンター */}
+            <div className="flex justify-center items-center gap-2 mb-5">
+              <div className="flex -space-x-2">
+                {["🌸", "⭐", "🔮", "💕", "🌙"].map((emoji, i) => (
+                  <div key={i} className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 border-2 border-purple-900 flex items-center justify-center text-xs">
+                    {emoji}
+                  </div>
+                ))}
+              </div>
+              <span className="text-xs text-green-300 font-bold">
+                <span className="text-white text-base font-black">2,847</span>名が登録中
+              </span>
+            </div>
+            <Link
+              href="/uranai"
+              className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-400 text-white font-bold px-8 py-4 rounded-full transition-colors text-sm shadow-lg shadow-green-900/40 w-full justify-center"
+            >
+              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
+                <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+              </svg>
+              LINE通知を受け取る（準備中・無料）
+            </Link>
+            <p className="text-xs text-green-700 mt-2">近日公開予定 • 今すぐAI鑑定でお試しを</p>
+          </div>
         </div>
       </section>
 

@@ -1156,22 +1156,42 @@ export default function UranaiPage() {
                   const plainText = result.replace(/^#+\s*/gm, "").replace(/\*\*/g, "").replace(/\n+/g, " ").trim();
                   const snippet = plainText.slice(0, 100);
                   const shareMsg = type === "compatibility" && compatibilityScore !== null
-                    ? `【占いAI】${name || "私"}と${partnerName || "相手"}の相性スコアは${compatibilityScore}点！💑 四柱推命×九星気学AIが鑑定 #占いAI #AI占い #相性占い`
-                    : `【占いAI】${snippet}... #占いAI #AI占い #今日の運勢`;
+                    ? `月詠 玲花先生に占ってもらいました🌙\n${name || "私"}と${partnerName || "相手"}の相性スコアは${compatibilityScore}点！💑\n#占いAI #月詠玲花 #相性占い`
+                    : `月詠 玲花先生に占ってもらいました🌙\n${snippet}...\n#占いAI #月詠玲花 #今日の運勢`;
                   const tweetUrl = type === "compatibility" && compatibilityScore !== null
                     ? `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareMsg)}&url=${encodeURIComponent(ogpUrl)}`
                     : `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareMsg)}&url=${encodeURIComponent("https://uranai-ai-sigma.vercel.app")}`;
+                  const typeLabel = type === "today" ? "今日の運勢" : type === "love" ? "恋愛運" : type === "destiny" ? "総合運命鑑定" : "相性鑑定";
+                  const kanteishoText = `【鑑定書】月詠 玲花 占い師\n鑑定種別: ${typeLabel}\n鑑定日: ${new Date().toLocaleDateString("ja-JP")}\n\n${result.replace(/^#+\s*/gm, "").replace(/\*\*/g, "")}\n\n玲花より愛を込めて 🌙`;
                   return (
-                    <div className="mt-4">
-                      <a
-                        href={tweetUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 bg-sky-500 hover:bg-sky-400 text-white font-bold px-6 py-3 rounded-2xl transition-colors"
-                      >
-                        <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.892-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                        𝕏 結果をシェアする
-                      </a>
+                    <div className="mt-4 space-y-3">
+                      {/* 占い師署名バッジ */}
+                      <div className="flex items-center gap-3 bg-purple-950/60 border border-purple-500/30 rounded-xl px-4 py-2.5">
+                        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-purple-400 to-pink-300 flex items-center justify-center text-lg shrink-0">🌙</div>
+                        <div>
+                          <p className="text-xs text-purple-400">担当占い師</p>
+                          <p className="text-sm font-bold text-white">月詠 玲花</p>
+                        </div>
+                        <span className="ml-auto text-xs text-purple-400 italic">玲花より愛を込めて</span>
+                      </div>
+                      {/* シェア・コピーボタン行 */}
+                      <div className="flex gap-2 flex-wrap">
+                        <a
+                          href={tweetUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 bg-black hover:bg-gray-800 text-white font-bold px-4 py-2.5 rounded-xl transition-colors text-sm"
+                        >
+                          <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.892-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                          月詠玲花先生に占ってもらった
+                        </a>
+                        <button
+                          onClick={() => navigator.clipboard.writeText(kanteishoText)}
+                          className="inline-flex items-center gap-2 bg-purple-700/60 hover:bg-purple-600/60 text-purple-100 font-bold px-4 py-2.5 rounded-xl transition-colors text-sm border border-purple-500/40"
+                        >
+                          📜 今日の鑑定書をコピー
+                        </button>
+                      </div>
                     </div>
                   );
                 })()}
