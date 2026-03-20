@@ -1059,6 +1059,76 @@ export default function UranaiPage() {
                     </div>
                   </div>
                 )}
+
+                {/* 今月のラッキーカラー・ラッキーナンバーカード */}
+                {type !== "compatibility" && (() => {
+                  const by = parseInt(birthYear, 10) || 1990;
+                  const bm = parseInt(birthMonth, 10) || 1;
+                  const bd = parseInt(birthDay, 10) || 1;
+                  const today = new Date();
+                  const seed = (by * 7 + bm * 13 + bd * 17 + today.getMonth() * 31 + today.getFullYear()) % 1000;
+                  const colors = [
+                    { name: "ロイヤルパープル", hex: "#7c3aed", bg: "bg-purple-600" },
+                    { name: "ローズゴールド",   hex: "#f472b6", bg: "bg-pink-400" },
+                    { name: "サファイアブルー", hex: "#3b82f6", bg: "bg-blue-500" },
+                    { name: "エメラルド",       hex: "#10b981", bg: "bg-emerald-500" },
+                    { name: "アンバーゴールド", hex: "#f59e0b", bg: "bg-amber-400" },
+                    { name: "コーラルオレンジ", hex: "#f97316", bg: "bg-orange-400" },
+                    { name: "ミッドナイトブルー",hex: "#1e40af", bg: "bg-blue-800" },
+                    { name: "チェリーレッド",   hex: "#ef4444", bg: "bg-red-500" },
+                    { name: "ミントグリーン",   hex: "#6ee7b7", bg: "bg-emerald-300" },
+                    { name: "アイボリーホワイト",hex: "#fef9c3", bg: "bg-yellow-100" },
+                  ];
+                  const luckyColor = colors[seed % colors.length];
+                  const luckyNum1 = ((seed * 3 + 1) % 9) + 1;
+                  const luckyNum2 = ((seed * 7 + 3) % 9) + 1;
+                  const luckyNum = luckyNum1 === luckyNum2 ? luckyNum1 * 10 + ((luckyNum2 % 9) + 1) : luckyNum1 * 10 + luckyNum2;
+                  const directions = ["北", "北東", "東", "南東", "南", "南西", "西", "北西"];
+                  const luckyDir = directions[(seed * 5 + bm) % directions.length];
+                  const items = ["水晶", "ラベンダー", "ローズクォーツ", "翡翠", "月長石", "アメジスト", "タイガーアイ", "トルマリン"];
+                  const luckyItem = items[(seed * 11 + bd) % items.length];
+                  return (
+                    <div className="mb-5 bg-gradient-to-br from-indigo-900/60 to-pink-900/40 border border-purple-400/40 rounded-2xl p-4">
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="text-lg">🍀</span>
+                        <h3 className="text-sm font-bold text-purple-200">今月のラッキー情報</h3>
+                        <span className="ml-auto text-xs text-purple-500">{today.getMonth() + 1}月 / あなた専用</span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        {/* ラッキーカラー */}
+                        <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex flex-col items-center gap-2">
+                          <span className="text-xs text-purple-400 font-bold">🎨 ラッキーカラー</span>
+                          <div className={`w-10 h-10 rounded-full ${luckyColor.bg} shadow-lg border-2 border-white/20`} style={{ boxShadow: `0 0 14px ${luckyColor.hex}80` }} />
+                          <span className="text-xs font-bold text-white text-center">{luckyColor.name}</span>
+                        </div>
+                        {/* ラッキーナンバー */}
+                        <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex flex-col items-center gap-2">
+                          <span className="text-xs text-purple-400 font-bold">🔢 ラッキーナンバー</span>
+                          <div className="flex gap-1">
+                            {String(luckyNum).split("").map((n, i) => (
+                              <div key={i} className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-black text-sm shadow-md">
+                                {n}
+                              </div>
+                            ))}
+                          </div>
+                          <span className="text-xs text-purple-300">今月の吉数</span>
+                        </div>
+                        {/* ラッキー方位 */}
+                        <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex flex-col items-center gap-1">
+                          <span className="text-xs text-purple-400 font-bold">🧭 ラッキー方位</span>
+                          <span className="text-2xl font-black text-yellow-300">{luckyDir}</span>
+                          <span className="text-xs text-purple-300">出かける方向に</span>
+                        </div>
+                        {/* ラッキーアイテム */}
+                        <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex flex-col items-center gap-1">
+                          <span className="text-xs text-purple-400 font-bold">💎 ラッキーアイテム</span>
+                          <span className="text-lg font-bold text-white">{luckyItem}</span>
+                          <span className="text-xs text-purple-300">持ち歩くと吉</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
                 <div className="text-sm text-purple-100 leading-relaxed space-y-3">
                   {result.split('\n').map((line, i) => {
                     if (line.startsWith('### ')) return (
