@@ -108,6 +108,7 @@ export default function UranaiPage() {
   const [compatibilityScore, setCompatibilityScore] = useState<number | null>(null);
   const [starfall, setStarfall] = useState(false);
   const [uranaiScores, setUranaiScores] = useState<{total:number;love:number;work:number;money:number;health:number;social:number;study:number} | null>(null);
+  const [cardCopied, setCardCopied] = useState(false);
 
   // タロット1枚引き
   const [activeTab, setActiveTab] = useState<"uranai" | "tarot" | "trend" | "yearly">("uranai");
@@ -1236,6 +1237,113 @@ export default function UranaiPage() {
                           月詠玲花先生に占ってもらった
                         </a>
                         <button
+                          onClick={() => {
+                            const canvas = document.createElement("canvas");
+                            canvas.width = 1200; canvas.height = 630;
+                            const ctx = canvas.getContext("2d");
+                            if (!ctx) return;
+                            // 背景グラデーション
+                            const grad = ctx.createLinearGradient(0, 0, 1200, 630);
+                            grad.addColorStop(0, "#1a0a2e");
+                            grad.addColorStop(0.5, "#2d1560");
+                            grad.addColorStop(1, "#1a0a2e");
+                            ctx.fillStyle = grad;
+                            ctx.fillRect(0, 0, 1200, 630);
+                            // 星を散りばめる
+                            ctx.fillStyle = "rgba(255,255,255,0.6)";
+                            for (let i = 0; i < 80; i++) {
+                              const sx = (i * 137.5 * 31) % 1200;
+                              const sy = (i * 97.3 * 17) % 630;
+                              const sr = i % 3 === 0 ? 2 : 1;
+                              ctx.beginPath();
+                              ctx.arc(sx, sy, sr, 0, Math.PI * 2);
+                              ctx.fill();
+                            }
+                            // タイトル
+                            ctx.font = "bold 38px serif";
+                            ctx.fillStyle = "#e9d5ff";
+                            ctx.textAlign = "center";
+                            ctx.fillText("🌙 月詠 玲花 鑑定書", 600, 80);
+                            // 鑑定種別バッジ
+                            ctx.fillStyle = "rgba(109,40,217,0.7)";
+                            ctx.beginPath();
+                            ctx.roundRect(400, 100, 400, 50, 25);
+                            ctx.fill();
+                            ctx.font = "bold 24px sans-serif";
+                            ctx.fillStyle = "#ddd6fe";
+                            ctx.textAlign = "center";
+                            ctx.fillText(typeLabel, 600, 132);
+                            // スコア表示（uranaiScoresがある場合）
+                            if (uranaiScores) {
+                              const scoreItems = [
+                                { label: "総合", value: uranaiScores.total },
+                                { label: "恋愛", value: uranaiScores.love },
+                                { label: "仕事", value: uranaiScores.work },
+                                { label: "金運", value: uranaiScores.money },
+                                { label: "健康", value: uranaiScores.health },
+                              ];
+                              const barW = 160; const barH = 18; const startX = 100; const startY = 190;
+                              ctx.font = "bold 26px sans-serif";
+                              ctx.fillStyle = "#f3e8ff";
+                              ctx.textAlign = "center";
+                              ctx.fillText("運気スコア", 600, 175);
+                              scoreItems.forEach((item, idx) => {
+                                const col = idx % 5; const bx = startX + col * 200; const by = startY + Math.floor(idx / 5) * 60;
+                                ctx.fillStyle = "rgba(255,255,255,0.1)";
+                                ctx.beginPath();
+                                ctx.roundRect(bx, by, barW, barH, 9);
+                                ctx.fill();
+                                const fillGrad = ctx.createLinearGradient(bx, by, bx + barW, by);
+                                fillGrad.addColorStop(0, "#a78bfa");
+                                fillGrad.addColorStop(1, "#ec4899");
+                                ctx.fillStyle = fillGrad;
+                                ctx.beginPath();
+                                ctx.roundRect(bx, by, barW * (item.value / 10), barH, 9);
+                                ctx.fill();
+                                ctx.font = "14px sans-serif";
+                                ctx.fillStyle = "#e9d5ff";
+                                ctx.textAlign = "left";
+                                ctx.fillText(`${item.label} ${item.value}/10`, bx, by - 4);
+                              });
+                            }
+                            // 鑑定文サマリー（最初の100文字）
+                            const plainResult = result.replace(/^#+\s*/gm, "").replace(/\*\*/g, "").replace(/\n+/g, " ").trim();
+                            const summary = plainResult.slice(0, 80) + (plainResult.length > 80 ? "…" : "");
+                            ctx.font = "22px serif";
+                            ctx.fillStyle = "#ddd6fe";
+                            ctx.textAlign = "center";
+                            const words = summary.split("");
+                            let line = ""; let ly = uranaiScores ? 300 : 200;
+                            for (const ch of words) {
+                              if (ctx.measureText(line + ch).width > 900) {
+                                ctx.fillText(line, 600, ly); ly += 34; line = ch;
+                              } else { line += ch; }
+                            }
+                            if (line) ctx.fillText(line, 600, ly);
+                            // フッター
+                            ctx.font = "18px sans-serif";
+                            ctx.fillStyle = "rgba(196,181,253,0.7)";
+                            ctx.textAlign = "center";
+                            ctx.fillText(`${new Date().toLocaleDateString("ja-JP")} 鑑定  |  uranai-ai-sigma.vercel.app`, 600, 600);
+                            // クリップボードへコピー
+                            canvas.toBlob(async (blob) => {
+                              if (!blob) return;
+                              try {
+                                await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+                                setCardCopied(true);
+                                setTimeout(() => setCardCopied(false), 3000);
+                              } catch {
+                                const url = canvas.toDataURL("image/png");
+                                const a = document.createElement("a");
+                                a.href = url; a.download = "uranai-card.png"; a.click();
+                              }
+                            }, "image/png");
+                          }}
+                          className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-500 hover:to-pink-400 text-white font-bold px-4 py-2.5 rounded-xl transition-all text-sm shadow-lg"
+                        >
+                          🖼️ {cardCopied ? "画像コピー完了！" : "鑑定カードを画像コピー"}
+                        </button>
+                        <button
                           onClick={() => navigator.clipboard.writeText(kanteishoText)}
                           className="inline-flex items-center gap-2 bg-purple-700/60 hover:bg-purple-600/60 text-purple-100 font-bold px-4 py-2.5 rounded-xl transition-colors text-sm border border-purple-500/40"
                         >
@@ -1383,6 +1491,17 @@ export default function UranaiPage() {
                   </button>
                 </div>
               </div>
+              {/* 鑑定結果Xシェアボタン */}
+              <button
+                onClick={() => {
+                  const text = `占いAIで鑑定を受けました！今日の運勢・恋愛・仕事を総合診断 🔮 #占いAI #月詠玲花`;
+                  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent('https://uranai-ai-sigma.vercel.app')}`, '_blank');
+                }}
+                className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-8 py-4 rounded-full w-full mt-4 text-lg"
+              >
+                ✨ 鑑定結果をXでシェア
+              </button>
+
               {/* 次のアクション3選 */}
               <div className="mt-4 bg-purple-900/30 border border-purple-500/30 rounded-xl p-4">
                 <p className="text-sm font-bold text-purple-300 mb-3">🔮 今日やるべきこと3選</p>
