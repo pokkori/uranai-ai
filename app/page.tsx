@@ -20,11 +20,20 @@ export default function LandingPage() {
           ✨ {today.getMonth() + 1}月の新しい運勢診断が解放されました！今すぐ診断する
         </div>
       )}
-      <nav className="px-6 py-4 flex items-center justify-between max-w-5xl mx-auto">
-        <span className="font-bold text-lg">🔮 AI占い</span>
-        <Link href="/uranai" className="bg-purple-500 hover:bg-purple-400 text-white text-sm font-medium px-4 py-2 rounded-full transition-colors">
-          無料で占う
-        </Link>
+      <nav className="px-6 py-4 max-w-5xl mx-auto">
+        <div className="flex items-center justify-between mb-2">
+          <span className="font-bold text-lg">🔮 AI占い</span>
+          <Link href="/uranai" className="bg-purple-500 hover:bg-purple-400 text-white text-sm font-medium px-4 py-2 rounded-full transition-colors">
+            無料で占う
+          </Link>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Link href="/uranai/category/love" className="text-xs text-purple-300 hover:text-white bg-purple-900/40 hover:bg-purple-800/60 border border-purple-600/30 px-3 py-1 rounded-full transition-colors">💕 恋愛占い</Link>
+          <Link href="/uranai/category/work" className="text-xs text-purple-300 hover:text-white bg-purple-900/40 hover:bg-purple-800/60 border border-purple-600/30 px-3 py-1 rounded-full transition-colors">💼 仕事占い</Link>
+          <Link href="/uranai/category/money" className="text-xs text-purple-300 hover:text-white bg-purple-900/40 hover:bg-purple-800/60 border border-purple-600/30 px-3 py-1 rounded-full transition-colors">💰 金運占い</Link>
+          <Link href="/uranai/category/health" className="text-xs text-purple-300 hover:text-white bg-purple-900/40 hover:bg-purple-800/60 border border-purple-600/30 px-3 py-1 rounded-full transition-colors">🌿 健康運</Link>
+          <Link href="/uranai/category/general" className="text-xs text-purple-300 hover:text-white bg-purple-900/40 hover:bg-purple-800/60 border border-purple-600/30 px-3 py-1 rounded-full transition-colors">⭐ 今日の運勢</Link>
+        </div>
       </nav>
 
       {/* ヒーロー */}

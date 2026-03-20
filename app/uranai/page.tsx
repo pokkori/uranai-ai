@@ -107,7 +107,7 @@ export default function UranaiPage() {
   const [isPremium, setIsPremium] = useState(false);
   const [compatibilityScore, setCompatibilityScore] = useState<number | null>(null);
   const [starfall, setStarfall] = useState(false);
-  const [uranaiScores, setUranaiScores] = useState<{total:number;love:number;work:number;money:number;health:number} | null>(null);
+  const [uranaiScores, setUranaiScores] = useState<{total:number;love:number;work:number;money:number;health:number;social:number;study:number} | null>(null);
 
   // タロット1枚引き
   const [activeTab, setActiveTab] = useState<"uranai" | "tarot" | "trend" | "yearly">("uranai");
@@ -134,7 +134,8 @@ export default function UranaiPage() {
     };
     const total = get("TOTAL"); const love = get("LOVE"); const work = get("WORK");
     const money = get("MONEY"); const health = get("HEALTH");
-    if (total && love && work && money && health) return { total, love, work, money, health };
+    const social = get("SOCIAL") ?? 5; const study = get("STUDY") ?? 5;
+    if (total && love && work && money && health) return { total, love, work, money, health, social, study };
     return null;
   }
   function cleanUranaiResult(text: string) {
@@ -1031,32 +1032,81 @@ export default function UranaiPage() {
             ) : result ? (
               <>
               <div className="animate-fade-in-up">
-                {/* 5軸運気スコア */}
+                {/* 6軸運気ヘキサゴンチャート */}
                 {uranaiScores && type !== "compatibility" && (
                   <div className="mb-5 bg-gradient-to-br from-purple-900/60 to-indigo-900/60 border border-purple-500/40 rounded-2xl p-4">
                     <div className="flex items-center gap-2 mb-3">
                       <span className="text-lg">⭐</span>
-                      <h3 className="text-sm font-bold text-purple-200">今日の運気スコア</h3>
+                      <h3 className="text-sm font-bold text-purple-200">今日の運気レーダー</h3>
                       <span className="ml-auto text-2xl font-black text-yellow-300">{uranaiScores.total}<span className="text-sm font-normal text-yellow-400">/10</span></span>
                     </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      {[
-                        { label: "恋愛運", val: uranaiScores.love, icon: "💕", color: "from-pink-500 to-rose-500" },
-                        { label: "仕事運", val: uranaiScores.work, icon: "💼", color: "from-blue-500 to-cyan-500" },
-                        { label: "金運", val: uranaiScores.money, icon: "💰", color: "from-yellow-500 to-amber-500" },
-                        { label: "健康運", val: uranaiScores.health, icon: "🌿", color: "from-green-500 to-emerald-500" },
-                      ].map(({ label, val, icon, color }) => (
-                        <div key={label} className="bg-white/5 rounded-xl p-2.5">
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="text-xs text-purple-300">{icon} {label}</span>
-                            <span className="text-xs font-bold text-white">{val}/10</span>
-                          </div>
-                          <div className="w-full bg-white/10 rounded-full h-1.5">
-                            <div className={`h-1.5 rounded-full bg-gradient-to-r ${color} transition-all duration-700`} style={{ width: `${val * 10}%` }} />
+                    {(() => {
+                      const axes = [
+                        { label: "恋愛運", icon: "💕", val: uranaiScores.love },
+                        { label: "仕事運", icon: "💼", val: uranaiScores.work },
+                        { label: "金運", icon: "💰", val: uranaiScores.money },
+                        { label: "健康運", icon: "🌿", val: uranaiScores.health },
+                        { label: "対人運", icon: "🤝", val: uranaiScores.social },
+                        { label: "学習運", icon: "📚", val: uranaiScores.study },
+                      ];
+                      const cx = 120; const cy = 120; const maxR = 88;
+                      const levels = [0.2, 0.4, 0.6, 0.8, 1.0];
+                      const getPoint = (idx: number, val: number) => {
+                        const angle = (Math.PI * 2 * idx) / 6 - Math.PI / 2;
+                        const r = (val / 10) * maxR;
+                        return { x: cx + r * Math.cos(angle), y: cy + r * Math.sin(angle) };
+                      };
+                      const getGridPoint = (idx: number, scale: number) => {
+                        const angle = (Math.PI * 2 * idx) / 6 - Math.PI / 2;
+                        const r = scale * maxR;
+                        return { x: cx + r * Math.cos(angle), y: cy + r * Math.sin(angle) };
+                      };
+                      const dataPoints = axes.map((a, i) => getPoint(i, a.val));
+                      const polyline = dataPoints.map(p => `${p.x},${p.y}`).join(" ");
+                      const labelOffset = 18;
+                      return (
+                        <div className="flex flex-col items-center gap-3">
+                          <svg viewBox="0 0 240 240" className="w-full max-w-[220px]">
+                            {/* グリッド */}
+                            {levels.map((scale, li) => {
+                              const pts = Array.from({length: 6}, (_, i) => getGridPoint(i, scale));
+                              return <polygon key={li} points={pts.map(p => `${p.x},${p.y}`).join(" ")} fill="none" stroke="rgba(167,139,250,0.2)" strokeWidth="0.8" />;
+                            })}
+                            {/* 軸線 */}
+                            {axes.map((_, i) => {
+                              const outer = getGridPoint(i, 1.0);
+                              return <line key={i} x1={cx} y1={cy} x2={outer.x} y2={outer.y} stroke="rgba(167,139,250,0.25)" strokeWidth="0.8" />;
+                            })}
+                            {/* データ多角形 */}
+                            <polygon points={polyline} fill="rgba(192,132,252,0.25)" stroke="#c084fc" strokeWidth="2" strokeLinejoin="round" />
+                            {/* データポイント */}
+                            {dataPoints.map((p, i) => (
+                              <circle key={i} cx={p.x} cy={p.y} r="4" fill="#f472b6" stroke="white" strokeWidth="1.5" />
+                            ))}
+                            {/* ラベル */}
+                            {axes.map((a, i) => {
+                              const angle = (Math.PI * 2 * i) / 6 - Math.PI / 2;
+                              const lx = cx + (maxR + labelOffset) * Math.cos(angle);
+                              const ly = cy + (maxR + labelOffset) * Math.sin(angle);
+                              return (
+                                <text key={i} x={lx} y={ly} textAnchor="middle" dominantBaseline="middle" fontSize="9" fill="#d8b4fe" fontWeight="bold">
+                                  {a.icon}{a.label}
+                                </text>
+                              );
+                            })}
+                          </svg>
+                          {/* スコア一覧 */}
+                          <div className="grid grid-cols-3 gap-1.5 w-full">
+                            {axes.map(({ label, icon, val }) => (
+                              <div key={label} className="bg-white/5 rounded-lg px-2 py-1.5 text-center">
+                                <span className="text-xs text-purple-400">{icon}{label}</span>
+                                <div className="text-base font-black text-white leading-tight">{val}<span className="text-[10px] text-purple-400">/10</span></div>
+                              </div>
+                            ))}
                           </div>
                         </div>
-                      ))}
-                    </div>
+                      );
+                    })()}
                   </div>
                 )}
 

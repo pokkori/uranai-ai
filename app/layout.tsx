@@ -21,13 +21,13 @@ export const metadata: Metadata = {
     siteName: "AI占い",
     locale: "ja_JP",
     type: "website",
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "AI占い" }],
+    images: [{ url: "/api/og?type=default", width: 1200, height: 630, alt: "AI占い｜四柱推命×九星気学で本格鑑定" }],
   },
   twitter: {
     card: "summary_large_image",
     title: TITLE,
     description: DESC,
-    images: ["/og.png"],
+    images: ["/api/og?type=default"],
   },
   metadataBase: new URL(SITE_URL),
 };

@@ -278,7 +278,9 @@ ${question ? `\n【相談内容】${question}\n（上記の相談内容に特に
 ===SCORE_WORK===XX
 ===SCORE_MONEY===XX
 ===SCORE_HEALTH===XX
-（XXは1〜10の整数。${eto}×${kyusei}白星の${todayStr}時点の運勢エネルギーを反映した値）
+===SCORE_SOCIAL===XX
+===SCORE_STUDY===XX
+（XXは1〜10の整数。${eto}×${kyusei}白星の${todayStr}時点の運勢エネルギーを反映した値。SOCIALは対人運・人間関係運、STUDYは学習・スキルアップ運）
 
 ---
 
