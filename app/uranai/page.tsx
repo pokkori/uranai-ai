@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import KomojuButton from "@/components/KomojuButton";
 import { track } from '@vercel/analytics';
+import { updateStreak, loadStreak, getStreakMilestoneMessage, type StreakData } from "@/lib/streak";
 
 // ==============================
 // タロットカードデータ（大アルカナ22枚）
@@ -120,10 +121,24 @@ export default function UranaiPage() {
   const [tarotFlipped, setTarotFlipped] = useState(false);
   const [tarotShared, setTarotShared] = useState(false);
 
-  // 連続鑑定ストリーク
-  const STREAK_KEY = "uranai_streak";
-  const STREAK_DATE_KEY = "uranai_streak_date";
-  const [streak, setStreak] = useState(0);
+  // 連続鑑定ストリーク（lib/streak.ts 使用）
+  const [streakData, setStreakData] = useState<StreakData | null>(null);
+  const [streakMsg, setStreakMsg] = useState<string | null>(null);
+  // 後方互換のために streak 数値を算出
+  const streak = streakData?.count ?? 0;
+
+  // 占い履歴（localStorage キー: uranai_history）
+  const URANAI_HISTORY_KEY = "uranai_history";
+  function loadUranaiHistory() {
+    if (typeof window === "undefined") return [];
+    try { return JSON.parse(localStorage.getItem(URANAI_HISTORY_KEY) ?? "[]"); } catch { return []; }
+  }
+  function saveUranaiHistory(q: string) {
+    if (typeof window === "undefined") return;
+    const items = loadUranaiHistory();
+    items.unshift({ text: q.slice(0, 50), date: new Date().toLocaleDateString("ja-JP") });
+    localStorage.setItem(URANAI_HISTORY_KEY, JSON.stringify(items.slice(0, 5)));
+  }
 
   // 鑑定履歴
   const HISTORY_KEY = "uranai_history";
@@ -154,18 +169,8 @@ export default function UranaiPage() {
     } catch {}
     fetch("/api/auth/status").then(r => r.json()).then(d => setIsPremium(d.isPremium)).catch(() => {});
 
-    // ストリーク計算
-    const todayDate = new Date().toDateString();
-    const lastDate = localStorage.getItem(STREAK_DATE_KEY);
-    const savedStreak = parseInt(localStorage.getItem(STREAK_KEY) || "0", 10);
-    if (lastDate === todayDate) {
-      setStreak(savedStreak);
-    } else {
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-      const newStreak = lastDate === yesterday.toDateString() ? savedStreak : 0;
-      setStreak(newStreak);
-    }
+    // ストリーク読み込み（lib/streak.ts 使用）
+    setStreakData(loadStreak("uranai"));
     // LPの「申し込む」から遷移した場合はペイウォールを自動表示
     const plan = new URLSearchParams(window.location.search).get("plan");
     if (plan === "standard" || plan === "business") {
@@ -283,18 +288,16 @@ export default function UranaiPage() {
       setStarfall(true);
       setTimeout(() => setStarfall(false), 3000);
 
-      // ストリーク更新
-      const todayStr = new Date().toDateString();
-      const lastStreakDate = localStorage.getItem(STREAK_DATE_KEY);
-      if (lastStreakDate !== todayStr) {
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        const prevStreak = parseInt(localStorage.getItem(STREAK_KEY) || "0", 10);
-        const newStreak = lastStreakDate === yesterday.toDateString() ? prevStreak + 1 : 1;
-        localStorage.setItem(STREAK_KEY, String(newStreak));
-        localStorage.setItem(STREAK_DATE_KEY, todayStr);
-        setStreak(newStreak);
+      // ストリーク更新（lib/streak.ts 使用）
+      const updatedStreak = updateStreak("uranai");
+      setStreakData(updatedStreak);
+      const milestoneMsg = getStreakMilestoneMessage(updatedStreak.count);
+      if (milestoneMsg) {
+        setStreakMsg(milestoneMsg);
+        setTimeout(() => setStreakMsg(null), 4000);
       }
+      // 占い履歴を保存（シンプルキー）
+      saveUranaiHistory(question);
 
       // 相性スコアを抽出 (例: "相性スコア: 78点" or "78点/100点")
       if (type === "compatibility") {
@@ -428,14 +431,19 @@ export default function UranaiPage() {
       </nav>
 
       {/* ストリークバッジ */}
-      {streak >= 3 && (
-        <div className="max-w-4xl mx-auto px-6 pb-2">
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500/20 to-yellow-500/20 border border-orange-400/40 rounded-full px-4 py-1.5 text-xs font-bold text-orange-300">
-            🔥 {streak}日連続鑑定中！
-            {streak >= 30 && <span className="bg-yellow-400 text-black text-xs px-2 py-0.5 rounded-full font-black">伝説の占い師</span>}
-            {streak >= 7 && streak < 30 && <span className="bg-orange-400 text-black text-xs px-2 py-0.5 rounded-full font-black">占い達人</span>}
-            {streak >= 3 && streak < 7 && <span className="bg-amber-400 text-black text-xs px-2 py-0.5 rounded-full font-black">占い修行中</span>}
+      {streakData && streakData.count > 0 && (
+        <div className="max-w-4xl mx-auto px-6 pb-2 flex flex-wrap gap-2 items-center">
+          <div className="inline-flex items-center gap-2 backdrop-blur-sm bg-white/80 border border-white/40 shadow-lg rounded-full px-4 py-1.5 text-xs font-bold text-purple-700">
+            <span>{streakData.count}日連続利用中</span>
+            {streakData.count >= 30 && <span className="bg-yellow-400 text-black text-xs px-2 py-0.5 rounded-full font-black">伝説の占い師</span>}
+            {streakData.count >= 7 && streakData.count < 30 && <span className="bg-orange-400 text-black text-xs px-2 py-0.5 rounded-full font-black">占い達人</span>}
+            {streakData.count >= 3 && streakData.count < 7 && <span className="bg-amber-400 text-black text-xs px-2 py-0.5 rounded-full font-black">占い修行中</span>}
           </div>
+          {streakMsg && (
+            <div className="inline-flex items-center gap-1 bg-gradient-to-r from-yellow-500/30 to-amber-500/20 border border-yellow-400/50 rounded-full px-3 py-1 text-xs font-bold text-yellow-300 animate-pulse">
+              {streakMsg}
+            </div>
+          )}
         </div>
       )}
 
@@ -543,7 +551,7 @@ export default function UranaiPage() {
               </div>
 
               {/* カードの意味 */}
-              <div className="w-full bg-white/5 border border-purple-500/30 rounded-2xl p-5">
+              <div className="w-full backdrop-blur-sm bg-white/10 border border-white/30 shadow-lg rounded-2xl p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-2xl">{tarotCard.emoji}</span>
                   <div>
@@ -615,7 +623,7 @@ export default function UranaiPage() {
           ) : (
             <div className="space-y-4">
               {/* ミニグラフ */}
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
+              <div className="backdrop-blur-sm bg-white/10 border border-white/30 shadow-lg rounded-2xl p-5">
                 <div className="flex items-end gap-2 h-24 mb-3">
                   {history.slice().reverse().map((item, i) => {
                     const heightPct = (item.score / 10) * 100;
@@ -653,7 +661,7 @@ export default function UranaiPage() {
               </div>
 
               {/* 詳細履歴 */}
-              <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
+              <div className="backdrop-blur-sm bg-white/10 border border-white/30 shadow-lg rounded-2xl overflow-hidden">
                 <div className="px-5 py-3 border-b border-white/10 flex items-center justify-between">
                   <span className="text-sm font-bold text-purple-200">📜 鑑定履歴</span>
                   <span className="text-xs text-purple-500">直近{history.length}件</span>
@@ -769,7 +777,7 @@ export default function UranaiPage() {
             return (
               <div className="space-y-5">
                 {/* SVGグラフ */}
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-5 overflow-x-auto">
+                <div className="backdrop-blur-sm bg-white/10 border border-white/30 shadow-lg rounded-2xl p-5 overflow-x-auto">
                   <svg viewBox={`0 0 ${chartWidth} ${chartHeight + 30}`} className="w-full" style={{ minWidth: "280px" }}>
                     {/* エリア塗りつぶし */}
                     <defs>
@@ -1050,7 +1058,7 @@ export default function UranaiPage() {
             </div>
           )}
 
-          <div className="flex-1 bg-white/5 border border-white/10 rounded-2xl p-5 min-h-[400px]">
+          <div className="flex-1 backdrop-blur-sm bg-white/5 border border-white/20 shadow-lg rounded-2xl p-5 min-h-[400px]">
             {loading ? (
               <div className="flex flex-col items-center justify-center h-full gap-4">
                 <div className="text-4xl animate-pulse">{type === "compatibility" ? "💑" : "🔮"}</div>

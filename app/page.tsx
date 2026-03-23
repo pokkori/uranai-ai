@@ -62,7 +62,7 @@ export default function LandingPage() {
 
       {/* 占い師プロフィールカード */}
       <section className="py-4 px-6 max-w-3xl mx-auto">
-        <div className="bg-purple-950/50 border border-purple-500/30 rounded-2xl p-6 flex items-center gap-6">
+        <div className="backdrop-blur-sm bg-white/5 border border-white/20 shadow-lg rounded-2xl p-6 flex items-center gap-6">
           <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-400 to-pink-300 flex items-center justify-center text-4xl shrink-0">
             🌙
           </div>
@@ -82,7 +82,7 @@ export default function LandingPage() {
 
       {/* 鑑定実績・社会的証明バナー */}
       <section className="py-6 px-6 max-w-3xl mx-auto">
-        <div className="bg-gradient-to-r from-purple-900/60 to-indigo-900/60 border border-purple-500/30 rounded-2xl px-6 py-4">
+        <div className="backdrop-blur-sm bg-white/5 border border-white/20 shadow-lg rounded-2xl px-6 py-4">
           <div className="flex flex-wrap justify-center gap-6 text-center">
             {[
               { num: "累計12万件+", label: "鑑定実績", icon: "🔮" },
