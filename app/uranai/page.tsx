@@ -63,15 +63,18 @@ function BirthDatePicker({ year, month, day, onYearChange, onMonthChange, onDayC
   return (
     <div className="grid grid-cols-3 gap-2">
       <select value={year} onChange={e => onYearChange(e.target.value)}
-        className="bg-white/10 border border-white/20 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-purple-400">
+        className="bg-white/10 border border-white/20 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-purple-400"
+        aria-label="生年（年）">
         {YEARS.map(y => <option key={y} value={y}>{y}年</option>)}
       </select>
       <select value={month} onChange={e => onMonthChange(e.target.value)}
-        className="bg-white/10 border border-white/20 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-purple-400">
+        className="bg-white/10 border border-white/20 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-purple-400"
+        aria-label="生月（月）">
         {MONTHS.map(m => <option key={m} value={m}>{m}月</option>)}
       </select>
       <select value={day} onChange={e => onDayChange(e.target.value)}
-        className="bg-white/10 border border-white/20 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-purple-400">
+        className="bg-white/10 border border-white/20 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-purple-400"
+        aria-label="生日（日）">
         {DAYS.map(d => <option key={d} value={d}>{d}日</option>)}
       </select>
     </div>
@@ -369,7 +372,7 @@ export default function UranaiPage() {
       {showPaywall && (
         <div className="fixed inset-0 bg-black/70 flex items-end sm:items-center justify-center z-50 px-4 pb-0 sm:pb-4">
           <div className="bg-gradient-to-b from-indigo-950 to-purple-950 border border-purple-500/50 rounded-t-3xl sm:rounded-3xl p-6 max-w-sm w-full shadow-2xl text-center relative">
-            <button onClick={() => setShowPaywall(false)} className="absolute top-4 right-4 text-purple-400 hover:text-purple-200 text-xl font-bold leading-none">×</button>
+            <button onClick={() => setShowPaywall(false)} className="absolute top-4 right-4 text-purple-400 hover:text-purple-200 text-xl font-bold leading-none min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="プレミアムプランのダイアログを閉じる">×</button>
             {/* 限定感バナー */}
             <div className="bg-gradient-to-r from-red-500/30 to-orange-500/20 border border-red-500/40 rounded-full px-4 py-1.5 text-xs font-bold text-red-300 inline-block mb-4 animate-pulse">
               🎁 初月¥480キャンペーン実施中
@@ -412,7 +415,7 @@ export default function UranaiPage() {
               planLabel="プレミアム ¥2,980/月（月運・年運付き）"
               className="w-full bg-white/10 text-purple-200 font-medium py-2.5 rounded-xl hover:bg-white/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm"
             />
-            <button onClick={() => setShowPaywall(false)} className="text-xs text-purple-600 hover:text-purple-400 mt-3 block w-full">今は使わない</button>
+            <button onClick={() => setShowPaywall(false)} className="text-xs text-purple-600 hover:text-purple-400 mt-3 block w-full min-h-[44px]" aria-label="プレミアムプランに登録せず閉じる">今は使わない</button>
             <p className="text-xs text-purple-700 mt-2">いつでも解約可能 • SSL暗号化決済</p>
           </div>
         </div>
@@ -441,27 +444,35 @@ export default function UranaiPage() {
         <div className="flex gap-2 flex-wrap">
           <button
             onClick={() => setActiveTab("uranai")}
-            className={`flex items-center gap-1.5 px-5 py-2.5 rounded-full text-sm font-bold transition-all ${activeTab === "uranai" ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-900/40" : "bg-white/10 text-purple-300 hover:bg-white/20"}`}
+            className={`flex items-center gap-1.5 px-5 py-2.5 rounded-full text-sm font-bold transition-all min-h-[44px] ${activeTab === "uranai" ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-900/40" : "bg-white/10 text-purple-300 hover:bg-white/20"}`}
+            aria-label="AI鑑定タブを表示する"
+            aria-selected={activeTab === "uranai"}
           >
             🔮 AI鑑定
           </button>
           <button
             onClick={() => setActiveTab("tarot")}
-            className={`flex items-center gap-1.5 px-5 py-2.5 rounded-full text-sm font-bold transition-all ${activeTab === "tarot" ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg shadow-indigo-900/40" : "bg-white/10 text-purple-300 hover:bg-white/20"}`}
+            className={`flex items-center gap-1.5 px-5 py-2.5 rounded-full text-sm font-bold transition-all min-h-[44px] ${activeTab === "tarot" ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg shadow-indigo-900/40" : "bg-white/10 text-purple-300 hover:bg-white/20"}`}
+            aria-label="今日のタロットタブを表示する"
+            aria-selected={activeTab === "tarot"}
           >
             🃏 今日のタロット
             {!tarotDrawn && <span className="bg-pink-500 text-white text-xs px-1.5 py-0.5 rounded-full animate-pulse">NEW</span>}
           </button>
           <button
             onClick={() => setActiveTab("trend")}
-            className={`flex items-center gap-1.5 px-5 py-2.5 rounded-full text-sm font-bold transition-all ${activeTab === "trend" ? "bg-gradient-to-r from-teal-500 to-cyan-500 text-white shadow-lg shadow-teal-900/40" : "bg-white/10 text-purple-300 hover:bg-white/20"}`}
+            className={`flex items-center gap-1.5 px-5 py-2.5 rounded-full text-sm font-bold transition-all min-h-[44px] ${activeTab === "trend" ? "bg-gradient-to-r from-teal-500 to-cyan-500 text-white shadow-lg shadow-teal-900/40" : "bg-white/10 text-purple-300 hover:bg-white/20"}`}
+            aria-label="運気トレンドタブを表示する"
+            aria-selected={activeTab === "trend"}
           >
             📈 運気トレンド
             {history.length > 0 && <span className="bg-teal-500 text-white text-xs px-1.5 py-0.5 rounded-full">{history.length}</span>}
           </button>
           <button
             onClick={() => setActiveTab("yearly")}
-            className={`flex items-center gap-1.5 px-5 py-2.5 rounded-full text-sm font-bold transition-all ${activeTab === "yearly" ? "bg-gradient-to-r from-yellow-500 to-amber-500 text-white shadow-lg shadow-yellow-900/40" : "bg-white/10 text-purple-300 hover:bg-white/20"}`}
+            className={`flex items-center gap-1.5 px-5 py-2.5 rounded-full text-sm font-bold transition-all min-h-[44px] ${activeTab === "yearly" ? "bg-gradient-to-r from-yellow-500 to-amber-500 text-white shadow-lg shadow-yellow-900/40" : "bg-white/10 text-purple-300 hover:bg-white/20"}`}
+            aria-label="年間運気タブを表示する"
+            aria-selected={activeTab === "yearly"}
           >
             🗓️ 年間運気
           </button>
@@ -891,7 +902,8 @@ export default function UranaiPage() {
             <label className="block text-sm text-purple-300 mb-1">お名前（ニックネームでOK）</label>
             <input type="text" value={name} onChange={e => setName(e.target.value)}
               placeholder="例: さくら"
-              className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-purple-400 placeholder-white/30" />
+              className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-purple-400 placeholder-white/30"
+              aria-label="お名前（ニックネームでOK）" />
           </div>
 
           <div>
@@ -905,7 +917,9 @@ export default function UranaiPage() {
             <div className="flex gap-3">
               {[{ value: "female", label: "女性" }, { value: "male", label: "男性" }].map(g => (
                 <button key={g.value} type="button" onClick={() => setGender(g.value)}
-                  className={`flex-1 py-2 rounded-lg border text-sm font-medium transition-colors ${gender === g.value ? "bg-purple-500 border-purple-500 text-white" : "bg-white/5 border-white/20 text-purple-200 hover:border-purple-400"}`}>
+                  className={`flex-1 py-2 rounded-lg border text-sm font-medium transition-colors min-h-[44px] ${gender === g.value ? "bg-purple-500 border-purple-500 text-white" : "bg-white/5 border-white/20 text-purple-200 hover:border-purple-400"}`}
+                  aria-label={`性別: ${g.label}を選択`}
+                  aria-pressed={gender === g.value}>
                   {g.label}
                 </button>
               ))}
@@ -922,7 +936,9 @@ export default function UranaiPage() {
                 { value: "compatibility", label: "💑 相性占い", desc: "プレミアム限定・ふたりの縁を鑑定", premium: true },
               ].map(t => (
                 <button key={t.value} type="button" onClick={() => setType(t.value)}
-                  className={`w-full text-left px-4 py-3 rounded-lg border transition-colors ${type === t.value ? "bg-purple-500/30 border-purple-400" : "bg-white/5 border-white/10 hover:border-purple-500/50"}`}>
+                  className={`w-full text-left px-4 py-3 rounded-lg border transition-colors min-h-[44px] ${type === t.value ? "bg-purple-500/30 border-purple-400" : "bg-white/5 border-white/10 hover:border-purple-500/50"}`}
+                  aria-label={`鑑定の種類: ${t.label}を選択`}
+                  aria-pressed={type === t.value}>
                   <div className="flex items-center justify-between">
                     <div className="text-sm font-medium">{t.label}</div>
                     {t.premium && (
@@ -943,7 +959,8 @@ export default function UranaiPage() {
                 <label className="block text-xs text-purple-400 mb-1">相手のお名前（任意）</label>
                 <input type="text" value={partnerName} onChange={e => setPartnerName(e.target.value)}
                   placeholder="例: たくや"
-                  className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-purple-400 placeholder-white/30" />
+                  className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-purple-400 placeholder-white/30"
+                  aria-label="相手のお名前（任意）" />
               </div>
               <div>
                 <label className="block text-xs text-purple-400 mb-1">生年月日</label>
@@ -955,7 +972,9 @@ export default function UranaiPage() {
                 <div className="flex gap-3">
                   {[{ value: "female", label: "女性" }, { value: "male", label: "男性" }].map(g => (
                     <button key={g.value} type="button" onClick={() => setPartnerGender(g.value)}
-                      className={`flex-1 py-2 rounded-lg border text-sm font-medium transition-colors ${partnerGender === g.value ? "bg-purple-500 border-purple-500 text-white" : "bg-white/5 border-white/20 text-purple-200 hover:border-purple-400"}`}>
+                      className={`flex-1 py-2 rounded-lg border text-sm font-medium transition-colors min-h-[44px] ${partnerGender === g.value ? "bg-purple-500 border-purple-500 text-white" : "bg-white/5 border-white/20 text-purple-200 hover:border-purple-400"}`}
+                      aria-label={`相手の性別: ${g.label}を選択`}
+                      aria-pressed={partnerGender === g.value}>
                       {g.label}
                     </button>
                   ))}
@@ -979,7 +998,8 @@ export default function UranaiPage() {
                   key={preset.label}
                   type="button"
                   onClick={() => { setType(preset.typeVal); setQuestion(preset.text); }}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-full border text-xs font-medium transition-colors bg-white/5 border-white/20 text-purple-200 hover:bg-purple-500/30 hover:border-purple-400"
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-full border text-xs font-medium transition-colors bg-white/5 border-white/20 text-purple-200 hover:bg-purple-500/30 hover:border-purple-400 min-h-[44px]"
+                  aria-label={`${preset.label}のプリセットを入力する`}
                 >
                   {preset.emoji} {preset.label}
                 </button>
@@ -992,12 +1012,14 @@ export default function UranaiPage() {
               rows={3}
               maxLength={200}
               className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-purple-400 placeholder-white/30 resize-none"
+              aria-label="相談内容（任意・自由入力）"
             />
             {question && <p className="text-xs text-purple-500 mt-1 text-right">{question.length}/200文字</p>}
           </div>
 
           <button type="submit" disabled={loading}
-            className={`w-full font-bold py-4 rounded-xl transition-colors text-white ${(isLimitReached && type !== "compatibility") ? "bg-orange-500 hover:bg-orange-400" : "bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 disabled:opacity-50"}`}>
+            className={`w-full font-bold py-4 rounded-xl transition-colors text-white min-h-[44px] ${(isLimitReached && type !== "compatibility") ? "bg-orange-500 hover:bg-orange-400" : "bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 disabled:opacity-50"}`}
+            aria-label="入力内容をもとにAI占いを実行する">
             {loading ? "鑑定中..." :
              type === "compatibility" && !isPremium ? "💑 相性を鑑定する（プレミアム）" :
              isLimitReached ? "有料プランに申し込む" : "鑑定する ✨"}
@@ -1339,13 +1361,15 @@ export default function UranaiPage() {
                               }
                             }, "image/png");
                           }}
-                          className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-500 hover:to-pink-400 text-white font-bold px-4 py-2.5 rounded-xl transition-all text-sm shadow-lg"
+                          className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-500 hover:to-pink-400 text-white font-bold px-4 py-2.5 rounded-xl transition-all text-sm shadow-lg min-h-[44px]"
+                          aria-label="鑑定結果を画像としてクリップボードにコピーする"
                         >
                           🖼️ {cardCopied ? "画像コピー完了！" : "鑑定カードを画像コピー"}
                         </button>
                         <button
                           onClick={() => navigator.clipboard.writeText(kanteishoText)}
-                          className="inline-flex items-center gap-2 bg-purple-700/60 hover:bg-purple-600/60 text-purple-100 font-bold px-4 py-2.5 rounded-xl transition-colors text-sm border border-purple-500/40"
+                          className="inline-flex items-center gap-2 bg-purple-700/60 hover:bg-purple-600/60 text-purple-100 font-bold px-4 py-2.5 rounded-xl transition-colors text-sm border border-purple-500/40 min-h-[44px]"
+                          aria-label="今日の鑑定書テキストをクリップボードにコピーする"
                         >
                           📜 今日の鑑定書をコピー
                         </button>
@@ -1355,11 +1379,13 @@ export default function UranaiPage() {
                 })()}
                 <div className="mt-4 flex gap-2 justify-end">
                   <button onClick={handleCopy}
-                    className="text-xs px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-purple-200 font-medium transition-colors">
+                    className="text-xs px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-purple-200 font-medium transition-colors min-h-[44px]"
+                    aria-label="鑑定結果テキストをクリップボードにコピーする">
                     {copied ? "✓ コピー済み" : "コピー"}
                   </button>
                   <button onClick={handlePrint}
-                    className="text-xs px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-purple-200 font-medium transition-colors">
+                    className="text-xs px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-purple-200 font-medium transition-colors min-h-[44px]"
+                    aria-label="鑑定結果を印刷またはPDF保存する">
                     印刷・PDF保存
                   </button>
                 </div>
@@ -1485,7 +1511,8 @@ export default function UranaiPage() {
                         : `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent("https://uranai-ai-sigma.vercel.app")}`;
                       window.open(shareCardUrl, "_blank");
                     }}
-                    className="bg-white text-purple-700 font-bold px-6 py-2 rounded-full hover:bg-purple-50 transition-colors"
+                    className="bg-white text-purple-700 font-bold px-6 py-2 rounded-full hover:bg-purple-50 transition-colors min-h-[44px]"
+                    aria-label="鑑定結果をXでシェアする"
                   >
                     Xでシェアする
                   </button>
@@ -1497,7 +1524,8 @@ export default function UranaiPage() {
                   const text = `占いAIで鑑定を受けました！今日の運勢・恋愛・仕事を総合診断 🔮 #占いAI #月詠玲花`;
                   window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent('https://uranai-ai-sigma.vercel.app')}`, '_blank');
                 }}
-                className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-8 py-4 rounded-full w-full mt-4 text-lg"
+                className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-8 py-4 rounded-full w-full mt-4 text-lg min-h-[44px]"
+                aria-label="鑑定結果をXでシェアする"
               >
                 ✨ 鑑定結果をXでシェア
               </button>
