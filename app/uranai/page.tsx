@@ -421,7 +421,7 @@ export default function UranaiPage() {
         </div>
       )}
       <nav className="px-6 py-4 flex items-center justify-between max-w-4xl mx-auto">
-        <Link href="/" className="font-bold">🔮 AI占い</Link>
+        <Link href="/" className="font-bold" aria-label="AI占いトップページに戻る">🔮 AI占い</Link>
         <span className={`text-xs px-3 py-1 rounded-full ${isPremium ? "bg-purple-600/50 text-purple-200" : isLimitReached ? "bg-red-900/50 text-red-300" : "bg-purple-900/50 text-purple-300"}`}>
           {isPremium ? "✓ プレミアム" : isLimitReached ? "無料枠終了" : `無料あと${remaining}回`}
         </span>
@@ -524,6 +524,7 @@ export default function UranaiPage() {
                   track('tarot_drawn', { service: '占いAI' });
                 }}
                 className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold px-8 py-4 rounded-full hover:opacity-90 transition-opacity shadow-lg text-sm"
+                aria-label="今日のタロットカードを無料で1枚引く"
               >
                 🃏 今日のカードを引く（無料）
               </button>
@@ -566,6 +567,7 @@ export default function UranaiPage() {
                   rel="noopener noreferrer"
                   onClick={() => setTarotShared(true)}
                   className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90 text-white font-bold py-3 rounded-xl transition-opacity text-sm"
+                  aria-label={`${tarotCard.name}カードの結果をXでシェアする`}
                 >
                   <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.892-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                   {tarotCard.name}カードをXでシェア
@@ -576,6 +578,7 @@ export default function UranaiPage() {
                 <button
                   onClick={() => setActiveTab("uranai")}
                   className="w-full bg-white/10 hover:bg-white/20 text-purple-200 font-medium py-2.5 rounded-xl transition-colors text-sm"
+                  aria-label="AI鑑定タブに切り替えて占いを試す"
                 >
                   🔮 AI鑑定も試す →
                 </button>
@@ -604,6 +607,7 @@ export default function UranaiPage() {
               <button
                 onClick={() => setActiveTab("uranai")}
                 className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold px-6 py-3 rounded-full text-sm hover:opacity-90 transition-opacity"
+                aria-label="AI鑑定タブに移動してAI占いを始める"
               >
                 🔮 今すぐ鑑定する
               </button>
@@ -704,6 +708,7 @@ export default function UranaiPage() {
               <button
                 onClick={() => setActiveTab("uranai")}
                 className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-3.5 rounded-xl hover:opacity-90 transition-opacity text-sm"
+                aria-label="AI鑑定タブに移動して今日の鑑定を受けてストリークを伸ばす"
               >
                 🔮 今日の鑑定を受けてストリークを伸ばす
               </button>
@@ -855,6 +860,7 @@ export default function UranaiPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 bg-black hover:bg-gray-800 text-white font-bold px-6 py-3 rounded-xl text-sm transition-colors"
+                    aria-label="2026年の運気グラフをXでシェアする"
                   >
                     <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.892-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                     運気グラフをXでシェア
@@ -882,6 +888,7 @@ export default function UranaiPage() {
                 <button
                   onClick={() => setActiveTab("uranai")}
                   className="w-full bg-white/10 hover:bg-white/20 text-purple-200 font-medium py-2.5 rounded-xl transition-colors text-sm"
+                  aria-label="AI鑑定タブに移動して今日の詳細鑑定を受ける"
                 >
                   🔮 今日の詳細鑑定を受ける →
                 </button>
@@ -1254,6 +1261,7 @@ export default function UranaiPage() {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-2 bg-black hover:bg-gray-800 text-white font-bold px-4 py-2.5 rounded-xl transition-colors text-sm"
+                          aria-label="占い鑑定結果を月詠玲花先生に占ってもらったとXでシェアする"
                         >
                           <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.892-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                           月詠玲花先生に占ってもらった
@@ -1474,13 +1482,15 @@ export default function UranaiPage() {
                   {type === "compatibility" ? (
                     <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(ogpUrl)}`}
                       target="_blank" rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:opacity-90 text-white font-bold py-3 rounded-xl transition-opacity text-sm">
+                      className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:opacity-90 text-white font-bold py-3 rounded-xl transition-opacity text-sm"
+                      aria-label={compatibilityScore !== null ? `相性スコア${compatibilityScore}点の結果をXでシェアする` : "相性占い結果をXでシェアする"}>
                       💑 {compatibilityScore !== null ? `相性${compatibilityScore}点をXでシェア！` : "相性結果をXでシェア！"}
                     </a>
                   ) : (
                     <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`}
                       target="_blank" rel="noopener noreferrer"
-                      className="block text-center text-xs bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition-colors">
+                      className="block text-center text-xs bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition-colors"
+                      aria-label="占い鑑定結果をXでシェアする">
                       Xでシェア
                     </a>
                   )}
@@ -1586,6 +1596,8 @@ export default function UranaiPage() {
           <button
             onClick={() => setHistoryOpen(o => !o)}
             className="w-full flex items-center justify-between bg-white/5 border border-white/10 rounded-xl px-5 py-3 hover:bg-white/10 transition-colors"
+            aria-label={historyOpen ? "過去の鑑定履歴を閉じる" : "過去の鑑定履歴を開く"}
+            aria-expanded={historyOpen}
           >
             <span className="text-sm font-bold text-purple-200">📜 過去の鑑定履歴（直近{history.length}件）</span>
             <span className="text-purple-400 text-xs">{historyOpen ? "▲ 閉じる" : "▼ 開く"}</span>
@@ -1612,9 +1624,9 @@ export default function UranaiPage() {
       )}
 
       <footer className="text-center py-6 text-xs text-gray-400 border-t mt-8">
-        <a href="/legal" className="hover:underline">特定商取引法に基づく表記</a>
+        <a href="/legal" className="hover:underline" aria-label="特定商取引法に基づく表記を見る">特定商取引法に基づく表記</a>
         <span className="mx-2">|</span>
-        <a href="/privacy" className="hover:underline">プライバシーポリシー</a>
+        <a href="/privacy" className="hover:underline" aria-label="プライバシーポリシーを読む">プライバシーポリシー</a>
       </footer>
     </main>
   );

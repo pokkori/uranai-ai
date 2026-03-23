@@ -23,16 +23,16 @@ export default function LandingPage() {
       <nav className="px-6 py-4 max-w-5xl mx-auto">
         <div className="flex items-center justify-between mb-2">
           <span className="font-bold text-lg">🔮 AI占い</span>
-          <Link href="/uranai" className="bg-purple-500 hover:bg-purple-400 text-white text-sm font-medium px-4 py-2 rounded-full transition-colors">
+          <Link href="/uranai" className="bg-purple-500 hover:bg-purple-400 text-white text-sm font-medium px-4 py-2 rounded-full transition-colors" aria-label="AI占いを無料で始める">
             無料で占う
           </Link>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Link href="/uranai/category/love" className="text-xs text-purple-300 hover:text-white bg-purple-900/40 hover:bg-purple-800/60 border border-purple-600/30 px-3 py-1 rounded-full transition-colors">💕 恋愛占い</Link>
-          <Link href="/uranai/category/work" className="text-xs text-purple-300 hover:text-white bg-purple-900/40 hover:bg-purple-800/60 border border-purple-600/30 px-3 py-1 rounded-full transition-colors">💼 仕事占い</Link>
-          <Link href="/uranai/category/money" className="text-xs text-purple-300 hover:text-white bg-purple-900/40 hover:bg-purple-800/60 border border-purple-600/30 px-3 py-1 rounded-full transition-colors">💰 金運占い</Link>
-          <Link href="/uranai/category/health" className="text-xs text-purple-300 hover:text-white bg-purple-900/40 hover:bg-purple-800/60 border border-purple-600/30 px-3 py-1 rounded-full transition-colors">🌿 健康運</Link>
-          <Link href="/uranai/category/general" className="text-xs text-purple-300 hover:text-white bg-purple-900/40 hover:bg-purple-800/60 border border-purple-600/30 px-3 py-1 rounded-full transition-colors">⭐ 今日の運勢</Link>
+          <Link href="/uranai/category/love" className="text-xs text-purple-300 hover:text-white bg-purple-900/40 hover:bg-purple-800/60 border border-purple-600/30 px-3 py-1 rounded-full transition-colors" aria-label="恋愛占いカテゴリを見る">💕 恋愛占い</Link>
+          <Link href="/uranai/category/work" className="text-xs text-purple-300 hover:text-white bg-purple-900/40 hover:bg-purple-800/60 border border-purple-600/30 px-3 py-1 rounded-full transition-colors" aria-label="仕事占いカテゴリを見る">💼 仕事占い</Link>
+          <Link href="/uranai/category/money" className="text-xs text-purple-300 hover:text-white bg-purple-900/40 hover:bg-purple-800/60 border border-purple-600/30 px-3 py-1 rounded-full transition-colors" aria-label="金運占いカテゴリを見る">💰 金運占い</Link>
+          <Link href="/uranai/category/health" className="text-xs text-purple-300 hover:text-white bg-purple-900/40 hover:bg-purple-800/60 border border-purple-600/30 px-3 py-1 rounded-full transition-colors" aria-label="健康運占いカテゴリを見る">🌿 健康運</Link>
+          <Link href="/uranai/category/general" className="text-xs text-purple-300 hover:text-white bg-purple-900/40 hover:bg-purple-800/60 border border-purple-600/30 px-3 py-1 rounded-full transition-colors" aria-label="今日の運勢カテゴリを見る">⭐ 今日の運勢</Link>
         </div>
       </nav>
 
@@ -46,7 +46,7 @@ export default function LandingPage() {
           九星気学×干支AIが、あなたの運命の波を分析。<br />
           今年の転機・恋愛の流れ・仕事の変化を今すぐ確認してください。
         </p>
-        <Link href="/uranai" className="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-lg px-10 py-4 rounded-full hover:opacity-90 transition-opacity shadow-lg shadow-purple-900">
+        <Link href="/uranai" className="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-lg px-10 py-4 rounded-full hover:opacity-90 transition-opacity shadow-lg shadow-purple-900" aria-label="AI占いを無料で鑑定してみる">
           無料で鑑定してみる →
         </Link>
         <p className="text-purple-400 text-xs mt-3">無料3回・クレジットカード不要</p>
@@ -165,7 +165,7 @@ export default function LandingPage() {
               あなたの生年月日（四柱推命の命式）によって、転機が来る時期は人それぞれ異なります。
               「今月の転機はいつ？」をAIが生年月日から個別に鑑定します。
             </div>
-            <Link href="/uranai" className="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold px-7 py-3 rounded-full hover:opacity-90 transition-opacity shadow-lg text-sm">
+            <Link href="/uranai" className="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold px-7 py-3 rounded-full hover:opacity-90 transition-opacity shadow-lg text-sm" aria-label="今月の転機をAI占いで鑑定してもらう">
               🔮 今月の転機をAIに鑑定してもらう →
             </Link>
             <p className="text-purple-500 text-xs mt-2">無料3回・生年月日だけで診断</p>
@@ -208,7 +208,7 @@ export default function LandingPage() {
         <div className="mt-8 bg-gradient-to-r from-purple-900/80 to-pink-900/60 border border-purple-400/40 rounded-2xl p-5 text-center">
           <p className="text-white font-bold mb-1">星があなたに今、何を伝えているか——</p>
           <p className="text-purple-300 text-sm mb-4">生年月日を入れるだけで、AIが四柱推命×九星気学で本格鑑定します。</p>
-          <Link href="/uranai" className="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white font-black px-6 py-3 rounded-full text-sm hover:opacity-90 transition-opacity">
+          <Link href="/uranai" className="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white font-black px-6 py-3 rounded-full text-sm hover:opacity-90 transition-opacity" aria-label="AI占いを今すぐ無料で始める">
             今すぐ無料で占う →
           </Link>
         </div>
@@ -295,7 +295,7 @@ export default function LandingPage() {
           </div>
         </div>
         <div className="text-center mt-8">
-          <Link href="/uranai" className="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold px-8 py-4 rounded-full hover:opacity-90 transition-opacity shadow-lg text-sm">
+          <Link href="/uranai" className="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold px-8 py-4 rounded-full hover:opacity-90 transition-opacity shadow-lg text-sm" aria-label="自分の運勢をAIで今すぐ占う（無料3回）">
             🔮 自分の運勢を今すぐ占う（無料3回）→
           </Link>
         </div>
@@ -324,7 +324,7 @@ export default function LandingPage() {
                 <li key={f} className="text-xs text-purple-200 flex gap-2"><span className="text-green-400">✓</span>{f}</li>
               ))}
             </ul>
-            <Link href="/uranai" className="block w-full text-center text-sm font-medium py-2.5 rounded-lg transition-colors bg-white/10 hover:bg-white/20 text-white">
+            <Link href="/uranai" className="block w-full text-center text-sm font-medium py-2.5 rounded-lg transition-colors bg-white/10 hover:bg-white/20 text-white" aria-label="お試しプランで無料で占いを試す">
               無料で試す
             </Link>
           </div>
@@ -348,7 +348,7 @@ export default function LandingPage() {
                 <li key={f} className="text-xs text-purple-100 flex gap-2 items-start"><span className="text-yellow-400 shrink-0">✓</span>{f}</li>
               ))}
             </ul>
-            <Link href="/uranai?plan=standard" className="block w-full text-center text-sm font-bold py-3 rounded-lg transition-colors bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white shadow-lg shadow-purple-900/40">
+            <Link href="/uranai?plan=standard" className="block w-full text-center text-sm font-bold py-3 rounded-lg transition-colors bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white shadow-lg shadow-purple-900/40" aria-label="スタンダードプラン（初月480円）を今すぐ始める">
               今すぐ始める →
             </Link>
             <div className="flex items-center justify-center gap-2 mt-3">
@@ -372,7 +372,7 @@ export default function LandingPage() {
                 <li key={f} className="text-xs text-purple-200 flex gap-2 items-start"><span className="text-purple-400 shrink-0">✓</span>{f}</li>
               ))}
             </ul>
-            <Link href="/uranai?plan=business" className="block w-full text-center text-sm font-medium py-2.5 rounded-lg transition-colors bg-white/10 hover:bg-white/20 text-white">
+            <Link href="/uranai?plan=business" className="block w-full text-center text-sm font-medium py-2.5 rounded-lg transition-colors bg-white/10 hover:bg-white/20 text-white" aria-label="プレミアムプラン（2980円/月）に申し込む">
               申し込む
             </Link>
           </div>
@@ -409,7 +409,7 @@ export default function LandingPage() {
             <p>🎯 カードの意味 + <strong className="text-white">今日のアクション</strong>付き</p>
             <p>📱 引いた結果をXでシェアできる（拡散しやすい！）</p>
           </div>
-          <Link href="/uranai?tab=tarot" className="inline-block bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold px-7 py-3 rounded-full hover:opacity-90 transition-opacity shadow-lg text-sm">
+          <Link href="/uranai?tab=tarot" className="inline-block bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold px-7 py-3 rounded-full hover:opacity-90 transition-opacity shadow-lg text-sm" aria-label="今日のタロットを1枚無料で引く">
             🃏 今日のタロットを引く（無料）→
           </Link>
           <p className="text-indigo-500 text-xs mt-2">生年月日不要・1タップで結果が出る</p>
@@ -425,7 +425,7 @@ export default function LandingPage() {
             2人の星座を入力するだけ。AIが相性スコアと相性のポイントを診断。<br/>
             「私たち○○点でした」をXでシェアして友達と比べよう。
           </p>
-          <Link href="/uranai" className="inline-block bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold px-6 py-3 rounded-full hover:opacity-90 transition-opacity text-sm">
+          <Link href="/uranai" className="inline-block bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold px-6 py-3 rounded-full hover:opacity-90 transition-opacity text-sm" aria-label="AI相性占いを試す">
             相性占いを試す →
           </Link>
         </div>
@@ -476,7 +476,7 @@ export default function LandingPage() {
           );
         })()}
         <div className="text-center mt-6">
-          <Link href="/uranai" className="inline-block text-sm text-purple-400 hover:text-purple-200 transition-colors underline underline-offset-2">
+          <Link href="/uranai" className="inline-block text-sm text-purple-400 hover:text-purple-200 transition-colors underline underline-offset-2" aria-label="生年月日であなただけの今週の開運アドバイスを見る">
             🔮 生年月日であなただけの今週の開運アドバイスを見る →
           </Link>
         </div>
@@ -531,6 +531,7 @@ export default function LandingPage() {
             <Link
               href="/uranai"
               className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-400 text-white font-bold px-8 py-4 rounded-full transition-colors text-sm shadow-lg shadow-green-900/40 w-full justify-center"
+              aria-label="LINE通知でAI占い鑑定を受け取る"
             >
               <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
                 <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
@@ -545,14 +546,14 @@ export default function LandingPage() {
       {/* CTA */}
       <section className="py-16 text-center px-6">
         <h2 className="text-2xl font-bold mb-4">今すぐあなたの運命を知る</h2>
-        <Link href="/uranai" className="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold px-10 py-4 rounded-full hover:opacity-90 shadow-lg">
+        <Link href="/uranai" className="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold px-10 py-4 rounded-full hover:opacity-90 shadow-lg" aria-label="AI占いを無料で鑑定する">
           無料で鑑定する →
         </Link>
       </section>
 
       {/* スティッキーモバイルCTA */}
       <div className="fixed bottom-0 left-0 right-0 bg-indigo-950 border-t border-purple-700/50 px-4 py-3 z-40 sm:hidden shadow-lg">
-        <Link href="/uranai" className="block w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-black text-center py-3.5 rounded-full text-sm">
+        <Link href="/uranai" className="block w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-black text-center py-3.5 rounded-full text-sm" aria-label="AI占いを今すぐ無料で始める（モバイルCTA）">
           今すぐ無料で占う →
         </Link>
       </div>
@@ -604,6 +605,7 @@ export default function LandingPage() {
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-black hover:bg-gray-800 text-white font-bold py-3 px-6 rounded-xl text-sm transition-colors"
+            aria-label="AI占いをXでシェアする"
           >
             <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
               <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
@@ -616,6 +618,7 @@ export default function LandingPage() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-white font-bold py-3 px-6 rounded-xl text-sm transition-colors"
             style={{ background: "#06C755" }}
+            aria-label="AI占いをLINEで友達に送る"
           >
             <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
               <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
@@ -628,21 +631,21 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto space-y-2">
           <p>AI占い © 2026</p>
           <div className="flex justify-center gap-6">
-            <Link href="/blog/shichusuimei" className="hover:text-purple-300">四柱推命とは</Link>
-            <Link href="/blog/kyusei-kigaku" className="hover:text-purple-300">九星気学とは</Link>
-            <Link href="/legal" className="hover:text-purple-300">特定商取引法</Link>
-            <Link href="/terms" className="hover:text-purple-300">利用規約</Link>
-            <Link href="/privacy" className="hover:text-purple-300">プライバシーポリシー</Link>
+            <Link href="/blog/shichusuimei" className="hover:text-purple-300" aria-label="四柱推命とはについて読む">四柱推命とは</Link>
+            <Link href="/blog/kyusei-kigaku" className="hover:text-purple-300" aria-label="九星気学とはについて読む">九星気学とは</Link>
+            <Link href="/legal" className="hover:text-purple-300" aria-label="特定商取引法に基づく表記を見る">特定商取引法</Link>
+            <Link href="/terms" className="hover:text-purple-300" aria-label="利用規約を読む">利用規約</Link>
+            <Link href="/privacy" className="hover:text-purple-300" aria-label="プライバシーポリシーを読む">プライバシーポリシー</Link>
           </div>
           <div className="mt-4 pt-4 border-t border-white/10">
             <p className="text-xs text-purple-600 mb-2">ポッコリラボの他のサービス</p>
             <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-purple-600">
-              <a href="https://keiba-yoso-ai.vercel.app" className="hover:text-purple-300">競馬予想AI</a>
-              <a href="https://rougo-sim-ai.vercel.app" className="hover:text-purple-300">老後シミュレーターAI</a>
-              <a href="https://claim-ai-beryl.vercel.app" className="hover:text-purple-300">クレームAI</a>
-              <a href="https://hojyokin-ai-delta.vercel.app" className="hover:text-purple-300">補助金AI</a>
-              <a href="https://keiyakusho-ai.vercel.app" className="hover:text-purple-300">契約書AIレビュー</a>
-              <a href="https://hada-ai.vercel.app" className="hover:text-purple-300">AI美肌診断</a>
+              <a href="https://keiba-yoso-ai.vercel.app" className="hover:text-purple-300" aria-label="競馬予想AIを見る（外部サービス）">競馬予想AI</a>
+              <a href="https://rougo-sim-ai.vercel.app" className="hover:text-purple-300" aria-label="老後シミュレーターAIを見る（外部サービス）">老後シミュレーターAI</a>
+              <a href="https://claim-ai-beryl.vercel.app" className="hover:text-purple-300" aria-label="クレームAIを見る（外部サービス）">クレームAI</a>
+              <a href="https://hojyokin-ai-delta.vercel.app" className="hover:text-purple-300" aria-label="補助金AIを見る（外部サービス）">補助金AI</a>
+              <a href="https://keiyakusho-ai.vercel.app" className="hover:text-purple-300" aria-label="契約書AIレビューを見る（外部サービス）">契約書AIレビュー</a>
+              <a href="https://hada-ai.vercel.app" className="hover:text-purple-300" aria-label="AI美肌診断を見る（外部サービス）">AI美肌診断</a>
             </div>
           </div>
         </div>
