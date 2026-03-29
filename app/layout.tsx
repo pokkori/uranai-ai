@@ -83,7 +83,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="antialiased">
+      <body className="antialiased min-h-screen text-white" style={{ background: '#0B0B1E' }}>
         {children}
         <Analytics />
       </body>
