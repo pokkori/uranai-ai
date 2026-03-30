@@ -15,6 +15,35 @@ export const metadata: Metadata = {
 export default function LandingPage() {
   const today = new Date();
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: [
+              { '@type': 'Question', name: '本当に当たりますか？', acceptedAnswer: { '@type': 'Answer', text: 'AIが星座・四柱推命・タロットの要素を組み合わせて独自分析。エンターテインメント目的でご利用ください。' } },
+              { '@type': 'Question', name: '何回まで無料ですか？', acceptedAnswer: { '@type': 'Answer', text: '毎日3回まで無料で鑑定できます。' } },
+              { '@type': 'Question', name: 'データは保存されますか？', acceptedAnswer: { '@type': 'Answer', text: '入力データは鑑定後に自動削除されます。個人情報の保存はしていません。' } },
+              { '@type': 'Question', name: 'スマホから使えますか？', acceptedAnswer: { '@type': 'Answer', text: 'はい、スマートフォン・タブレットに完全対応しています。' } },
+            ],
+          }).replace(/</g, '\\u003c'),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'SoftwareApplication',
+            name: 'AI占い',
+            operatingSystem: 'Web',
+            applicationCategory: 'EntertainmentApplication',
+            offers: { '@type': 'Offer', price: 0, priceCurrency: 'JPY' },
+          }).replace(/</g, '\\u003c'),
+        }}
+      />
     <main className="min-h-screen text-white" style={{ background: 'radial-gradient(ellipse at 20% 50%, rgba(120, 80, 200, 0.18) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(200, 80, 180, 0.12) 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, rgba(80, 100, 220, 0.1) 0%, transparent 50%), #0B0B1E' }}>
       {/* Floating particles */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
@@ -662,5 +691,6 @@ export default function LandingPage() {
       <AdBanner slot="" />
       </div>
     </main>
+    </>
   );
 }
