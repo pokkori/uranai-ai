@@ -6,6 +6,8 @@ import TodayFortune from "@/components/TodayFortune";
 import { ShareButtons } from "@/components/ShareButtons";
 import ZodiacRankingSection from "@/components/ZodiacRankingSection";
 import { AdBanner } from "@/components/AdBanner";
+import { StreakBanner } from "@/components/StreakBanner";
+import { UsageCounter } from "@/components/UsageCounter";
 
 export const metadata: Metadata = {
   title: "AI占い｜四柱推命・九星気学で本格鑑定",
@@ -85,6 +87,8 @@ export default function LandingPage() {
         </div>
       </nav>
 
+      <StreakBanner />
+
       {/* ヒーロー */}
       <section className="text-center py-20 px-6 max-w-3xl mx-auto">
         <div className="mb-6">
@@ -103,6 +107,7 @@ export default function LandingPage() {
           九星気学×干支AIが、あなたの運命の波を分析。<br />
           今年の転機・恋愛の流れ・仕事の変化を今すぐ確認してください。
         </p>
+        <div className="max-w-xs mx-auto mb-4"><UsageCounter /></div>
         <Link href="/uranai" className="inline-block text-white font-bold text-lg px-10 py-4 rounded-full transition-all hover:scale-105 min-h-[44px]" style={{ background: 'linear-gradient(135deg, #A855F7, #EC4899)', boxShadow: '0 0 30px rgba(168,85,247,0.5), 0 0 60px rgba(236,72,153,0.2)' }} aria-label="AI占いを無料で鑑定してみる">
           無料で鑑定してみる
         </Link>
