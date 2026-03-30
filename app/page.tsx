@@ -111,6 +111,29 @@ export default function LandingPage() {
         </p>
         <div className="max-w-xs mx-auto mb-4"><UsageCounter /></div>
         <div className="mb-4"><TrustBadge /></div>
+        {/* ヒーロー内鑑定プレビュー — アハモーメント */}
+        <div className="max-w-sm mx-auto mb-5 mt-2">
+          <p className="text-xs text-purple-300/60 text-center mb-2">AIが生成する鑑定の一例</p>
+          <div className="bg-purple-900/30 border border-purple-400/30 rounded-xl overflow-hidden text-left">
+            <div className="bg-purple-500/10 border-b border-purple-400/20 px-4 py-2">
+              <span className="text-xs font-bold text-purple-300">本日の運勢（四柱推命×九星気学）</span>
+            </div>
+            <div className="px-4 py-3 space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-pink-400 w-8">恋愛</span>
+                <span className="text-xs text-white/80">今日は素直な言葉が縁を引き寄せる吉日。気になる人に連絡するなら午後が最吉。</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-blue-400 w-8">仕事</span>
+                <span className="text-xs text-white/80">直感が冴える時期。新しいアイデアを形にするなら今週中に動き出して。</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-amber-400 w-8">金運</span>
+                <span className="text-xs text-white/80">衝動買いは控えて。来週の木曜が金銭的な好機。</span>
+              </div>
+            </div>
+          </div>
+        </div>
         <Link href="/uranai" className="inline-block text-white font-bold text-lg px-10 py-4 rounded-full transition-all hover:scale-105 min-h-[44px]" style={{ background: 'linear-gradient(135deg, #A855F7, #EC4899)', boxShadow: '0 0 30px rgba(168,85,247,0.5), 0 0 60px rgba(236,72,153,0.2)' }} aria-label="AI占いを無料で鑑定してみる">
           今日の運勢を無料で占う
         </Link>
