@@ -8,6 +8,7 @@ import ZodiacRankingSection from "@/components/ZodiacRankingSection";
 import { AdBanner } from "@/components/AdBanner";
 import { StreakBanner } from "@/components/StreakBanner";
 import { UsageCounter } from "@/components/UsageCounter";
+import { CrossSell } from "@/components/CrossSell";
 
 export const metadata: Metadata = {
   title: "AI占い｜四柱推命・九星気学で本格鑑定",
@@ -109,8 +110,9 @@ export default function LandingPage() {
         </p>
         <div className="max-w-xs mx-auto mb-4"><UsageCounter /></div>
         <Link href="/uranai" className="inline-block text-white font-bold text-lg px-10 py-4 rounded-full transition-all hover:scale-105 min-h-[44px]" style={{ background: 'linear-gradient(135deg, #A855F7, #EC4899)', boxShadow: '0 0 30px rgba(168,85,247,0.5), 0 0 60px rgba(236,72,153,0.2)' }} aria-label="AI占いを無料で鑑定してみる">
-          無料で鑑定してみる
+          今日の運勢を無料で占う
         </Link>
+        <p className="text-xs opacity-60 mt-2">※毎日3回まで無料</p>
         <p className="text-purple-400 text-xs mt-3">無料3回・クレジットカード不要</p>
         <div className="flex justify-center gap-6 text-xs text-purple-400 mt-6">
           <span className="flex items-center gap-1"><svg className="w-3 h-3" viewBox="0 0 24 24" fill="#FBBF24" aria-hidden="true"><path d="M12 2l2.09 6.26L20.18 9.27l-5.09 3.93L16.18 19.46 12 16l-4.18 3.46 1.09-6.26L3.82 9.27l6.09-1.01z"/></svg> 四柱推命×九星気学 AI</span>
@@ -670,6 +672,8 @@ export default function LandingPage() {
       <section className="py-6 px-6 text-center">
         <ShareButtons url="https://uranai-ai-sigma.vercel.app" text="AI占いを使ってみた！" hashtags="AI占い" />
       </section>
+      <CrossSell currentService="占いAI" />
+
       <footer className="border-t border-white/10 py-8 pb-24 sm:pb-8 text-center text-xs text-purple-500 px-6">
         <div className="max-w-5xl mx-auto space-y-2">
           <p>AI占い © 2026</p>
