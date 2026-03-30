@@ -9,6 +9,7 @@ import { AdBanner } from "@/components/AdBanner";
 import { StreakBanner } from "@/components/StreakBanner";
 import { UsageCounter } from "@/components/UsageCounter";
 import { CrossSell } from "@/components/CrossSell";
+import { TrustBadge } from "@/components/TrustBadge";
 
 export const metadata: Metadata = {
   title: "AI占い｜四柱推命・九星気学で本格鑑定",
@@ -109,6 +110,7 @@ export default function LandingPage() {
           今年の転機・恋愛の流れ・仕事の変化を今すぐ確認してください。
         </p>
         <div className="max-w-xs mx-auto mb-4"><UsageCounter /></div>
+        <div className="mb-4"><TrustBadge /></div>
         <Link href="/uranai" className="inline-block text-white font-bold text-lg px-10 py-4 rounded-full transition-all hover:scale-105 min-h-[44px]" style={{ background: 'linear-gradient(135deg, #A855F7, #EC4899)', boxShadow: '0 0 30px rgba(168,85,247,0.5), 0 0 60px rgba(236,72,153,0.2)' }} aria-label="AI占いを無料で鑑定してみる">
           今日の運勢を無料で占う
         </Link>
