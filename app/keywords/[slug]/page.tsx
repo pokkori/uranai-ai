@@ -11,6 +11,7 @@ export const KEYWORDS: Record<
     title: string;
     description: string;
     faqs: { q: string; a: string }[];
+    lastUpdated: string;
   }
 > = {
   "ai-uranai-muryou": {
@@ -31,6 +32,7 @@ export const KEYWORDS: Record<
         a: "四柱推命と九星気学の理論をベースにAIが総合判断するため、従来のランダム占いより深い鑑定結果をお届けします。",
       },
     ],
+    lastUpdated: "2026-03-31",
   },
   "kyou-no-unsei": {
     title: "今日の運勢",
@@ -50,6 +52,7 @@ export const KEYWORDS: Record<
         a: "現在は当日の運勢のみ対応しています。毎日チェックすることで運勢の流れを把握できます。",
       },
     ],
+    lastUpdated: "2026-03-31",
   },
   "renai-un-uranai": {
     title: "恋愛運 占い",
@@ -69,6 +72,7 @@ export const KEYWORDS: Record<
         a: "鑑定結果にはラッキーカラーやラッキーアイテムなど、運気アップのアドバイスも含まれます。",
       },
     ],
+    lastUpdated: "2026-03-31",
   },
   "aishou-uranai-ai": {
     title: "相性占い AI",
@@ -88,6 +92,7 @@ export const KEYWORDS: Record<
         a: "はい。恋愛だけでなく、仕事や友人関係の相性も分析可能です。",
       },
     ],
+    lastUpdated: "2026-03-31",
   },
   "shigoto-un-uranai": {
     title: "仕事運 占い",
@@ -107,6 +112,7 @@ export const KEYWORDS: Record<
         a: "基本的な仕事運の鑑定は1日3回まで無料です。より詳しい適職分析はプレミアム版で利用できます。",
       },
     ],
+    lastUpdated: "2026-03-31",
   },
   "tanjyoubi-uranai-2026": {
     title: "誕生日占い 2026",
@@ -126,6 +132,7 @@ export const KEYWORDS: Record<
         a: "はい。年齢に関係なく、生年月日があれば誰でも鑑定可能です。",
       },
     ],
+    lastUpdated: "2026-03-31",
   },
   "kusei-kigaku-ai": {
     title: "九星気学 AI占い",
@@ -145,6 +152,7 @@ export const KEYWORDS: Record<
         a: "九星気学は方位や時期の吉凶に強く、四柱推命は性格や人生の流れの鑑定に強い占術です。当サービスでは両方を組み合わせています。",
       },
     ],
+    lastUpdated: "2026-03-31",
   },
   "tarot-ai-muryou": {
     title: "タロット AI 無料",
@@ -164,6 +172,7 @@ export const KEYWORDS: Record<
         a: "AIが四柱推命・九星気学の論理的な鑑定にタロットの象徴的要素を加え、より奥深い結果を提供します。",
       },
     ],
+    lastUpdated: "2026-03-31",
   },
   "unmei-kantei-ai": {
     title: "運命鑑定 AI",
@@ -183,6 +192,7 @@ export const KEYWORDS: Record<
         a: "AIが800〜1500文字程度の詳細な鑑定文をリアルタイムで生成します。",
       },
     ],
+    lastUpdated: "2026-03-31",
   },
   "fuufu-aishou-uranai": {
     title: "夫婦 相性占い",
@@ -202,6 +212,7 @@ export const KEYWORDS: Record<
         a: "はい。夫婦に限らず、カップルや婚約中の方も同じように相性鑑定が可能です。",
       },
     ],
+    lastUpdated: "2026-03-31",
   },
 };
 
@@ -238,6 +249,9 @@ export async function generateMetadata({
   return {
     title: `${kw.title}｜AI占い - 四柱推命×九星気学で本格鑑定`,
     description: kw.description,
+    other: {
+      "article:modified_time": kw.lastUpdated,
+    },
     openGraph: {
       title: `${kw.title}｜AI占い - 四柱推命×九星気学で本格鑑定`,
       description: kw.description,
@@ -276,6 +290,7 @@ export default async function KeywordPage({
       },
       {
         "@type": "FAQPage",
+        "dateModified": kw.lastUpdated,
         mainEntity: kw.faqs.map((f) => ({
           "@type": "Question",
           name: f.q,
@@ -376,6 +391,11 @@ export default async function KeywordPage({
           </Link>
         </div>
       </section>
+
+      {/* LastUpdated */}
+      <p className="text-center text-xs text-white/40 mt-8">
+        最終更新: 2026年3月31日
+      </p>
 
       {/* CrossSell */}
       <section className="px-4 pb-20">
