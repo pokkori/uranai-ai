@@ -307,7 +307,7 @@ export default function UranaiPage() {
         setCompatibilityScore(null);
       }
       if (newCount >= FREE_LIMIT) setTimeout(() => { setPaywallIsCompatibility(false); setShowPaywall(true); }, 12000);
-    } catch { setResult("通信エラーが発生しました。インターネット接続を確認してください。"); }
+    } catch { setResult("少し時間をおいてもう一度お試しください。"); }
     finally { setLoading(false); }
   };
 
@@ -1037,7 +1037,7 @@ export default function UranaiPage() {
             aria-label="入力内容をもとにAI占いを実行する">
             {loading ? "鑑定中..." :
              type === "compatibility" && !isPremium ? "💑 相性を鑑定する（プレミアム）" :
-             isLimitReached ? "有料プランに申し込む" : "鑑定する ✨"}
+             isLimitReached ? "有料プランに申し込む" : "無料で鑑定する"}
           </button>
         </form>
 
