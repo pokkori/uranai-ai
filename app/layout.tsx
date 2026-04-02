@@ -3,6 +3,7 @@ import { Noto_Sans_JP } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GoogleAdScript } from "@/components/GoogleAdScript";
+import CookieBanner from "@/components/CookieBanner";
 import "./globals.css";
 import { InstallPrompt } from "@/components/InstallPrompt";
 
@@ -99,6 +100,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <Analytics />
         <SpeedInsights />
         <GoogleAdScript />
+        <CookieBanner />
       </body>
     </html>
   );
