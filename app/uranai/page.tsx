@@ -6,6 +6,7 @@ import KomojuButton from "@/components/KomojuButton";
 import { track } from '@vercel/analytics';
 import { updateStreak, loadStreak, getStreakMilestoneMessage, type StreakData } from "@/lib/streak";
 import { AffiliateSection } from "@/components/AffiliateSection";
+import { UsageCounter } from "@/components/UsageCounter";
 
 // ==============================
 // タロットカードデータ（大アルカナ22枚）
@@ -912,6 +913,7 @@ export default function UranaiPage() {
       <div className="max-w-4xl mx-auto px-6 py-8 grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* 入力フォーム */}
         <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="mb-1 max-w-xs"><UsageCounter /></div>
           <h1 className="text-2xl font-bold">あなたの情報を入力</h1>
 
           <div>

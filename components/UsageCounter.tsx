@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 
-const STORAGE_KEY = 'uranai_usage';
+const STORAGE_KEY = 'uranai_count';
 const MAX_FREE = 3;
 
 function getUsageCount(): number {
