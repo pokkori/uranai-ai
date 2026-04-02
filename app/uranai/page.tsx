@@ -5,6 +5,7 @@ import Link from "next/link";
 import KomojuButton from "@/components/KomojuButton";
 import { track } from '@vercel/analytics';
 import { updateStreak, loadStreak, getStreakMilestoneMessage, type StreakData } from "@/lib/streak";
+import { AffiliateSection } from "@/components/AffiliateSection";
 
 // ==============================
 // タロットカードデータ（大アルカナ22枚）
@@ -1565,22 +1566,7 @@ export default function UranaiPage() {
                 </ol>
               </div>
               {/* 占いをもっと深めるなら - A8.netアフィリエイト */}
-              <div className="mt-4 bg-purple-800/40 border border-purple-400/40 rounded-xl p-4">
-                <p className="text-sm font-bold text-purple-200 mb-3">💜 占いをもっと深めるなら</p>
-                <a
-                  href="https://px.a8.net/svt/ejp?a8mat=4AZIOF+2AR9V6+2PEO+BXYEA"
-                  target="_blank"
-                  rel="noopener noreferrer sponsored"
-                  className="flex items-center justify-between bg-purple-700/50 border border-purple-400/50 rounded-xl px-4 py-3 hover:bg-purple-600/50 transition-colors"
-                >
-                  <div>
-                    <div className="text-sm font-bold text-white">ココナラ電話占い — プロ占い師に相談</div>
-                    <div className="text-xs text-purple-300 mt-0.5">初回最大¥16,000分無料 • 電話・チャット対応</div>
-                  </div>
-                  <span className="text-purple-200 font-bold text-xs bg-purple-600/60 px-2 py-1 rounded-full shrink-0 ml-2">無料で相談 →</span>
-                </a>
-                <p className="text-xs text-purple-500 text-center mt-2">※ 広告・PR（ココナラ公式サイトに遷移します）</p>
-              </div>
+              <AffiliateSection />
               </>
             ) : (
               <div className="flex flex-col items-center justify-center h-full text-purple-500 gap-3">
