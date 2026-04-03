@@ -1,3 +1,26 @@
 User-agent: *
 Allow: /
-Sitemap: https://uranai-ai.vercel.app/sitemap.xml
+
+# AI Crawlers - Allow
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+Sitemap: https://uranai-ai-sigma.vercel.app/sitemap.xml
