@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 const SITE_URL = "https://uranai-ai-sigma.vercel.app";
 
 type Props = {
