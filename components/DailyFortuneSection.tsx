@@ -171,7 +171,7 @@ export default function DailyFortuneSection() {
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="bg-black/40 backdrop-blur-[2px] rounded-xl inset-0 absolute" />
                   <span className="relative text-white/70 text-xs font-medium bg-black/50 px-3 py-1 rounded-full border border-white/20">
-                    🔒 有料プランで全て確認
+                    有料プランで全て確認
                   </span>
                 </div>
               </div>
