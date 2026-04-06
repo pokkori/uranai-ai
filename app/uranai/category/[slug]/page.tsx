@@ -170,14 +170,14 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
       {/* Hero */}
       <section className="pt-12 pb-8 px-4 text-center">
         <div className="max-w-2xl mx-auto">
-          <div className="text-5xl mb-4">{cat.emoji}</div>
+          <div className="text-2xl font-black text-purple-300 mb-4">{cat.title}</div>
           <h1 className="text-2xl md:text-3xl font-black text-white mb-4 leading-tight">{cat.h1}</h1>
           <p className="text-purple-200 text-sm md:text-base leading-relaxed mb-6">{cat.lead}</p>
           <Link
             href="/uranai"
             className="inline-block bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-4 px-8 rounded-2xl text-lg shadow-2xl shadow-purple-900/60 transition-all duration-200 active:scale-95"
           >
-            {cat.emoji} {cat.title}を今すぐ無料鑑定
+            {cat.title}を今すぐ無料鑑定
           </Link>
           <p className="text-purple-400 text-xs mt-2">登録不要・無料3回・今すぐ結果表示</p>
         </div>
@@ -189,7 +189,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {cat.points.map((p, i) => (
             <div key={i} className="bg-purple-900/30 border border-purple-500/30 rounded-xl p-4">
-              <div className="text-2xl mb-2">{p.icon}</div>
+              <div className="text-xs text-purple-400 font-bold mb-2 uppercase tracking-wider">POINT</div>
               <h3 className="font-bold text-white text-sm mb-1">{p.title}</h3>
               <p className="text-purple-200 text-xs leading-relaxed">{p.body}</p>
             </div>
@@ -209,7 +209,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                 href={`/uranai/category/${s}`}
                 className="bg-purple-900/40 border border-purple-500/30 hover:border-purple-400/60 text-purple-200 text-xs px-3 py-2 rounded-full transition-colors"
               >
-                {c.emoji} {c.title}
+                {c.title}
               </Link>
             ))}
         </div>
@@ -243,7 +243,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
       {/* CTA Footer */}
       <section className="max-w-2xl mx-auto px-4 py-8 text-center">
         <div className="bg-gradient-to-r from-purple-900/60 to-indigo-900/60 border border-purple-500/40 rounded-2xl p-6">
-          <div className="text-3xl mb-3">{cat.emoji}</div>
+          <div className="text-xl font-black text-purple-300 mb-3">{cat.title}</div>
           <h2 className="text-lg font-black text-white mb-2">今すぐ{cat.title}を体験</h2>
           <p className="text-purple-200 text-xs mb-4">生年月日を入力するだけ。AI鑑定結果が即表示されます。</p>
           <Link

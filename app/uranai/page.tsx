@@ -370,9 +370,7 @@ export default function UranaiPage() {
             animationDuration: `${1.5 + Math.random() * 2}s`,
             animationDelay: `${Math.random() * 1}s`,
           }}
-        >
-          {["✨", "⭐", "🌟", "💫"][Math.floor(Math.random() * 4)]}
-        </span>
+        />
       ))}
       {showPaywall && (
         <div className="fixed inset-0 bg-black/70 flex items-end sm:items-center justify-center z-50 px-4 pb-0 sm:pb-4">
@@ -380,9 +378,18 @@ export default function UranaiPage() {
             <button onClick={() => setShowPaywall(false)} className="absolute top-4 right-4 text-purple-400 hover:text-purple-200 text-xl font-bold leading-none min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="プレミアムプランのダイアログを閉じる">×</button>
             {/* 限定感バナー */}
             <div className="bg-gradient-to-r from-red-500/30 to-orange-500/20 border border-red-500/40 rounded-full px-4 py-1.5 text-xs font-bold text-red-300 inline-block mb-4 animate-pulse">
-              🎁 初月¥480キャンペーン実施中
+              初月¥480キャンペーン実施中
             </div>
-            <div className="text-4xl mb-2">🔮</div>
+            <div className="text-4xl mb-2">
+              <svg viewBox="0 0 40 40" width="40" height="40" aria-hidden="true">
+                <circle cx="20" cy="22" r="14" fill="#7c3aed" opacity="0.85"/>
+                <circle cx="20" cy="22" r="14" fill="none" stroke="#c084fc" strokeWidth="1.5"/>
+                <circle cx="15" cy="18" r="4" fill="white" opacity="0.25"/>
+                <path d="M14 8 L16 4 L18 8" stroke="#f0abfc" strokeWidth="1" fill="none"/>
+                <path d="M25 6 L26 3 L27 6" stroke="#f0abfc" strokeWidth="1" fill="none"/>
+                <path d="M30 13 L33 12 L31 15" stroke="#f0abfc" strokeWidth="1" fill="none"/>
+              </svg>
+            </div>
             <h2 className="text-lg font-bold text-white mb-1">
               {paywallIsCompatibility ? "相性占いはプレミアム限定" : "無料鑑定3回を使い切りました"}
             </h2>
@@ -393,9 +400,9 @@ export default function UranaiPage() {
             </p>
             {/* 実績バッジ */}
             <div className="flex justify-center gap-3 mb-4 text-xs">
-              <span className="bg-white/10 text-purple-300 px-2 py-1 rounded-full">⭐ 満足度4.8/5</span>
-              <span className="bg-white/10 text-purple-300 px-2 py-1 rounded-full">🔄 リピート率78%</span>
-              <span className="bg-white/10 text-purple-300 px-2 py-1 rounded-full">🛡️ 30日返金保証</span>
+              <span className="bg-white/10 text-purple-300 px-2 py-1 rounded-full">満足度4.8/5</span>
+              <span className="bg-white/10 text-purple-300 px-2 py-1 rounded-full">リピート率78%</span>
+              <span className="bg-white/10 text-purple-300 px-2 py-1 rounded-full">30日返金保証</span>
             </div>
             {/* プレミアム特典リスト */}
             <div className="bg-purple-900/40 border border-purple-500/30 rounded-xl p-3 mb-4 text-left space-y-1.5">
@@ -412,7 +419,7 @@ export default function UranaiPage() {
             </div>
             <KomojuButton
               planId="standard"
-              planLabel="✨ 初月¥480で始める（通常¥980）"
+              planLabel="初月¥480で始める（通常¥980）"
               className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-3.5 rounded-xl hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity mb-2 text-sm shadow-lg shadow-purple-900/40"
             />
             <KomojuButton
@@ -426,7 +433,7 @@ export default function UranaiPage() {
         </div>
       )}
       <nav className="px-6 py-4 flex items-center justify-between max-w-4xl mx-auto">
-        <Link href="/" className="font-bold" aria-label="AI占いトップページに戻る">🔮 AI占い</Link>
+        <Link href="/" className="font-bold" aria-label="AI占いトップページに戻る">AI占い</Link>
         <span className={`text-xs px-3 py-1 rounded-full ${isPremium ? "bg-purple-600/50 text-purple-200" : isLimitReached ? "bg-red-900/50 text-red-300" : "bg-purple-900/50 text-purple-300"}`}>
           {isPremium ? "✓ プレミアム" : isLimitReached ? "無料枠終了" : `無料あと${remaining}回`}
         </span>
@@ -458,7 +465,7 @@ export default function UranaiPage() {
             aria-label="AI鑑定タブを表示する"
             aria-selected={activeTab === "uranai"}
           >
-            🔮 AI鑑定
+            AI鑑定
           </button>
           <button
             onClick={() => setActiveTab("tarot")}
@@ -466,7 +473,7 @@ export default function UranaiPage() {
             aria-label="今日のタロットタブを表示する"
             aria-selected={activeTab === "tarot"}
           >
-            🃏 今日のタロット
+            今日のタロット
             {!tarotDrawn && <span className="bg-pink-500 text-white text-xs px-1.5 py-0.5 rounded-full animate-pulse">NEW</span>}
           </button>
           <button
@@ -475,7 +482,7 @@ export default function UranaiPage() {
             aria-label="運気トレンドタブを表示する"
             aria-selected={activeTab === "trend"}
           >
-            📈 運気トレンド
+            運気トレンド
             {history.length > 0 && <span className="bg-teal-500 text-white text-xs px-1.5 py-0.5 rounded-full">{history.length}</span>}
           </button>
           <button
@@ -484,7 +491,7 @@ export default function UranaiPage() {
             aria-label="年間運気タブを表示する"
             aria-selected={activeTab === "yearly"}
           >
-            🗓️ 年間運気
+            年間運気
           </button>
         </div>
       </div>
@@ -517,7 +524,16 @@ export default function UranaiPage() {
                 aria-label="タロットカードを引く"
               >
                 <div className="w-48 h-72 bg-gradient-to-br from-indigo-800 to-purple-900 border-4 border-indigo-400/60 rounded-2xl flex flex-col items-center justify-center shadow-2xl shadow-indigo-900/60 group-hover:scale-105 transition-transform duration-300 group-hover:shadow-indigo-500/40">
-                  <div className="text-6xl mb-3 opacity-60">✨</div>
+                  <div className="mb-3 opacity-60">
+                    <svg viewBox="0 0 48 48" width="48" height="48" aria-hidden="true">
+                      <circle cx="24" cy="24" r="18" fill="none" stroke="#a5b4fc" strokeWidth="1.5" strokeDasharray="4 3"/>
+                      <circle cx="24" cy="24" r="8" fill="#4338ca" opacity="0.6"/>
+                      <path d="M24 8 L25.5 20 L24 22 L22.5 20 Z" fill="#c7d2fe" opacity="0.7"/>
+                      <path d="M40 24 L28 25.5 L26 24 L28 22.5 Z" fill="#c7d2fe" opacity="0.7"/>
+                      <path d="M24 40 L22.5 28 L24 26 L25.5 28 Z" fill="#c7d2fe" opacity="0.7"/>
+                      <path d="M8 24 L20 22.5 L22 24 L20 25.5 Z" fill="#c7d2fe" opacity="0.7"/>
+                    </svg>
+                  </div>
                   <div className="grid grid-cols-3 gap-1 mb-3 opacity-30">
                     {Array.from({length: 9}).map((_, i) => <div key={i} className="w-2 h-2 bg-indigo-300 rounded-full" />)}
                   </div>
@@ -536,7 +552,7 @@ export default function UranaiPage() {
                 className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold px-8 py-4 rounded-full hover:opacity-90 transition-opacity shadow-lg text-sm"
                 aria-label="今日のタロットカードを無料で1枚引く"
               >
-                🃏 今日のカードを引く（無料）
+                今日のカードを引く（無料）
               </button>
               <p className="text-purple-500 text-xs text-center">毎日23時にリセット • 1日1回無料</p>
             </div>
@@ -546,7 +562,15 @@ export default function UranaiPage() {
               <div className="w-48 h-72 bg-gradient-to-br from-purple-700 to-indigo-800 border-4 border-purple-400/80 rounded-2xl flex flex-col items-center justify-center shadow-2xl shadow-purple-900/60 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-pink-500/10" />
                 <div className="relative text-center px-4">
-                  <div className="text-6xl mb-3">{tarotCard.emoji}</div>
+                  <div className="text-6xl mb-3">
+                    <svg viewBox="0 0 60 60" width="60" height="60" aria-hidden="true">
+                      <rect x="4" y="4" width="52" height="52" rx="6" fill="#4c1d95" stroke="#c084fc" strokeWidth="2"/>
+                      <circle cx="30" cy="30" r="16" fill="none" stroke="#f0abfc" strokeWidth="1.5" strokeDasharray="3 2"/>
+                      <text x="30" y="36" textAnchor="middle" fontSize="18" fill="#e9d5ff" fontWeight="bold">
+                        {tarotCard.id}
+                      </text>
+                    </svg>
+                  </div>
                   <div className="text-white font-black text-xl mb-1">{tarotCard.name}</div>
                   <div className="text-purple-300 text-xs">{tarotCard.upright}</div>
                 </div>
@@ -555,7 +579,7 @@ export default function UranaiPage() {
               {/* カードの意味 */}
               <div className="w-full backdrop-blur-sm bg-white/10 border border-white/30 shadow-lg rounded-2xl p-5">
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="text-2xl">{tarotCard.emoji}</span>
+                  <span className="text-2xl text-purple-300 font-black">{tarotCard.name[0]}</span>
                   <div>
                     <h3 className="text-white font-black text-lg">{tarotCard.name}</h3>
                     <p className="text-purple-400 text-xs">{tarotCard.upright}</p>
@@ -564,7 +588,7 @@ export default function UranaiPage() {
                 </div>
                 <p className="text-purple-100 text-sm leading-relaxed mb-4">{tarotCard.meaning}</p>
                 <div className="bg-indigo-900/50 border border-indigo-500/30 rounded-xl p-3">
-                  <p className="text-xs text-indigo-300 font-bold mb-1">🎯 今日のアクション</p>
+                  <p className="text-xs text-indigo-300 font-bold mb-1">今日のアクション</p>
                   <p className="text-xs text-indigo-100">{tarotCard.action}</p>
                 </div>
               </div>
@@ -583,14 +607,14 @@ export default function UranaiPage() {
                   {tarotCard.name}カードをXでシェア
                 </a>
                 {tarotShared && (
-                  <p className="text-center text-xs text-green-400">シェアありがとう！明日も引いてね ✨</p>
+                  <p className="text-center text-xs text-green-400">シェアありがとう！明日も引いてね</p>
                 )}
                 <button
                   onClick={() => setActiveTab("uranai")}
                   className="w-full bg-white/10 hover:bg-white/20 text-purple-200 font-medium py-2.5 rounded-xl transition-colors text-sm"
                   aria-label="AI鑑定タブに切り替えて占いを試す"
                 >
-                  🔮 AI鑑定も試す →
+                  AI鑑定も試す →
                 </button>
               </div>
               <p className="text-purple-600 text-xs text-center">明日の23時に新しいカードが引けます</p>
@@ -612,14 +636,14 @@ export default function UranaiPage() {
 
           {history.length === 0 ? (
             <div className="text-center py-12 text-purple-500">
-              <div className="text-4xl mb-3">📈</div>
+              <div className="text-4xl mb-3 text-teal-400 font-black">↑</div>
               <p className="text-sm mb-4">まだ鑑定履歴がありません。<br />AI鑑定を受けると運気トレンドが記録されます。</p>
               <button
                 onClick={() => setActiveTab("uranai")}
                 className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold px-6 py-3 rounded-full text-sm hover:opacity-90 transition-opacity"
                 aria-label="AI鑑定タブに移動してAI占いを始める"
               >
-                🔮 今すぐ鑑定する
+                今すぐ鑑定する
               </button>
             </div>
           ) : (
@@ -665,7 +689,7 @@ export default function UranaiPage() {
               {/* 詳細履歴 */}
               <div className="backdrop-blur-sm bg-white/10 border border-white/30 shadow-lg rounded-2xl overflow-hidden">
                 <div className="px-5 py-3 border-b border-white/10 flex items-center justify-between">
-                  <span className="text-sm font-bold text-purple-200">📜 鑑定履歴</span>
+                  <span className="text-sm font-bold text-purple-200">鑑定履歴</span>
                   <span className="text-xs text-purple-500">直近{history.length}件</span>
                 </div>
                 <div className="divide-y divide-white/10">
@@ -690,24 +714,23 @@ export default function UranaiPage() {
               {/* ストリーク表示 */}
               <div className="bg-gradient-to-r from-orange-900/30 to-yellow-900/20 border border-orange-400/30 rounded-2xl p-4 text-center">
                 <div className="text-3xl font-black text-orange-300 mb-1">
-                  🔥 {streak > 0 ? streak : 0}日
+                  {streak > 0 ? streak : 0}日
                 </div>
                 <p className="text-sm text-orange-200 font-bold mb-1">連続鑑定ストリーク</p>
                 <p className="text-xs text-orange-400">
-                  {streak >= 30 ? "🏆 伝説の占い師バッジ獲得！" :
-                   streak >= 7  ? "⚡ 占い達人バッジ獲得！次は30日連続を目指そう" :
-                   streak >= 3  ? "✨ 占い修行中バッジ獲得！次は7日連続を目指そう" :
+                  {streak >= 30 ? "伝説の占い師バッジ獲得！" :
+                   streak >= 7  ? "占い達人バッジ獲得！次は30日連続を目指そう" :
+                   streak >= 3  ? "占い修行中バッジ獲得！次は7日連続を目指そう" :
                    streak >= 1  ? `あと${3 - streak}日で「占い修行中」バッジ獲得！` :
                    "毎日鑑定すると連続記録が積み上がります"}
                 </p>
                 <div className="mt-3 flex justify-center gap-4 text-xs">
                   {[
-                    { days: 3, label: "修行中", icon: "✨" },
-                    { days: 7, label: "達人", icon: "⚡" },
-                    { days: 30, label: "伝説", icon: "🏆" },
+                    { days: 3, label: "修行中" },
+                    { days: 7, label: "達人" },
+                    { days: 30, label: "伝説" },
                   ].map(badge => (
                     <div key={badge.days} className={`text-center px-3 py-2 rounded-xl border ${streak >= badge.days ? "border-orange-400/60 bg-orange-500/20 text-orange-200" : "border-white/10 bg-white/5 text-purple-600"}`}>
-                      <div className="text-lg mb-0.5">{badge.icon}</div>
                       <div className="font-bold">{badge.days}日</div>
                       <div>{badge.label}</div>
                     </div>
@@ -720,7 +743,7 @@ export default function UranaiPage() {
                 className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-3.5 rounded-xl hover:opacity-90 transition-opacity text-sm"
                 aria-label="AI鑑定タブに移動して今日の鑑定を受けてストリークを伸ばす"
               >
-                🔮 今日の鑑定を受けてストリークを伸ばす
+                今日の鑑定を受けてストリークを伸ばす
               </button>
             </div>
           )}
@@ -830,13 +853,13 @@ export default function UranaiPage() {
                 {/* サマリーバッジ */}
                 <div className="grid grid-cols-2 gap-3">
                   <div className="bg-gradient-to-br from-pink-900/40 to-purple-900/40 border border-pink-500/30 rounded-xl p-4 text-center">
-                    <div className="text-2xl mb-1">🌟</div>
+                    <div className="text-2xl mb-1 text-pink-300 font-black">★</div>
                     <div className="text-xs text-pink-300 font-bold mb-1">最も運気が高い月</div>
                     <div className="text-2xl font-black text-white">{peakMonth + 1}月</div>
                     <div className="text-xs text-pink-400 mt-1">スコア {maxScore}点</div>
                   </div>
                   <div className="bg-gradient-to-br from-blue-900/40 to-indigo-900/40 border border-blue-500/30 rounded-xl p-4 text-center">
-                    <div className="text-2xl mb-1">⚠️</div>
+                    <div className="text-2xl mb-1 text-blue-300 font-black">!</div>
                     <div className="text-xs text-blue-300 font-bold mb-1">注意が必要な月</div>
                     <div className="text-2xl font-black text-white">{lowMonth + 1}月</div>
                     <div className="text-xs text-blue-400 mt-1">スコア {minScore}点（備えが大切）</div>
@@ -846,7 +869,7 @@ export default function UranaiPage() {
                 {/* 今月の位置づけ */}
                 <div className="bg-gradient-to-r from-yellow-900/30 to-amber-900/20 border border-yellow-400/30 rounded-xl p-4">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-yellow-300 font-bold text-sm">🗓️ 現在（{currentMonth + 1}月）の運気スコア</span>
+                    <span className="text-yellow-300 font-bold text-sm">現在（{currentMonth + 1}月）の運気スコア</span>
                     <span className="text-2xl font-black text-yellow-300 ml-auto">{monthlyScores[currentMonth]}点</span>
                   </div>
                   <div className="w-full bg-white/10 rounded-full h-2.5 mb-2">
@@ -864,7 +887,7 @@ export default function UranaiPage() {
 
                 {/* Xシェアボタン */}
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-4 text-center">
-                  <p className="text-sm text-purple-200 font-bold mb-3">🔮 あなたの2026年運気グラフをシェア</p>
+                  <p className="text-sm text-purple-200 font-bold mb-3">あなたの2026年運気グラフをシェア</p>
                   <a
                     href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`【AI占い】2026年の運気グラフを確認しました！\n\n🌟 最高運気の月: ${peakMonth + 1}月（スコア${maxScore}点）\n⚠️ 注意の月: ${lowMonth + 1}月（スコア${minScore}点）\n今月(${currentMonth + 1}月)のスコア: ${monthlyScores[currentMonth]}点\n\n九星気学×AIで2026年の転機を先読み✨\n#AI占い #九星気学 #2026年運勢\nhttps://uranai-ai-sigma.vercel.app/uranai?tab=yearly`)}`}
                     target="_blank"
@@ -889,7 +912,7 @@ export default function UranaiPage() {
                   </p>
                   <KomojuButton
                     planId="standard"
-                    planLabel="✨ 詳細な年間運気を見る（¥980/月）"
+                    planLabel="詳細な年間運気を見る（¥980/月）"
                     className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-3 rounded-xl hover:opacity-90 transition-opacity text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-purple-900/40"
                   />
                   <p className="text-xs text-purple-600 mt-2">初月¥480 • 30日返金保証</p>
@@ -900,7 +923,7 @@ export default function UranaiPage() {
                   className="w-full bg-white/10 hover:bg-white/20 text-purple-200 font-medium py-2.5 rounded-xl transition-colors text-sm"
                   aria-label="AI鑑定タブに移動して今日の詳細鑑定を受ける"
                 >
-                  🔮 今日の詳細鑑定を受ける →
+                  今日の詳細鑑定を受ける →
                 </button>
               </div>
             );
@@ -948,10 +971,10 @@ export default function UranaiPage() {
             <label className="block text-sm text-purple-300 mb-1">鑑定の種類</label>
             <div className="space-y-2">
               {[
-                { value: "today", label: "🌟 今日の運勢", desc: "今日の全体運・行動指針" },
-                { value: "love", label: "💕 恋愛運・相性傾向", desc: "恋愛の流れと出会いのヒント" },
-                { value: "destiny", label: "🔮 総合運命鑑定", desc: "人生のテーマと運命の流れ" },
-                { value: "compatibility", label: "💑 相性占い", desc: "プレミアム限定・ふたりの縁を鑑定", premium: true },
+                { value: "today", label: "今日の運勢", desc: "今日の全体運・行動指針" },
+                { value: "love", label: "恋愛運・相性傾向", desc: "恋愛の流れと出会いのヒント" },
+                { value: "destiny", label: "総合運命鑑定", desc: "人生のテーマと運命の流れ" },
+                { value: "compatibility", label: "相性占い", desc: "プレミアム限定・ふたりの縁を鑑定", premium: true },
               ].map(t => (
                 <button key={t.value} type="button" onClick={() => setType(t.value)}
                   className={`w-full text-left px-4 py-3 rounded-lg border transition-colors min-h-[44px] ${type === t.value ? "bg-purple-500/30 border-purple-400" : "bg-white/5 border-white/10 hover:border-purple-500/50"}`}
@@ -972,7 +995,7 @@ export default function UranaiPage() {
           {/* 相性占いの場合：相手情報入力 */}
           {type === "compatibility" && (
             <div className="bg-white/5 border border-purple-500/30 rounded-xl p-4 space-y-4">
-              <p className="text-sm font-medium text-purple-300">💑 相手の情報</p>
+              <p className="text-sm font-medium text-purple-300">相手の情報</p>
               <div>
                 <label className="block text-xs text-purple-400 mb-1">相手のお名前（任意）</label>
                 <input type="text" value={partnerName} onChange={e => setPartnerName(e.target.value)}
@@ -1006,11 +1029,11 @@ export default function UranaiPage() {
             <label className="block text-sm text-purple-300 mb-2">相談内容（任意）— プリセットから選ぶか自由に入力</label>
             <div className="flex flex-wrap gap-2 mb-3">
               {[
-                { emoji: "💕", label: "恋愛", typeVal: "love", text: "彼との関係はこれからどうなりますか？今の気持ちを伝えるべきか迷っています" },
-                { emoji: "💼", label: "仕事", typeVal: "today", text: "転職を考えています。今の会社に残るべきか、新しい職場に挑戦すべきでしょうか" },
-                { emoji: "💰", label: "金運", typeVal: "today", text: "今年の金運はどうですか？投資や副業を始めるべきタイミングを教えてください" },
-                { emoji: "🌿", label: "健康", typeVal: "today", text: "最近体調が優れません。健康面で気をつけることを教えてください" },
-                { emoji: "✨", label: "総合", typeVal: "destiny", text: "今の私の運勢全般を見てください。特に気をつけることは何ですか？" },
+                { label: "恋愛", typeVal: "love", text: "彼との関係はこれからどうなりますか？今の気持ちを伝えるべきか迷っています" },
+                { label: "仕事", typeVal: "today", text: "転職を考えています。今の会社に残るべきか、新しい職場に挑戦すべきでしょうか" },
+                { label: "金運", typeVal: "today", text: "今年の金運はどうですか？投資や副業を始めるべきタイミングを教えてください" },
+                { label: "健康", typeVal: "today", text: "最近体調が優れません。健康面で気をつけることを教えてください" },
+                { label: "総合", typeVal: "destiny", text: "今の私の運勢全般を見てください。特に気をつけることは何ですか？" },
               ].map(preset => (
                 <button
                   key={preset.label}
@@ -1019,7 +1042,7 @@ export default function UranaiPage() {
                   className="flex items-center gap-1 px-3 py-1.5 rounded-full border text-xs font-medium transition-colors bg-white/5 border-white/20 text-purple-200 hover:bg-purple-500/30 hover:border-purple-400 min-h-[44px]"
                   aria-label={`${preset.label}のプリセットを入力する`}
                 >
-                  {preset.emoji} {preset.label}
+                  {preset.label}
                 </button>
               ))}
             </div>
@@ -1039,7 +1062,7 @@ export default function UranaiPage() {
             className={`w-full font-bold py-4 rounded-xl transition-colors text-white min-h-[44px] ${(isLimitReached && type !== "compatibility") ? "bg-orange-500 hover:bg-orange-400" : "bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 disabled:opacity-50"}`}
             aria-label="入力内容をもとにAI占いを実行する">
             {loading ? "鑑定中..." :
-             type === "compatibility" && !isPremium ? "💑 相性を鑑定する（プレミアム）" :
+             type === "compatibility" && !isPremium ? "相性を鑑定する（プレミアム）" :
              isLimitReached ? "有料プランに申し込む" : "無料で鑑定する"}
           </button>
         </form>
@@ -1064,11 +1087,11 @@ export default function UranaiPage() {
           <div className="flex-1 backdrop-blur-sm bg-white/5 border border-white/20 shadow-lg rounded-2xl p-5 min-h-[400px]">
             {loading ? (
               <div className="flex flex-col items-center justify-center h-full gap-4">
-                <div className="text-4xl animate-pulse">{type === "compatibility" ? "💑" : "🔮"}</div>
+                <div className="text-4xl animate-pulse text-purple-300 font-black">{type === "compatibility" ? "◎" : "◉"}</div>
                 <p className="text-purple-300 text-sm">
                   {type === "compatibility" ? "ふたりの縁を読み解いています..." : "AIが運命を読み解いています..."}
                 </p>
-                <p className="text-xs text-gray-400">🔮 生年月日分析 → ⭐ 運勢算出 → 📋 鑑定文生成</p>
+                <p className="text-xs text-gray-400">生年月日分析 → 運勢算出 → 鑑定文生成</p>
               </div>
             ) : result ? (
               <>
@@ -1077,18 +1100,17 @@ export default function UranaiPage() {
                 {uranaiScores && type !== "compatibility" && (
                   <div className="mb-5 bg-gradient-to-br from-purple-900/60 to-indigo-900/60 border border-purple-500/40 rounded-2xl p-4">
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-lg">⭐</span>
                       <h3 className="text-sm font-bold text-purple-200">今日の運気レーダー</h3>
                       <span className="ml-auto text-2xl font-black text-yellow-300">{uranaiScores.total}<span className="text-sm font-normal text-yellow-400">/10</span></span>
                     </div>
                     {(() => {
                       const axes = [
-                        { label: "恋愛運", icon: "💕", val: uranaiScores.love },
-                        { label: "仕事運", icon: "💼", val: uranaiScores.work },
-                        { label: "金運", icon: "💰", val: uranaiScores.money },
-                        { label: "健康運", icon: "🌿", val: uranaiScores.health },
-                        { label: "対人運", icon: "🤝", val: uranaiScores.social },
-                        { label: "学習運", icon: "📚", val: uranaiScores.study },
+                        { label: "恋愛運", icon: "", val: uranaiScores.love },
+                        { label: "仕事運", icon: "", val: uranaiScores.work },
+                        { label: "金運", icon: "", val: uranaiScores.money },
+                        { label: "健康運", icon: "", val: uranaiScores.health },
+                        { label: "対人運", icon: "", val: uranaiScores.social },
+                        { label: "学習運", icon: "", val: uranaiScores.study },
                       ];
                       const cx = 120; const cy = 120; const maxR = 88;
                       const levels = [0.2, 0.4, 0.6, 0.8, 1.0];
@@ -1181,20 +1203,19 @@ export default function UranaiPage() {
                   return (
                     <div className="mb-5 bg-gradient-to-br from-indigo-900/60 to-pink-900/40 border border-purple-400/40 rounded-2xl p-4">
                       <div className="flex items-center gap-2 mb-3">
-                        <span className="text-lg">🍀</span>
                         <h3 className="text-sm font-bold text-purple-200">今月のラッキー情報</h3>
                         <span className="ml-auto text-xs text-purple-500">{today.getMonth() + 1}月 / あなた専用</span>
                       </div>
                       <div className="grid grid-cols-2 gap-2">
                         {/* ラッキーカラー */}
                         <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex flex-col items-center gap-2">
-                          <span className="text-xs text-purple-400 font-bold">🎨 ラッキーカラー</span>
+                          <span className="text-xs text-purple-400 font-bold">ラッキーカラー</span>
                           <div className={`w-10 h-10 rounded-full ${luckyColor.bg} shadow-lg border-2 border-white/20`} style={{ boxShadow: `0 0 14px ${luckyColor.hex}80` }} />
                           <span className="text-xs font-bold text-white text-center">{luckyColor.name}</span>
                         </div>
                         {/* ラッキーナンバー */}
                         <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex flex-col items-center gap-2">
-                          <span className="text-xs text-purple-400 font-bold">🔢 ラッキーナンバー</span>
+                          <span className="text-xs text-purple-400 font-bold">ラッキーナンバー</span>
                           <div className="flex gap-1">
                             {String(luckyNum).split("").map((n, i) => (
                               <div key={i} className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-black text-sm shadow-md">
@@ -1206,13 +1227,13 @@ export default function UranaiPage() {
                         </div>
                         {/* ラッキー方位 */}
                         <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex flex-col items-center gap-1">
-                          <span className="text-xs text-purple-400 font-bold">🧭 ラッキー方位</span>
+                          <span className="text-xs text-purple-400 font-bold">ラッキー方位</span>
                           <span className="text-2xl font-black text-yellow-300">{luckyDir}</span>
                           <span className="text-xs text-purple-300">出かける方向に</span>
                         </div>
                         {/* ラッキーアイテム */}
                         <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex flex-col items-center gap-1">
-                          <span className="text-xs text-purple-400 font-bold">💎 ラッキーアイテム</span>
+                          <span className="text-xs text-purple-400 font-bold">ラッキーアイテム</span>
                           <span className="text-lg font-bold text-white">{luckyItem}</span>
                           <span className="text-xs text-purple-300">持ち歩くと吉</span>
                         </div>
@@ -1383,14 +1404,14 @@ export default function UranaiPage() {
                           className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-500 hover:to-pink-400 text-white font-bold px-4 py-2.5 rounded-xl transition-all text-sm shadow-lg min-h-[44px]"
                           aria-label="鑑定結果を画像としてクリップボードにコピーする"
                         >
-                          🖼️ {cardCopied ? "画像コピー完了！" : "鑑定カードを画像コピー"}
+                          {cardCopied ? "画像コピー完了！" : "鑑定カードを画像コピー"}
                         </button>
                         <button
                           onClick={() => navigator.clipboard.writeText(kanteishoText)}
                           className="inline-flex items-center gap-2 bg-purple-700/60 hover:bg-purple-600/60 text-purple-100 font-bold px-4 py-2.5 rounded-xl transition-colors text-sm border border-purple-500/40 min-h-[44px]"
                           aria-label="今日の鑑定書テキストをクリップボードにコピーする"
                         >
-                          📜 今日の鑑定書をコピー
+                          今日の鑑定書をコピー
                         </button>
                       </div>
                     </div>
@@ -1412,7 +1433,7 @@ export default function UranaiPage() {
                 {type !== "compatibility" && (
                   <div className="mt-4 border border-purple-500/30 rounded-xl overflow-hidden">
                     <div className="bg-purple-900/50 px-4 py-2 flex items-center gap-2">
-                      <span className="text-sm font-bold text-purple-200">🌟 今日の運勢チェック</span>
+                      <span className="text-sm font-bold text-purple-200">今日の運勢チェック</span>
                       {isPremium ? (
                         <span className="text-xs bg-purple-600/60 text-purple-200 px-2 py-0.5 rounded-full">毎日更新</span>
                       ) : (
@@ -1422,13 +1443,13 @@ export default function UranaiPage() {
                     {isPremium ? (
                       <div className="p-4 grid grid-cols-2 gap-3 text-xs">
                         {[
-                          { label: "今日の総合運", icon: "⭐" },
-                          { label: "恋愛運", icon: "💕" },
-                          { label: "仕事運", icon: "💼" },
-                          { label: "ラッキーカラー", icon: "🎨" },
+                          { label: "今日の総合運", icon: "" },
+                          { label: "恋愛運", icon: "" },
+                          { label: "仕事運", icon: "" },
+                          { label: "ラッキーカラー", icon: "" },
                         ].map(item => (
                           <div key={item.label} className="bg-white/5 rounded-lg p-2.5">
-                            <div className="text-purple-400 mb-1">{item.icon} {item.label}</div>
+                            <div className="text-purple-400 mb-1">{item.label}</div>
                             <div className="text-purple-100 text-xs leading-relaxed">
                               {result.match(new RegExp(`${item.label}[：:][^\n]*`))?.[0]?.replace(`${item.label}：`, "").replace(`${item.label}:`, "").trim().slice(0, 30) || "鑑定結果を参照"}
                             </div>
@@ -1439,10 +1460,10 @@ export default function UranaiPage() {
                       <div className="p-4 relative">
                         <div className="grid grid-cols-2 gap-3 text-xs blur-sm pointer-events-none select-none">
                           {[
-                            "⭐ 今日の総合運: 大吉・行動が吉",
-                            "💕 恋愛運: 告白は週末が◎",
-                            "💼 仕事運: 新しい縁が来る",
-                            "🎨 ラッキー: 紫・東の方角"
+                            "今日の総合運: 大吉・行動が吉",
+                            "恋愛運: 告白は週末が◎",
+                            "仕事運: 新しい縁が来る",
+                            "ラッキー: 紫・東の方角"
                           ].map(item => (
                             <div key={item} className="bg-white/5 rounded-lg p-2.5 text-xs text-purple-200">{item}</div>
                           ))}
@@ -1465,25 +1486,25 @@ export default function UranaiPage() {
                     <>
                       <KomojuButton
                         planId="standard"
-                        planLabel="✨ 毎日の運勢＋相性占いを使う（¥980/月）"
+                        planLabel="毎日の運勢＋相性占いを使う（¥980/月）"
                         className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white font-bold py-3 rounded-xl transition-opacity text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                       />
                       {/* 安心保証バッジ */}
                       <div className="flex items-center justify-center gap-3 mt-2">
                         <div className="flex items-center gap-1 text-xs text-purple-500">
-                          <span>🔒</span>
+                          <span>安全</span>
                           <span>SSL暗号化決済</span>
                         </div>
                         <div className="flex items-center gap-1 text-xs text-purple-500">
-                          <span>✅</span>
+                          <span>✓</span>
                           <span>いつでもキャンセル可能</span>
                         </div>
                         <div className="flex items-center gap-1 text-xs text-purple-500">
-                          <span>💳</span>
+                          <span>カード</span>
                           <span>PAY.JP安全決済</span>
                         </div>
                         <div className="flex items-center gap-1 text-xs text-green-600 font-bold">
-                          <span>🛡️</span>
+                          <span>保護</span>
                           <span>30日返金保証</span>
                         </div>
                       </div>
@@ -1495,7 +1516,7 @@ export default function UranaiPage() {
                       target="_blank" rel="noopener noreferrer"
                       className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:opacity-90 text-white font-bold py-3 rounded-xl transition-opacity text-sm"
                       aria-label={compatibilityScore !== null ? `相性スコア${compatibilityScore}点の結果をXでシェアする` : "相性占い結果をXでシェアする"}>
-                      💑 {compatibilityScore !== null ? `相性${compatibilityScore}点をXでシェア！` : "相性結果をXでシェア！"}
+                      {compatibilityScore !== null ? `相性${compatibilityScore}点をXでシェア！` : "相性結果をXでシェア！"}
                     </a>
                   ) : (
                     <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`}
@@ -1514,7 +1535,7 @@ export default function UranaiPage() {
                     <>
                       <p className="text-2xl font-bold mb-1">相性スコア {compatibilityScore}点/100点</p>
                       <p className="text-sm opacity-90 mb-4">
-                        {name || "私"}と{partnerName || "相手"}の相性をAIが鑑定しました💑
+                        {name || "私"}と{partnerName || "相手"}の相性をAIが鑑定しました
                       </p>
                     </>
                   ) : (
@@ -1522,7 +1543,7 @@ export default function UranaiPage() {
                       <p className="text-2xl font-bold mb-1">
                         {type === "today" ? "今日の運勢を鑑定しました" : type === "love" ? "恋愛運を鑑定しました" : "総合運命を鑑定しました"}
                       </p>
-                      <p className="text-sm opacity-90 mb-4">四柱推命×九星気学AIがあなたの運命を読み解きました✨</p>
+                      <p className="text-sm opacity-90 mb-4">四柱推命×九星気学AIがあなたの運命を読み解きました</p>
                     </>
                   )}
                   <button
@@ -1548,21 +1569,20 @@ export default function UranaiPage() {
                 className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-8 py-4 rounded-full w-full mt-4 text-lg min-h-[44px]"
                 aria-label="鑑定結果をXでシェアする"
               >
-                ✨ 鑑定結果をXでシェア
+                鑑定結果をXでシェア
               </button>
 
               {/* 次のアクション3選 */}
               <div className="mt-4 bg-purple-900/30 border border-purple-500/30 rounded-xl p-4">
-                <p className="text-sm font-bold text-purple-300 mb-3">🔮 今日やるべきこと3選</p>
+                <p className="text-sm font-bold text-purple-300 mb-3">今日やるべきこと3選</p>
                 <ol className="space-y-2">
                   {[
-                    { icon: "💜", text: "今日の行動テーマを手帳やメモに書き留めておく" },
-                    { icon: "🌟", text: "今日の幸運アイテムを身につけてからスタートする" },
-                    { icon: "✨", text: "週間・月間運勢でさらに詳しい流れを確認する" },
-                  ].map((item, i) => (
+                    "今日の行動テーマを手帳やメモに書き留めておく",
+                    "今日の幸運アイテムを身につけてからスタートする",
+                    "週間・月間運勢でさらに詳しい流れを確認する",
+                  ].map((text, i) => (
                     <li key={i} className="flex items-start gap-3 text-sm text-purple-100">
-                      <span className="text-base leading-none">{item.icon}</span>
-                      <span>{i + 1}. {item.text}</span>
+                      <span>{i + 1}. {text}</span>
                     </li>
                   ))}
                 </ol>
@@ -1572,13 +1592,13 @@ export default function UranaiPage() {
               </>
             ) : (
               <div className="flex flex-col items-center justify-center h-full text-purple-500 gap-3">
-                <div className="text-4xl">✨</div>
+                <div className="text-4xl text-purple-400 font-black">◉</div>
                 <p className="text-sm text-center">情報を入力して<br />「鑑定する」を押してください</p>
                 <div className="mt-2 text-xs text-purple-600 space-y-1 text-center">
-                  <p>🌟 今日の運勢 — 無料</p>
-                  <p>💕 恋愛運 — 無料</p>
-                  <p>🔮 総合運命鑑定 — 無料</p>
-                  <p>💑 相性占い — プレミアム限定</p>
+                  <p>今日の運勢 — 無料</p>
+                  <p>恋愛運 — 無料</p>
+                  <p>総合運命鑑定 — 無料</p>
+                  <p>相性占い — プレミアム限定</p>
                 </div>
               </div>
             )}
@@ -1595,7 +1615,7 @@ export default function UranaiPage() {
             aria-label={historyOpen ? "過去の鑑定履歴を閉じる" : "過去の鑑定履歴を開く"}
             aria-expanded={historyOpen}
           >
-            <span className="text-sm font-bold text-purple-200">📜 過去の鑑定履歴（直近{history.length}件）</span>
+            <span className="text-sm font-bold text-purple-200">過去の鑑定履歴（直近{history.length}件）</span>
             <span className="text-purple-400 text-xs">{historyOpen ? "▲ 閉じる" : "▼ 開く"}</span>
           </button>
           {historyOpen && (
