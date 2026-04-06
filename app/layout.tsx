@@ -21,7 +21,7 @@ const DESC = "AI占いが無料3回から。生年月日を入力するだけで
 export const metadata: Metadata = {
   title: TITLE,
   description: DESC,
-  icons: { icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔮</text></svg>" },
+  icons: { icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='55' r='35' fill='%238b5cf6'/><circle cx='50' cy='55' r='20' fill='%23a78bfa' opacity='0.6'/><ellipse cx='50' cy='88' rx='25' ry='6' fill='%236d28d9'/></svg>" },
   openGraph: {
     title: TITLE,
     description: DESC,
