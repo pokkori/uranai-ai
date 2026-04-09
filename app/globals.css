@@ -168,6 +168,13 @@ body::before {
 ::-webkit-scrollbar-thumb { background: rgba(124,58,237,0.5); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(124,58,237,0.8); }
 
+/* ---- OrbBackground keyframe ---- */
+@keyframes orbFloat {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.85; }
+  33% { transform: translateY(-22px) scale(1.06); opacity: 1; }
+  66% { transform: translateY(12px) scale(0.96); opacity: 0.92; }
+}
+
 /* ===== a11y: WCAG 2.2 必須対応 ===== */
 /* prefers-reduced-motion: アニメーション低減 */
 @media (prefers-reduced-motion: reduce) {

@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GoogleAdScript } from "@/components/GoogleAdScript";
 import CookieBanner from "@/components/CookieBanner";
+import OrbBackground from "@/components/OrbBackground";
 import "./globals.css";
 import { InstallPrompt } from "@/components/InstallPrompt";
 
@@ -94,13 +95,16 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="antialiased min-h-screen text-white" style={{ background: '#0B0B1E' }}>
-        {children}
-        <InstallPrompt />
-        <Analytics />
-        <SpeedInsights />
-        <GoogleAdScript />
-        <CookieBanner />
+      <body className="antialiased min-h-screen text-white" style={{ background: '#0f0a1e' }}>
+        <OrbBackground theme="purple" />
+        <div style={{ position: "relative", zIndex: 1 }}>
+          {children}
+          <InstallPrompt />
+          <Analytics />
+          <SpeedInsights />
+          <GoogleAdScript />
+          <CookieBanner />
+        </div>
       </body>
     </html>
   );
